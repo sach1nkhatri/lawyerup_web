@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import '../css/Header.css';
 import logo from '../assets/logo2.png';
 import logoText from '../assets/textlogoblack.png';
+import {useNavigate} from "react-router-dom";
 
 const Header = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
+    const navigate = useNavigate();
+
 
     return (
         <header className="header">
@@ -26,7 +29,9 @@ const Header = () => {
             </nav>
 
 
-            <button className="signup-btn">Sign up</button>
+            <button className="signup-btn" onClick={() => navigate('/login')}>
+                Sign up
+            </button>
         </header>
     );
 };
