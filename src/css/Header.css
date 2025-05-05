@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap');
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.8rem 3rem;
+    background-color: #c6f4f0;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.brand-logo {
+    height: 40px;
+}
+
+.brand-text-logo {
+    height: 28px;
+    object-fit: contain;
+}
+
+/* Nav links - desktop */
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #000;
+    font-weight: 500;
+}
+
+/* Sign Up Button */
+.signup-btn {
+    background-color: #dff9f5;
+    border: none;
+    padding: 0.6rem 1.4rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    transition: all 0.2s ease-in-out;
+}
+
+.signup-btn:hover {
+    background-color: #bff0e8;
+}
+
+/* Mobile toggle icon */
+.mobile-menu-icon {
+    display: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .mobile-menu-icon {
+        display: block;
+    }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .nav-links.open {
+        display: flex;
+    }
+
+    .signup-btn {
+        width: 100%;
+        margin-top: 1rem;
+    }
+}

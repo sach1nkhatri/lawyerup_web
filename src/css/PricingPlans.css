@@ -1,0 +1,134 @@
+.pricing-section {
+    padding: 4rem 2rem;
+    background-color: #f8fcff;
+    text-align: center;
+}
+
+.pricing-title {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
+
+.toggle-wrapper {
+    display: inline-flex;
+    border-radius: 999px;
+    overflow: hidden;
+    background-color: #e0fdfa;
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.toggle-wrapper button {
+    padding: 0.6rem 1.4rem;
+    background: none;
+    border: none;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    z-index: 1;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.toggle-wrapper .active-toggle {
+    color: #000;
+}
+
+.toggle-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 4px;
+    width: 50%;
+    border-radius: 999px;
+    background-color: #3ff0d0;
+    z-index: 0;
+    transition: transform 0.3s ease;
+}
+
+.toggle-wrapper.yearly::before {
+    transform: translateX(100%);
+}
+
+.plans-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.plan-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    width: 300px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.plan-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+
+.plan-card h3 {
+    text-align: center;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.price-label {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+
+.plan-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+}
+
+.plan-card li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    font-size: 0.95rem;
+}
+
+.plan-card li img {
+    width: 18px;
+    margin-right: 0.6rem;
+}
+
+.choose-btn {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: #3ff0d0;
+    border: none;
+    border-radius: 999px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.choose-btn:hover {
+    background-color: #2be3c4;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .plans-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .plan-card {
+        width: 90%;
+    }
+}
