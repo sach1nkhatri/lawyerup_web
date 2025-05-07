@@ -8,7 +8,7 @@ import logoText from '../assets/textlogowhite.png';
 import iconLawAI from '../assets/chatbotWhite.png';
 import iconNews from '../assets/newsWhite.png';
 import iconLawyer from '../assets/hammerwhite.png';
-import iconPdf from '../assets/law.png';
+import iconPdf from '../assets/pdfweb.png';
 import iconSettings from '../assets/settings.png'; // placeholder
 import iconReport from '../assets/warning.png'; // placeholder
 import iconHelp from '../assets/faq.png'; // placeholder
@@ -16,8 +16,7 @@ import iconUser from '../assets/user.png'; // placeholder
 import arrowUp from '../assets/up.png';
 import arrowDown from '../assets/down.png';
 
-
-const Sidebar = () => {
+const Sidebar = ({ onSectionChange }) => {
     const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
     const [showUserInfo, setShowUserInfo] = useState(false);
@@ -48,7 +47,11 @@ const Sidebar = () => {
                     item.divider ? (
                         <hr key={idx} className="menu-divider" />
                     ) : (
-                        <div key={idx} className="menu-item">
+                        <div
+                            key={idx}
+                            className="menu-item"
+                            onClick={() => onSectionChange(item.label)}
+                        >
                             <img src={item.icon} alt={item.label} className="menu-icon" />
                             {!collapsed && <span>{item.label}</span>}
                         </div>
@@ -76,8 +79,8 @@ const Sidebar = () => {
                         <button
                             className="logout-btn"
                             onClick={() => {
-                                localStorage.clear(); // optional: clear user session
-                                navigate('/'); // redirect to landing page
+                                localStorage.clear();
+                                navigate('/'); // Redirect to landing page
                             }}
                         >
                             Logout

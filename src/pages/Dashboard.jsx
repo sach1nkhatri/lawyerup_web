@@ -1,14 +1,36 @@
-import React from 'react';
-import Sidebar from '../components/Sidebar'; // Adjust the path based on your structure
-import '../css/Dashboard.css'; // Optional: for future content styling
+import React, { useState } from 'react';
+import Sidebar from '../components/Sidebar';
+import ChatWindow from '../components/ChatWindow';
+import NewsPage from '../components/NewsPage'; // Your actual news component
+import '../css/Dashboard.css';
+import LawyerUp from "../components/LawyerUp";
+import PdfLibrary from "../components/PdfLibrary";
+
 
 const Dashboard = () => {
+    const [activeSection, setActiveSection] = useState('LawAi');
+
+    const renderContent = () => {
+        switch (activeSection) {
+            case 'LawAi':
+                return <ChatWindow />;
+            case 'News':
+                return <NewsPage />;
+            case 'LawyerUp':
+                return <LawyerUp />;
+            case 'Pdf Library':
+                return <PdfLibrary />;
+            default:
+                return <ChatWindow />; // fallback
+        }
+    };
+
+
     return (
         <div className="dashboard-wrapper">
-            <Sidebar />
+            <Sidebar onSectionChange={setActiveSection} />
             <div className="dashboard-content">
-                <h2>Welcome to LawyerUp Dashboard</h2>
-                <p>We'll load the LawAi chat component here next.</p>
+                {renderContent()}
             </div>
         </div>
     );
