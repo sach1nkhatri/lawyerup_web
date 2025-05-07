@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import '../css/Sidebar.css';
 
 // Icons (placeholder icons from your assets folder)
@@ -15,7 +16,9 @@ import iconUser from '../assets/user.png'; // placeholder
 import arrowUp from '../assets/up.png';
 import arrowDown from '../assets/down.png';
 
+
 const Sidebar = () => {
+    const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
     const [showUserInfo, setShowUserInfo] = useState(false);
 
@@ -70,7 +73,15 @@ const Sidebar = () => {
                     <div className="user-details">
                         <p>Plan: Premium</p>
                         <p>Email: sachin@example.com</p>
-                        <button className="logout-btn">Logout</button>
+                        <button
+                            className="logout-btn"
+                            onClick={() => {
+                                localStorage.clear(); // optional: clear user session
+                                navigate('/'); // redirect to landing page
+                            }}
+                        >
+                            Logout
+                        </button>
                     </div>
                 )}
 
