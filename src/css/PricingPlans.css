@@ -1,3 +1,4 @@
+/* === General Section Styles === */
 .pricing-section {
     padding: 4rem 2rem;
     background-color: #f8fcff;
@@ -10,48 +11,40 @@
     font-weight: 700;
 }
 
-.toggle-wrapper {
-    display: inline-flex;
-    border-radius: 999px;
-    overflow: hidden;
-    background-color: #e0fdfa;
-    margin-bottom: 3rem;
-    position: relative;
+/* === Toggle Container + Buttons === */
+.toggle-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 2rem 0 3rem;
 }
 
-.toggle-wrapper button {
+.plan-toggle {
+    display: inline-flex;
+    padding: 4px;
+    gap: 0.5rem;
+    width: fit-content;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.toggle-btn {
     padding: 0.6rem 1.4rem;
-    background: none;
     border: none;
+    background-color: transparent;
     font-weight: bold;
     color: #333;
+    border-radius: 999px;
     cursor: pointer;
-    z-index: 1;
-    position: relative;
-    transition: color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.toggle-wrapper .active-toggle {
+.toggle-btn.active {
+    background-color: rgba(63, 240, 208, 0.55);
     color: #000;
 }
 
-.toggle-wrapper::before {
-    content: '';
-    position: absolute;
-    top: 4px;
-    bottom: 4px;
-    left: 4px;
-    width: 50%;
-    border-radius: 999px;
-    background-color: #3ff0d0;
-    z-index: 0;
-    transition: transform 0.3s ease;
-}
-
-.toggle-wrapper.yearly::before {
-    transform: translateX(100%);
-}
-
+/* === Plans Layout === */
 .plans-grid {
     display: flex;
     flex-wrap: wrap;
@@ -59,12 +52,13 @@
     gap: 2rem;
 }
 
+/* === Plan Cards === */
 .plan-card {
     background-color: #fff;
     border-radius: 12px;
     padding: 2rem;
     width: 300px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     text-align: left;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -73,7 +67,6 @@
     transform: translateY(-8px);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
-
 
 .plan-card h3 {
     text-align: center;
@@ -85,7 +78,15 @@
     text-align: center;
     font-size: 1.2rem;
     font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.value-label {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #555;
     margin-bottom: 1.5rem;
+    font-style: italic;
 }
 
 .plan-card ul {
@@ -106,6 +107,7 @@
     margin-right: 0.6rem;
 }
 
+/* === Choose Button === */
 .choose-btn {
     width: 100%;
     padding: 0.8rem;
@@ -121,7 +123,32 @@
     background-color: #2be3c4;
 }
 
-/* Responsive */
+/* === Badges & Tooltips === */
+.badge-popular {
+    background-color: #ffbb00;
+    color: white;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 999px;
+    width: fit-content;
+    margin: 0 auto 1rem;
+}
+
+.hover-tooltip {
+    display: none;
+    font-size: 0.75rem;
+    color: #777;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.plan-card:hover .hover-tooltip {
+    display: block;
+}
+
+/* === Responsive Support === */
 @media (max-width: 768px) {
     .plans-grid {
         flex-direction: column;
@@ -130,5 +157,19 @@
 
     .plan-card {
         width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+    .plan-toggle {
+        flex-direction: column;
+        padding: 6px;
+        gap: 0.3rem;
+    }
+
+    .toggle-btn {
+        width: 100%;
+        text-align: center;
+        padding: 0.8rem 1rem;
     }
 }
