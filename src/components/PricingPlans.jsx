@@ -9,7 +9,7 @@ const PricingPlans = () => {
     const pricing = {
         monthly: {
             basic: 'NPR.200/month',
-            premium: 'NPR.500/month',
+            premium: 'NPR.600/month',
         },
         yearly: {
             basic: 'NPR.1000/-',
@@ -45,7 +45,7 @@ const PricingPlans = () => {
                         <li><img src={tick} alt="✔" /> Access to Constitution, Civil Code, Criminal Code, and more</li>
                         <li><img src={tick} alt="✔" /> 500 words per day or 10 chat bot interactions</li>
                         <li><img src={tick} alt="✔" /> Includes legal news and articles</li>
-                        <li><img src={tick} alt="✔" /> Lawyer Booking and Appointment</li>
+                        <li><img src={tick} alt="✔" /> Lawyer Search</li>
                         <li><img src={no} alt="✖" /> No 24/7 tech Support</li>
                     </ul>
                     <button className="choose-btn">Choose Plan</button>

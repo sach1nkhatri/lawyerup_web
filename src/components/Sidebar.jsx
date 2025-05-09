@@ -2,21 +2,20 @@ import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import '../css/Sidebar.css';
 
-// Icons (placeholder icons from your assets folder)
 import logoIcon from '../assets/logo2.png';
 import logoText from '../assets/textlogowhite.png';
 import iconLawAI from '../assets/chatbotWhite.png';
 import iconNews from '../assets/newsWhite.png';
 import iconLawyer from '../assets/hammerwhite.png';
 import iconPdf from '../assets/pdfweb.png';
-import iconSettings from '../assets/settings.png'; // placeholder
-import iconReport from '../assets/warning.png'; // placeholder
-import iconHelp from '../assets/faq.png'; // placeholder
-import iconUser from '../assets/user.png'; // placeholder
+import iconSettings from '../assets/settings.png';
+import iconReport from '../assets/warning.png';
+import iconHelp from '../assets/faq.png';
+import iconUser from '../assets/user.png';
 import arrowUp from '../assets/up.png';
 import arrowDown from '../assets/down.png';
 
-const Sidebar = ({ onSectionChange }) => {
+const Sidebar = ({ onSectionChange, onReportClick }) => {
     const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
     const [showUserInfo, setShowUserInfo] = useState(false);
@@ -31,7 +30,7 @@ const Sidebar = ({ onSectionChange }) => {
         { icon: iconPdf, label: 'Pdf Library' },
         { divider: true },
         { icon: iconSettings, label: 'Settings' },
-        { icon: iconReport, label: 'Report' },
+        { icon: iconReport, label: 'Report', onClick: onReportClick },
         { icon: iconHelp, label: 'Help&FAQ' },
     ];
 
@@ -50,7 +49,13 @@ const Sidebar = ({ onSectionChange }) => {
                         <div
                             key={idx}
                             className="menu-item"
-                            onClick={() => onSectionChange(item.label)}
+                            onClick={() => {
+                                if (item.label === 'Report') {
+                                    item.onClick?.();
+                                } else {
+                                    onSectionChange(item.label);
+                                }
+                            }}
                         >
                             <img src={item.icon} alt={item.label} className="menu-icon" />
                             {!collapsed && <span>{item.label}</span>}
@@ -65,7 +70,7 @@ const Sidebar = ({ onSectionChange }) => {
                     {!collapsed && <span className="username">Sachin Khatri</span>}
                     {!collapsed && (
                         <img
-                            src={showUserInfo ? arrowUp : arrowDown}
+                            src={showUserInfo ? arrowDown : arrowUp}
                             alt="Toggle"
                             className="arrow-toggle"
                         />
@@ -80,7 +85,7 @@ const Sidebar = ({ onSectionChange }) => {
                             className="logout-btn"
                             onClick={() => {
                                 localStorage.clear();
-                                navigate('/'); // Redirect to landing page
+                                navigate('/');
                             }}
                         >
                             Logout

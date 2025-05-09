@@ -1,7 +1,7 @@
 // src/components/News.jsx
 import React from 'react';
 import NewsData from '../data/NewsData';
-import NewsCard from './NewsCard';
+import NewsCard from '../components/NewsCard';
 import '../css/NewsPage.css';
 
 const NewsPage = () => {
