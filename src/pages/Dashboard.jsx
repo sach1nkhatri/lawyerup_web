@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
-import ChatWindow from '../components/ChatWindow';
+import ChatWindow from './ChatWindow';
 import NewsPage from './NewsPage'; // Your actual news component
 import '../css/Dashboard.css';
 import LawyerUp from "../components/LawyerUp";
