@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../css/PricingPlans.css';
 import tick from '../assets/tick.png';
 import no from '../assets/no.png';
 
 const PricingPlans = () => {
     const [activePlan, setActivePlan] = useState('daily');
+    const navigate = useNavigate();
 
     const pricing = {
         daily: {
@@ -26,6 +28,8 @@ const PricingPlans = () => {
         if (activePlan === 'monthly') return 'Save 65% compared to daily! Best value.';
         return '';
     };
+
+    const getDuration = () => activePlan.charAt(0).toUpperCase() + activePlan.slice(1);
 
     return (
         <section className="pricing-section" id="pricing">
@@ -56,26 +60,44 @@ const PricingPlans = () => {
                         <li><img src={tick} alt="✔"/> Lawyer Search</li>
                         <li><img src={no} alt="✖"/> No 24/7 tech Support</li>
                     </ul>
-                    <button className="choose-btn">Choose Plan</button>
+                    <button
+                        className="choose-btn"
+                        onClick={() => navigate('/login')}
+                    >
+                        Choose Plan
+                    </button>
                 </div>
 
                 {/* BASIC PLAN */}
                 <div className="plan-card">
-                    <h3>Basic Plan</h3>
+                <h3>Basic Plan</h3>
                     <p className="price-label">{pricing[activePlan].basic}</p>
                     <p className="value-label">{getValueMessage()}</p>
                     <ul>
-                        <li><img src={tick} alt="✔"/> Everything in Free Plan +</li>
-                        <li><img src={tick} alt="✔"/> Unlimited AI chat access with smarter legal responses</li>
-                        <li><img src={tick} alt="✔"/> Includes legal news and articles</li>
-                        <li><img src={tick} alt="✔"/> Lawyer Booking and Appointment</li>
-                        <li><img src={tick} alt="✔"/> Great for students, citizens, and regular users</li>
-                        <li><img src={no} alt="✖"/> No 24/7 tech Support</li>
+                        <li><img src={tick} alt="✔" /> Everything in Free Plan +</li>
+                        <li><img src={tick} alt="✔" /> Unlimited AI chat access with smarter legal responses</li>
+                        <li><img src={tick} alt="✔" /> Includes legal news and articles</li>
+                        <li><img src={tick} alt="✔" /> Lawyer Booking and Appointment</li>
+                        <li><img src={tick} alt="✔" /> Great for students, citizens, and regular users</li>
+                        <li><img src={no} alt="✖" /> No 24/7 tech Support</li>
                     </ul>
                     {activePlan === 'daily' && (
                         <span className="hover-tooltip">Use daily often? Save big with a weekly plan.</span>
                     )}
-                    <button className="choose-btn">Choose Plan</button>
+                    <button
+                        className="choose-btn"
+                        onClick={() =>
+                            navigate('/checkout', {
+                                state: {
+                                    planName: 'Basic Plan',
+                                    planPrice: pricing[activePlan].basic,
+                                    planDuration: getDuration(),
+                                },
+                            })
+                        }
+                    >
+                        Choose Plan
+                    </button>
                 </div>
 
                 {/* PREMIUM PLAN */}
@@ -87,13 +109,26 @@ const PricingPlans = () => {
                         <div className="badge-popular">Most Popular</div>
                     )}
                     <ul>
-                        <li><img src={tick} alt="✔"/> Everything in Basic Plan +</li>
-                        <li><img src={tick} alt="✔"/> Advanced legal reasoning and document analysis</li>
-                        <li><img src={tick} alt="✔"/> Tools for lawyers, researchers, and professionals</li>
-                        <li><img src={tick} alt="✔"/> Best For lawyers & LawFirms</li>
-                        <li><img src={tick} alt="✔"/> 24/7 Tech Support</li>
+                        <li><img src={tick} alt="✔" /> Everything in Basic Plan +</li>
+                        <li><img src={tick} alt="✔" /> Advanced legal reasoning and document analysis</li>
+                        <li><img src={tick} alt="✔" /> Tools for lawyers, researchers, and professionals</li>
+                        <li><img src={tick} alt="✔" /> Best For lawyers & LawFirms</li>
+                        <li><img src={tick} alt="✔" /> 24/7 Tech Support</li>
                     </ul>
-                    <button className="choose-btn">Choose Plan</button>
+                    <button
+                        className="choose-btn"
+                        onClick={() =>
+                            navigate('/checkout', {
+                                state: {
+                                    planName: 'Premium Plan',
+                                    planPrice: pricing[activePlan].premium,
+                                    planDuration: getDuration(),
+                                },
+                            })
+                        }
+                    >
+                        Choose Plan
+                    </button>
                 </div>
             </div>
         </section>

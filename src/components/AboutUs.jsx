@@ -47,7 +47,15 @@ const AboutUs = () => {
                         <br /><br />
                         By combining advanced language models with a vector database of structured legal content, it offers intelligent, human-like assistance for legal queries without the jargon or confusion.
                     </p>
-                    <button className="get-started-btn">Get Started Now!</button>
+                    <button
+                        className="get-started-btn"
+                        onClick={() => {
+                            document.getElementById('pricing')?.scrollIntoView({behavior: 'smooth'});
+                        }}
+                    >
+                        Get Started Now!
+                    </button>
+
                 </div>
             </div>
         </section>
