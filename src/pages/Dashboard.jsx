@@ -29,7 +29,7 @@ const Dashboard = () => {
                 return <PdfLibrary />;
             case 'Settings':
                 return <SettingsPage />;
-            case 'Help&FAQ': // ✅ Add this
+            case 'Help&FAQ':
                 return <HelpFAQPage />;
             default:
                 return <ChatWindow />;

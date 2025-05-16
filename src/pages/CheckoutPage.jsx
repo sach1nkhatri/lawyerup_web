@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import khaltiLogo from '../assets/khalti-logo.png';
 import esewaLogo from '../assets/esewa.png';
 import visaLogo from '../assets/visa.png';
+import imeLogo from '../assets/imelogo.png'
 import '../css/CheckoutPage.css';
 
 const CheckoutPage = () => {
@@ -21,7 +22,7 @@ const CheckoutPage = () => {
     };
 
     const renderPaymentForm = () => {
-        if (selectedMethod === 'Khalti' || selectedMethod === 'eSewa') {
+        if (selectedMethod === 'Khalti' || selectedMethod === 'eSewa' || selectedMethod === 'IME') {
             return (
                 <div className={`wallet-form ${selectedMethod}`}>
                     <h3>Pay via {selectedMethod} Wallet</h3>
@@ -83,22 +84,29 @@ const CheckoutPage = () => {
                             className={`method-tile ${selectedMethod === 'Khalti' ? 'active' : ''}`}
                             onClick={() => setSelectedMethod('Khalti')}
                         >
-                            <img src={khaltiLogo} alt="Khalti" />
+                            <img src={khaltiLogo} alt="Khalti"/>
                             <span>Khalti</span>
                         </div>
                         <div
                             className={`method-tile ${selectedMethod === 'eSewa' ? 'active' : ''}`}
                             onClick={() => setSelectedMethod('eSewa')}
                         >
-                            <img src={esewaLogo} alt="eSewa" />
+                            <img src={esewaLogo} alt="eSewa"/>
                             <span>eSewa</span>
                         </div>
                         <div
                             className={`method-tile ${selectedMethod === 'Visa' ? 'active' : ''}`}
                             onClick={() => setSelectedMethod('Visa')}
                         >
-                            <img src={visaLogo} alt="Visa" />
+                            <img src={visaLogo} alt="Visa"/>
                             <span>VISA</span>
+                        </div>
+                        <div
+                            className={`method-tile ${selectedMethod === 'imepay' ? 'active' : ''}`}
+                            onClick={() => setSelectedMethod('IME')}
+                        >
+                            <img src={imeLogo} alt="IME"/>
+                            <span>IME pay</span>
                         </div>
                     </div>
                     <button
