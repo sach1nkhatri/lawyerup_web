@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import '../css/Sidebar.css';
 
@@ -19,6 +19,14 @@ const Sidebar = ({ onSectionChange, onReportClick }) => {
     const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
     const [showUserInfo, setShowUserInfo] = useState(false);
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem('lawyerup_user');
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
 
     const toggleCollapse = () => setCollapsed(!collapsed);
     const toggleUserInfo = () => setShowUserInfo(!showUserInfo);
@@ -67,7 +75,7 @@ const Sidebar = ({ onSectionChange, onReportClick }) => {
             <div className="sidebar-footer">
                 <div className="user-toggle" onClick={toggleUserInfo}>
                     <img src={iconUser} alt="User" className="user-icon" />
-                    {!collapsed && <span className="username">Sachin Khatri</span>}
+                    {!collapsed && <span className="username">{user?.fullName || 'Guest'}</span>}
                     {!collapsed && (
                         <img
                             src={showUserInfo ? arrowDown : arrowUp}
@@ -77,10 +85,10 @@ const Sidebar = ({ onSectionChange, onReportClick }) => {
                     )}
                 </div>
 
-                {!collapsed && showUserInfo && (
+                {!collapsed && showUserInfo && user && (
                     <div className="user-details">
-                        <p>Plan: Premium</p>
-                        <p>Email: sachin@example.com</p>
+                        <p><strong>Plan:</strong> {user.plan}</p>
+                        <p><strong>Email:</strong> {user.email}</p>
                         <button
                             className="logout-btn"
                             onClick={() => {
