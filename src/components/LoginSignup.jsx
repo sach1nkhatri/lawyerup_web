@@ -1,35 +1,70 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/LoginSignup.css';
 import hammerIcon from '../assets/hammer.png';
 import logoIcon from '../assets/logo2.png';
 import logoText from '../assets/textlogoblack.png';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const LoginSignUp = () => {
     const navigate = useNavigate();
     const [isLogin, setIsLogin] = useState(true);
     const [formData, setFormData] = useState({
+        role: 'user',
         fullName: '',
         email: '',
         password: '',
         contactNumber: '',
-        organizationName: '',
     });
+
+    useEffect(() => {
+        const token = localStorage.getItem('lawyerup_token');
+        if (token) {
+            navigate('/dashboard');
+        }
+    }, []);
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (isLogin) {
-            console.log('Logging in user:', formData.email);
-            navigate('/dashboard');
-        } else {
-            alert('Signup Successful!');
-            setIsLogin(true);
+        const endpoint = isLogin
+            ? 'http://localhost:5000/api/auth/login'
+            : 'http://localhost:5000/api/auth/signup';
+
+        const payload = isLogin
+            ? {
+                email: formData.email,
+                password: formData.password,
+            }
+            : {
+                fullName: formData.fullName,
+                email: formData.email,
+                password: formData.password,
+                role: formData.role,
+                contactNumber: formData.contactNumber,
+            };
+
+        try {
+            const res = await axios.post(endpoint, payload);
+            const { user, token } = res.data;
+
+            // Save auth info
+            localStorage.setItem('lawyerup_token', token);
+            localStorage.setItem('lawyerup_user', JSON.stringify(user));
+            if (isLogin) {
+                localStorage.setItem('auth', 'true'); // ✅ THIS IS NEEDED
+                console.log('Logging in user:', formData.email);
+                navigate('/dashboard'); // ✅ Should work if auth is set
+            }
+        } catch (err) {
+            console.error(err);
+            alert(err.response?.data?.message || 'Something went wrong!');
         }
     };
 
@@ -52,6 +87,17 @@ const LoginSignUp = () => {
                     <form onSubmit={handleSubmit}>
                         {!isLogin && (
                             <>
+                                <select
+                                    name="role"
+                                    value={formData.role}
+                                    onChange={handleInputChange}
+                                    className="input-dropdown"
+                                    required
+                                >
+                                    <option value="user">User</option>
+                                    <option value="lawyer">Lawyer</option>
+                                </select>
+
                                 <input
                                     type="text"
                                     name="fullName"
@@ -67,13 +113,6 @@ const LoginSignUp = () => {
                                     value={formData.contactNumber}
                                     onChange={handleInputChange}
                                     required
-                                />
-                                <input
-                                    type="text"
-                                    name="organizationName"
-                                    placeholder="Organization Name"
-                                    value={formData.organizationName}
-                                    onChange={handleInputChange}
                                 />
                             </>
                         )}
