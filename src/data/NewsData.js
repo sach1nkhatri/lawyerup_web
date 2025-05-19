@@ -1,4 +1,5 @@
 // src/data/NewsData.js
+import judicary1 from '../assets/judciyary.png';
 const NewsData = [
     {
         id: 1,
@@ -6,7 +7,7 @@ const NewsData = [
         author: 'Post Report',
         summary: 'The new bill is passed and will be implemented from today',
         date: 'Wed, Apr 20, 2025',
-        image: null, // or path to image like: require('../assets/news1.png')
+        image: judicary1, // or path to image like: require('../assets/news1.png')
     },
     {
         id: 2,
@@ -14,7 +15,7 @@ const NewsData = [
         author: 'Post Report',
         summary: 'The draft law seeks to streamline property registration and ownership disputes.',
         date: 'Wed, Apr 20, 2025',
-        image: null,
+        image: judicary1,
     },
     {
         id: 3,
@@ -22,7 +23,7 @@ const NewsData = [
         author: 'Post Report',
         summary: 'Key changes include increased minimum wage and stricter safety standards.',
         date: 'Wed, Apr 30, 2025',
-        image: null,
+        image: judicary1,
     },
     // Add more entries if needed
 ];

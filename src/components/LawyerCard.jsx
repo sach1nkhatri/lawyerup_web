@@ -1,19 +1,20 @@
 import React from 'react';
 import '../css/LawyerCard.css';
-import defaultPhoto from '../assets/user.png'; // placeholder image
 
-const LawyerCard = ({ name, specialization, contact, education, rating }) => {
+const LawyerCard = ({ lawyer, onViewProfile, showShare }) => {
     return (
         <div className="lawyer-card">
-            <img src={defaultPhoto} alt="Lawyer" className="lawyer-photo" />
+            <img src={lawyer.image} alt="Lawyer" className="lawyer-photo" />
             <div className="lawyer-info">
-                <p><strong>{name}</strong></p>
-                <p>Specialization: {specialization}</p>
-                <p>Contact: {contact}</p>
-                <p>Education: {education}</p>
+                <p><strong>{lawyer.name}</strong></p>
+                <p>{lawyer.specialization}</p>
                 <div className="rating">
-                    {'⭐'.repeat(rating)}{'☆'.repeat(5 - rating)}
+                    {'⭐'.repeat(lawyer.rating)}{'☆'.repeat(5 - lawyer.rating)}
                 </div>
+                {showShare && <button className="share-btn">Share</button>}
+                <button onClick={onViewProfile}>
+                    {showShare ? 'Book Appointment' : 'View Profile'}
+                </button>
             </div>
         </div>
     );

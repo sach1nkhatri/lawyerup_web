@@ -1,4 +1,6 @@
 // data.js
+import lawyer1 from "../assets/lawyer1.png";
+
 const dummyMessages = [
     { sender: 'bot', text: "Hello! I'm LawAi. How can I help you today?" },
     { sender: 'user', text: "What are the legal procedures to register a company in Nepal?" },
@@ -8,3 +10,5 @@ const dummyMessages = [
 ];
 
 export default dummyMessages;
+
+

@@ -6,7 +6,7 @@ import AuthForm from './components/LoginSignup';
 import Dashboard from './pages/Dashboard';
 import PricingPlans from './components/PricingPlans';
 import CheckoutPage from './pages/CheckoutPage';
-import PrivateRoute from './routes/privateRoute'; // 👈 import this
+import PrivateRoute from './routes/privateRoute';
 
 function App() {
     return (
@@ -14,11 +14,14 @@ function App() {
             <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<AuthForm />} />
-                <Route path="/dashboard" element={
+
+                {/* ✅ Allow nested routing under dashboard */}
+                <Route path="/dashboard/*" element={
                     <PrivateRoute>
                         <Dashboard />
                     </PrivateRoute>
                 } />
+
                 <Route path="/pricing" element={<PricingPlans />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
             </Routes>

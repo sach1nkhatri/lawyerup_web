@@ -1,37 +1,65 @@
-import React, { useState } from 'react';
-import LawyerCard from './LawyerCard';
-import AppointmentModal from '.././modals/AppointmentModal';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import LawyerCard from '../components/LawyerCard';
+import LawyerProfilePanel from '../components/LawyerProfilePanel';
 import '../css/LawyerUp.css';
-
-const dummyLawyers = [
-    { name: 'Ram Prasad', specialization: 'Criminal Law', contact: '9812345678', education: 'LLB, TU', rating: 4, charge: 1500 },
-    { name: 'Sita Kumari', specialization: 'Civil Law', contact: '9801234567', education: 'LLM, KU', rating: 5, charge: 2000 },
-    { name: 'Hari Bahadur', specialization: 'Family Law', contact: '9823456789', education: 'LLB, Purbanchal', rating: 3, charge: 1200 },
-    { name: 'Gita Rana', specialization: 'Tax Law', contact: '9867891234', education: 'LLM, TU', rating: 4, charge: 1800 },
-    { name: 'Shyam Kharel', specialization: 'Corporate Law', contact: '9845671234', education: 'LLB, KU', rating: 4, charge: 2200 },
-    { name: 'Mina Joshi', specialization: 'Human Rights', contact: '9887654321', education: 'LLM, TU', rating: 5, charge: 2500 },
-];
-
+import { dummyLawyers } from '../data/lawyerData';
 
 const LawyerUp = () => {
+    const navigate = useNavigate();
+    const { id } = useParams(); // grab dynamic segment like /lawyerProfile/:id
+
     const [selectedLawyer, setSelectedLawyer] = useState(null);
+
+    useEffect(() => {
+        if (id) {
+            console.log("URL ID:", id);
+            const match = dummyLawyers.find((l) => String(l.id) === id);
+            console.log("Match found:", match);
+            setSelectedLawyer(match || null);
+        } else {
+            setSelectedLawyer(null);
+        }
+    }, [id]);
+
 
     return (
         <div className="lawyerup-container">
-            <h2>LawyerUp</h2>
-            <div className="lawyer-grid">
-                {dummyLawyers.map((lawyer, index) => (
-                    <div key={index} onClick={() => setSelectedLawyer(lawyer)}>
-                        <LawyerCard {...lawyer} />
-                    </div>
-                ))}
+            <div className="lawyerup-header">
+                <h2>LawyerUp</h2>
+                <div className="lawyerup-controls">
+                    <input className="search-bar" placeholder="Search for lawyers" />
+                    <label className="toggle-wrapper">
+                        <input type="checkbox" />
+                        <span className="toggle-slider" />
+                    </label>
+                </div>
             </div>
 
-            {selectedLawyer && (
-                <AppointmentModal
-                    lawyer={selectedLawyer}
-                    onClose={() => setSelectedLawyer(null)}
-                />
+            {!selectedLawyer ? (
+                <div className="lawyer-grid">
+                    {dummyLawyers.map((lawyer) => (
+                        <LawyerCard
+                            key={lawyer.id}
+                            lawyer={lawyer}
+                            onViewProfile={() => navigate(`/dashboard/lawyerUp/lawyerProfile/${lawyer.id}`)}
+                        />
+                    ))}
+                </div>
+            ) : (
+                <div className="profile-split-view">
+                    {selectedLawyer ? (
+                        <>
+                            <LawyerCard lawyer={selectedLawyer} showShare/>
+                            <LawyerProfilePanel
+                                lawyer={selectedLawyer}
+                                onBack={() => navigate('/dashboard/lawyerUp')}
+                            />
+                        </>
+                    ) : (
+                        <p style={{marginLeft: '2rem', marginTop: '2rem'}}>⚠️ Lawyer not found.</p>
+                    )}
+                </div>
             )}
         </div>
     );
