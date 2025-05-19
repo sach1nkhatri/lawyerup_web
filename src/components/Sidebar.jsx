@@ -14,6 +14,8 @@ import iconHelp from '../assets/faq.png';
 import iconUser from '../assets/user.png';
 import arrowUp from '../assets/up.png';
 import arrowDown from '../assets/down.png';
+import bookingLogo from '../assets/bookingicon.png';
+import listLawyer from '../assets/listaslawyer.png';
 
 const Sidebar = ({ onSectionChange, onReportClick }) => {
     const navigate = useNavigate();
@@ -35,12 +37,17 @@ const Sidebar = ({ onSectionChange, onReportClick }) => {
         { icon: iconLawAI, label: 'LawAi' },
         { icon: iconNews, label: 'News' },
         { icon: iconLawyer, label: 'LawyerUp' },
+        ...(user?.role === 'lawyer'
+            ? [{ icon: listLawyer, label: 'Join as a Lawyer' }]
+            : []),
         { icon: iconPdf, label: 'Pdf Library' },
+        { icon: bookingLogo, label: 'Bookings' },
         { divider: true },
         { icon: iconSettings, label: 'Settings' },
         { icon: iconReport, label: 'Report', onClick: onReportClick },
         { icon: iconHelp, label: 'Help&FAQ' },
     ];
+
 
     return (
         <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>

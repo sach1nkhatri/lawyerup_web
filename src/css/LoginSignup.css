@@ -154,3 +154,19 @@ button:hover {
     outline: none;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
 }
+
+.login-signup-page *,
+.login-signup-page *::before,
+.login-signup-page *::after {
+    box-sizing: border-box;
+}
+
+.login-signup-page .login-box {
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-signup-page input,
+.login-signup-page button {
+    width: 100%;
+}

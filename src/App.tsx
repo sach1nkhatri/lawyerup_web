@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import PricingPlans from './components/PricingPlans';
 import CheckoutPage from './pages/CheckoutPage';
 import PrivateRoute from './routes/privateRoute';
+import LawyerControlPanel from './components/LawyerControlPanel';
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
 
                 <Route path="/pricing" element={<PricingPlans />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/lawyer-status" element={<LawyerControlPanel />} />
             </Routes>
         </Router>
     );

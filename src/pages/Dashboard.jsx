@@ -9,7 +9,7 @@ import PdfLibrary from "../components/PdfLibrary";
 import SettingsPage from '../pages/SettingsPage';
 import ReportModal from '../modals/ReportModal';
 import HelpFAQPage from '../pages/HelpFAQPage';
-import LawyerProfile from '../components/LawyerProfilePanel';
+import JoinAsLawyerForm from '../components/JoinAsLawyerForm';
 
 
 import '../css/Dashboard.css';
@@ -26,6 +26,7 @@ const Dashboard = () => {
             'Pdf Library': '/dashboard/pdfLibrary',
             'Settings': '/dashboard/settings',
             'Help&FAQ': '/dashboard/help',
+            'Join as a Lawyer': '/dashboard/join-lawyerUp',
         };
 
         navigate(routeMap[label] || '/dashboard');
@@ -48,6 +49,7 @@ const Dashboard = () => {
                     <Route path="settings" element={<SettingsPage />} />
                     <Route path="help" element={<HelpFAQPage />} />
                     <Route path="*" element={<ChatWindow />} />
+                    <Route path="join-lawyerUp" element={<JoinAsLawyerForm />} />
                 </Routes>
             </div>
 
