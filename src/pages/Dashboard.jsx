@@ -4,12 +4,14 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import ChatWindow from './ChatWindow';
 import NewsPage from './NewsPage';
-import LawyerUp from "../components/LawyerUp";
+import LawyerUp from "../lawuerUp/component/LawyerUp";
 import PdfLibrary from "../components/PdfLibrary";
 import SettingsPage from '../pages/SettingsPage';
 import ReportModal from '../modals/ReportModal';
 import HelpFAQPage from '../pages/HelpFAQPage';
-import JoinAsLawyerForm from '../components/JoinAsLawyerForm';
+import JoinLawyerPage from '../list_lawyer/component/JoinLawyerPage';
+import LawyerStatusPanel from '../list_lawyer/component/LawyerStatusPanel';
+
 
 
 import '../css/Dashboard.css';
@@ -49,7 +51,8 @@ const Dashboard = () => {
                     <Route path="settings" element={<SettingsPage />} />
                     <Route path="help" element={<HelpFAQPage />} />
                     <Route path="*" element={<ChatWindow />} />
-                    <Route path="join-lawyerUp" element={<JoinAsLawyerForm />} />
+                    <Route path="join-lawyerUp" element={<JoinLawyerPage />} />
+                    <Route path="status-page" element={<LawyerStatusPanel />} />
                 </Routes>
             </div>
 
