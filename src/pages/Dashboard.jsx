@@ -1,54 +1,64 @@
 import React, { useState } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+
 import Sidebar from '../components/Sidebar';
 import ChatWindow from './ChatWindow';
-import NewsPage from './NewsPage'; // Your actual news component
-import '../css/Dashboard.css';
-import LawyerUp from "../components/LawyerUp";
+import NewsPage from './NewsPage';
+import LawyerUp from "../lawuerUp/component/LawyerUp";
 import PdfLibrary from "../components/PdfLibrary";
 import SettingsPage from '../pages/SettingsPage';
 import ReportModal from '../modals/ReportModal';
 import HelpFAQPage from '../pages/HelpFAQPage';
+import JoinLawyerPage from '../list_lawyer/component/JoinLawyerPage';
+import LawyerStatusPanel from '../list_lawyer/component/LawyerStatusPanel';
 
 
 
-
+import '../css/Dashboard.css';
 
 const Dashboard = () => {
-    const [activeSection, setActiveSection] = useState('LawAi');
     const [isReportOpen, setIsReportOpen] = useState(false);
+    const navigate = useNavigate();
 
-    const renderContent = () => {
-        switch (activeSection) {
-            case 'LawAi':
-                return <ChatWindow />;
-            case 'News':
-                return <NewsPage />;
-            case 'LawyerUp':
-                return <LawyerUp />;
-            case 'Pdf Library':
-                return <PdfLibrary />;
-            case 'Settings':
-                return <SettingsPage />;
-            case 'Help&FAQ':
-                return <HelpFAQPage />;
-            default:
-                return <ChatWindow />;
-        }
+    const handleSectionChange = (label) => {
+        const routeMap = {
+            'LawAi': '/dashboard',
+            'News': '/dashboard/news',
+            'LawyerUp': '/dashboard/lawyerUp',
+            'Pdf Library': '/dashboard/pdfLibrary',
+            'Settings': '/dashboard/settings',
+            'Help&FAQ': '/dashboard/help',
+            'Join as a Lawyer': '/dashboard/join-lawyerUp',
+        };
+
+        navigate(routeMap[label] || '/dashboard');
     };
 
     return (
         <div className="dashboard-wrapper">
             <Sidebar
-                onSectionChange={setActiveSection}
+                onSectionChange={handleSectionChange}
                 onReportClick={() => setIsReportOpen(true)}
             />
+
             <div className="dashboard-content">
-                {renderContent()}
+                <Routes>
+                    <Route path="/" element={<ChatWindow />} />
+                    <Route path="news" element={<NewsPage />} />
+                    <Route path="lawyerUp" element={<LawyerUp />} />
+                    <Route path="lawyerUp/lawyerProfile/:id" element={<LawyerUp />} />
+                    <Route path="pdfLibrary" element={<PdfLibrary />} />
+                    <Route path="settings" element={<SettingsPage />} />
+                    <Route path="help" element={<HelpFAQPage />} />
+                    <Route path="*" element={<ChatWindow />} />
+                    <Route path="join-lawyerUp" element={<JoinLawyerPage />} />
+                    <Route path="status-page" element={<LawyerStatusPanel />} />
+                </Routes>
             </div>
+
             <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} />
         </div>
     );
 };
-
 
 export default Dashboard;
