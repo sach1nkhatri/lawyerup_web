@@ -9,15 +9,17 @@ const LawyerStatusPanel = ({ lawyer, onNext }) => {
 
     const statusStep = {
         pending: 1,
-        hold: 1,
         rejected: 1,
-        verified: 3,
+        disabled: 0,
+        hold: 2,
+        verified: 2,
         listed: 3,
     }[status] || 1;
 
-    const imageURL = lawyer.profilePhoto
-        ? `http://localhost:5000/uploads/${lawyer.profilePhoto}`
-        : defaultAvatar;
+    const imageURL = lawyer.profilePhoto?.startsWith('data:image')
+        ? lawyer.profilePhoto
+        : `http://localhost:5000/uploads/${lawyer.profilePhoto || ''}`;
+
 
     const getStatusLabel = (status) => {
         switch (status) {
@@ -31,7 +33,22 @@ const LawyerStatusPanel = ({ lawyer, onNext }) => {
         }
     };
 
-
+    const handleStartListing = async () => {
+        const token = localStorage.getItem('lawyerup_token');
+        try {
+            await fetch(`http://localhost:5000/api/lawyers/${lawyer._id}/status`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ status: 'listed' }),
+            });
+            onNext(); // Reload to reflect new status
+        } catch (error) {
+            alert('Failed to update status. Please try again.');
+        }
+    };
 
     return (
         <div className={styles.statusContainer}>
@@ -69,16 +86,37 @@ const LawyerStatusPanel = ({ lawyer, onNext }) => {
                     </div>
                 </div>
 
-                {/* Status Progress Bar */}
+                {/* Rejection Reason */}
+                {status === 'rejected' && lawyer.rejectionReason && (
+                    <div className={styles.rejectionBox}>
+                        <h4>❌ Application Rejected</h4>
+                        <p><strong>Reason:</strong> {lawyer.rejectionReason}</p>
+                    </div>
+                )}
+
+                {/* Progress Bar */}
                 <div className={styles.progressBar}>
                     <div className={`${styles.step} ${statusStep >= 1 ? styles.activeOrange : ''}`}>Application Sent</div>
                     <div className={`${styles.step} ${statusStep >= 2 ? styles.activeGreen : ''}`}>Application Approved</div>
                     <div className={`${styles.step} ${statusStep >= 3 ? styles.activeBlue : ''}`}>Listed</div>
                 </div>
 
+                {/* Action Buttons */}
+                {status === 'hold' && (
+                    <div className={styles.actionRow}>
+                        <button className={styles.nextButton} onClick={handleStartListing}>Start Listing →</button>
+                    </div>
+                )}
+
                 {(status === 'verified' || status === 'listed') && (
                     <div className={styles.actionRow}>
                         <button className={styles.nextButton} onClick={onNext}>Edit Listing →</button>
+                    </div>
+                )}
+
+                {status === 'rejected' && (
+                    <div className={styles.actionRow}>
+                        <button className={styles.nextButton} onClick={onNext}>Edit Application →</button>
                     </div>
                 )}
             </div>

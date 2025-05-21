@@ -123,7 +123,7 @@ const JoinAsLawyerForm = () => {
                     </div>
 
                     <div className="file-input">
-                        <label>Upload License Document</label>
+                        <label>Upload License Document (Single page Pdf only❗)</label>
                         <input type="file" accept="application/pdf" onChange={(e) => handleFileChange(e, 'licenseFile')} />
                     </div>
                 </div>

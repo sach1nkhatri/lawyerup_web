@@ -1,3 +1,4 @@
+/* Panel container */
 .listing-panel {
     padding: 2rem;
     background: linear-gradient(to bottom, #f0f4f8, #e2ecf5);
@@ -18,6 +19,7 @@
     color: #374151;
 }
 
+/* Form grid layout */
 .listing-grid {
     display: flex;
     justify-content: space-between;
@@ -55,6 +57,7 @@
     margin-top: 0.3rem;
 }
 
+/* Profile picture */
 .listing-profile-pic {
     width: 180px;
     height: 180px;
@@ -65,13 +68,39 @@
     margin-bottom: 1rem;
 }
 
+/* Right section layout */
 .listing-right {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 
-.listing-right button {
+/* Upload + hold section */
+.photo-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
     margin-top: 1rem;
+}
+
+.photo-actions input[type="file"] {
+    padding: 0.5rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background-color: #e0f2fe;
+    width: 100%;
+    max-width: 220px;
+    cursor: pointer;
+}
+
+/* Buttons */
+.listing-right button,
+.photo-actions button {
+    margin-top: 0.5rem;
     padding: 0.7rem 1.4rem;
     border-radius: 8px;
     background-color: #f3f4f6;
@@ -81,10 +110,12 @@
     transition: background 0.2s ease;
 }
 
-.listing-right button:hover {
+.listing-right button:hover,
+.photo-actions button:hover {
     background-color: #e5e7eb;
 }
 
+/* Action buttons */
 .listing-actions {
     display: flex;
     justify-content: center;
@@ -122,4 +153,53 @@
     background-color: #dc2626;
 }
 
+/* Back to status button */
+.back-button {
+    background-color: #f3f4f6;
+    color: #1f2937;
+    border: 1px solid #cbd5e0;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    margin-bottom: 1rem;
+    align-self: flex-start;
+}
 
+.back-button:hover {
+    background-color: #e2e8f0;
+}
+
+/* 🔁 Responsive */
+@media (max-width: 768px) {
+    .listing-grid {
+        flex-direction: column;
+        padding: 1.5rem;
+    }
+
+    .listing-left,
+    .listing-right {
+        width: 100%;
+    }
+
+    .listing-profile-pic {
+        width: 140px;
+        height: 140px;
+    }
+
+    .photo-actions input[type="file"] {
+        max-width: 100%;
+    }
+
+    .listing-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .listing-save-btn,
+    .listing-update-btn,
+    .listing-delete-btn {
+        width: 100%;
+    }
+}
