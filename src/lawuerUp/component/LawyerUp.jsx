@@ -3,25 +3,44 @@ import { useParams, useNavigate } from 'react-router-dom';
 import LawyerCard from './LawyerCard';
 import LawyerProfilePanel from './LawyerProfilePanel';
 import '../css/LawyerUp.css';
-import { dummyLawyers } from '../../data/lawyerData';
+import axios from 'axios';
 
 const LawyerUp = () => {
     const navigate = useNavigate();
-    const { id } = useParams(); // grab dynamic segment like /lawyerProfile/:id
+    const { id } = useParams();
 
+    const [lawyers, setLawyers] = useState([]);
     const [selectedLawyer, setSelectedLawyer] = useState(null);
 
     useEffect(() => {
-        if (id) {
-            console.log("URL ID:", id);
-            const match = dummyLawyers.find((l) => String(l.id) === id);
-            console.log("Match found:", match);
+        const fetchLawyers = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/lawyers');
+                setLawyers(response.data);
+            } catch (err) {
+                console.error("Failed to fetch lawyers", err);
+            }
+        };
+        fetchLawyers();
+    }, []);
+
+    useEffect(() => {
+        if (id && lawyers.length > 0) {
+            const match = lawyers.find((l) => String(l._id) === id);
             setSelectedLawyer(match || null);
         } else {
             setSelectedLawyer(null);
         }
-    }, [id]);
+    }, [id, lawyers]);
 
+    const listedLawyers = lawyers.filter((l) => l.status === 'listed');
+
+    const resolveImage = (profilePhoto) => {
+        if (!profilePhoto) return null;
+        return profilePhoto.startsWith('data:image')
+            ? profilePhoto
+            : `http://localhost:5000/uploads/${profilePhoto}`;
+    };
 
     return (
         <div className="lawyerup-container">
@@ -38,27 +57,40 @@ const LawyerUp = () => {
 
             {!selectedLawyer ? (
                 <div className="lawyer-grid">
-                    {dummyLawyers.map((lawyer) => (
+                    {listedLawyers.map((lawyer) => (
                         <LawyerCard
-                            key={lawyer.id}
-                            lawyer={lawyer}
-                            onViewProfile={() => navigate(`/dashboard/lawyerUp/lawyerProfile/${lawyer.id}`)}
+                            key={lawyer._id}
+                            lawyer={{
+                                ...lawyer,
+                                name: lawyer.fullName,
+                                contact: lawyer.phone,
+                                image: resolveImage(lawyer.profilePhoto),
+                                rating: lawyer.rating || 0,
+                                reviews: lawyer.reviews || [],
+                            }}
+                            onViewProfile={() =>
+                                navigate(`/dashboard/lawyerUp/lawyerProfile/${lawyer._id}`)
+                            }
                         />
                     ))}
                 </div>
             ) : (
                 <div className="profile-split-view">
-                    {selectedLawyer ? (
-                        <>
-                            <LawyerCard lawyer={selectedLawyer} showShare/>
-                            <LawyerProfilePanel
-                                lawyer={selectedLawyer}
-                                onBack={() => navigate('/dashboard/lawyerUp')}
-                            />
-                        </>
-                    ) : (
-                        <p style={{marginLeft: '2rem', marginTop: '2rem'}}>⚠️ Lawyer not found.</p>
-                    )}
+                    <LawyerCard
+                        lawyer={{
+                            ...selectedLawyer,
+                            name: selectedLawyer.fullName,
+                            contact: selectedLawyer.phone,
+                            image: resolveImage(selectedLawyer.profilePhoto),
+                            rating: selectedLawyer.rating || 0,
+                            reviews: selectedLawyer.reviews || [],
+                        }}
+                        showShare
+                    />
+                    <LawyerProfilePanel
+                        lawyer={selectedLawyer}
+                        onBack={() => navigate('/dashboard/lawyerUp')}
+                    />
                 </div>
             )}
         </div>

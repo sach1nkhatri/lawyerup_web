@@ -1,4 +1,3 @@
-// src/list_lawyer/component/JoinLawyerPage.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,17 +10,14 @@ const JoinLawyerPage = () => {
     const [lawyerData, setLawyerData] = useState(null);
     const navigate = useNavigate();
 
-    // 🔁 Shared function to fetch lawyer data & update view
     const loadProfile = async () => {
-        const token = localStorage.getItem('lawyerup_token'); // ✅ correct
+        const token = localStorage.getItem('lawyerup_token');
         if (!token) {
-            console.warn('No token found — showing form.');
             setView('form');
             return;
         }
 
         try {
-            console.log('🔁 loadProfile called');
             const res = await fetch('http://localhost:5000/api/lawyers/me', {
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -29,24 +25,17 @@ const JoinLawyerPage = () => {
             if (!res.ok) throw new Error('no-application');
 
             const data = await res.json();
-            console.log('📦 Lawyer response:', data);
-
             setLawyerData(data);
 
-            const status = data.status;
-            const nextClicked = localStorage.getItem('lawyerup_nextClicked') === 'true';
-
-            console.log('📌 status:', status);
+            const status = data?.status || 'pending';
 
             if (['pending', 'hold', 'rejected'].includes(status)) {
                 setView('status');
             } else if (['verified', 'listed'].includes(status)) {
+                const nextClicked = localStorage.getItem('lawyerup_nextClicked') === 'true';
                 setView(nextClicked ? 'control' : 'status');
-            } else {
-                setView('status');
             }
         } catch (err) {
-            console.warn('No lawyer found — showing form.');
             setView('form');
         }
     };
@@ -60,33 +49,34 @@ const JoinLawyerPage = () => {
         setView('control');
     };
 
+    const handleBackToStatus = () => {
+        localStorage.removeItem('lawyerup_nextClicked');
+        setView('status');
+    };
+
     const handleReapply = () => {
         localStorage.removeItem('lawyerup_nextClicked');
         setLawyerData(null);
         setView('form');
     };
+    const handleGoToStatus = () => {
+        localStorage.removeItem('lawyerup_nextClicked');
+        setView('status');
+    };
 
-    console.log('📺 Current view:', view);
 
-    // ⏳ Loading
-    if (view === 'loading') {
-        return <p style={{ padding: '2rem' }}>Loading your application…</p>;
-    }
-
-    // 📝 Join Form
-    if (view === 'form') {
-        return <JoinAsLawyerForm onSubmitted={loadProfile} />;
-    }
-
-    // 📋 Status View
-    if (view === 'status') {
-        if (!lawyerData) return <p>⚠️ No application data found.</p>;
-        return <LawyerStatusPanel lawyer={lawyerData} onNext={handleNext} />;
-    }
-
-    // 🛠 Edit Listing
+    if (view === 'loading') return <p style={{ padding: '2rem' }}>Loading your application…</p>;
+    if (view === 'form') return <JoinAsLawyerForm onSubmitted={loadProfile} />;
+    if (view === 'status') return <LawyerStatusPanel lawyer={lawyerData} onNext={handleNext} />;
     if (view === 'control') {
-        return <LawyerFinalListingPanel lawyer={lawyerData} onReapply={handleReapply} />;
+        return (
+            <LawyerFinalListingPanel
+                lawyer={lawyerData}
+                onReapply={handleReapply}
+                onBack={handleBackToStatus} // ✅ here!
+                onHold={handleGoToStatus}
+            />
+        );
     }
 
     return <p>Something went wrong. Please reload.</p>;

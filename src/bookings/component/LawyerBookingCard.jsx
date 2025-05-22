@@ -1,0 +1,88 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import '../css/LawyerBookingCard.css';
+
+const LawyerBookingCard = ({ booking, onStatusChange }) => {
+    const user = booking.user; // client
+    const [link, setLink] = useState('');
+    const [isUpdating, setIsUpdating] = useState(false);
+
+    useEffect(() => {
+        setLink(booking.meetingLink || '');
+    }, [booking.meetingLink]);
+
+    const updateStatus = async (newStatus) => {
+        try {
+            await axios.patch(`http://localhost:5000/api/bookings/${booking._id}/status`, {
+                status: newStatus,
+            });
+            if (onStatusChange) onStatusChange();
+        } catch (error) {
+            console.error('Failed to update status:', error);
+        }
+    };
+
+    const updateLink = async () => {
+        try {
+            setIsUpdating(true);
+            await axios.patch(`http://localhost:5000/api/bookings/${booking._id}/meeting-link`, {
+                meetingLink: link,
+            });
+        } catch (error) {
+            console.error('Failed to update meeting link:', error);
+        } finally {
+            setIsUpdating(false);
+        }
+    };
+
+    return (
+        <div className="user-booking-card">
+            <div className="info-section">
+                <h2>{user?.fullName || "Unknown"}</h2>
+                <p><b>Email:</b> {user?.email}</p>
+                <p><b>Contact:</b> {user?.contactNumber || user?.phone}</p>
+            </div>
+
+            <hr style={{ margin: '1rem 0', borderTop: '1px dashed #ccc' }} />
+
+            <div className="booking-info">
+                <h3>Booking Info</h3>
+                <div className="booking-columns">
+                    <div>
+                        <p><b>Date:</b> {booking.date}</p>
+                        <p><b>Time:</b> {booking.time}</p>
+                        <p><b>Status:</b> {booking.status}</p>
+                        <p><b>Type:</b> {booking.mode}</p>
+                    </div>
+                    <div>
+                        <label><b>Meeting Link:</b></label>
+                        <input
+                            type="text"
+                            value={link}
+                            onChange={(e) => setLink(e.target.value)}
+                            style={{ width: '100%' }}
+                        />
+                        <button className="update-btn" onClick={updateLink} disabled={isUpdating}>
+                            {isUpdating ? 'Updating...' : 'Update Link'}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div className="card-actions">
+                {booking.status === 'pending' && (
+                    <button className="approve-btn" onClick={() => updateStatus('approved')}>
+                        Approve
+                    </button>
+                )}
+                {booking.status === 'approved' && (
+                    <button className="complete-btn" onClick={() => updateStatus('completed')}>
+                        Mark Completed
+                    </button>
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default LawyerBookingCard;
