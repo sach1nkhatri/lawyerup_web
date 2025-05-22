@@ -11,6 +11,7 @@ import ReportModal from '../modals/ReportModal';
 import HelpFAQPage from '../pages/HelpFAQPage';
 import JoinLawyerPage from '../list_lawyer/component/JoinLawyerPage';
 import LawyerStatusPanel from '../list_lawyer/component/LawyerStatusPanel';
+import Bookings from '../bookings/component/BookingPage';
 
 
 
@@ -29,6 +30,7 @@ const Dashboard = () => {
             'Settings': '/dashboard/settings',
             'Help&FAQ': '/dashboard/help',
             'Join as a Lawyer': '/dashboard/join-lawyerUp',
+            'Bookings': '/dashboard/bookings',
         };
 
         navigate(routeMap[label] || '/dashboard');
@@ -53,6 +55,7 @@ const Dashboard = () => {
                     <Route path="*" element={<ChatWindow />} />
                     <Route path="join-lawyerUp" element={<JoinLawyerPage />} />
                     <Route path="status-page" element={<LawyerStatusPanel />} />
+                    <Route path="bookings" element={<Bookings/>} />
                 </Routes>
             </div>
 
