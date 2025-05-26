@@ -4,6 +4,7 @@ import LawyerCard from './LawyerCard';
 import LawyerProfilePanel from './LawyerProfilePanel';
 import '../css/LawyerUp.css';
 import axios from 'axios';
+import { startLoader, stopLoader } from '../../utils/loader'; // ✅ NProgress loader
 
 const LawyerUp = () => {
     const navigate = useNavigate();
@@ -11,14 +12,19 @@ const LawyerUp = () => {
 
     const [lawyers, setLawyers] = useState([]);
     const [selectedLawyer, setSelectedLawyer] = useState(null);
+    const [loading, setLoading] = useState(true); // ✅ local flag for fallback UI
 
     useEffect(() => {
         const fetchLawyers = async () => {
             try {
+                startLoader(); // ✅ show loader
                 const response = await axios.get('http://localhost:5000/api/lawyers');
                 setLawyers(response.data);
             } catch (err) {
                 console.error("Failed to fetch lawyers", err);
+            } finally {
+                stopLoader(); // ✅ stop loader
+                setLoading(false);
             }
         };
         fetchLawyers();
@@ -41,6 +47,10 @@ const LawyerUp = () => {
             ? profilePhoto
             : `http://localhost:5000/uploads/${profilePhoto}`;
     };
+
+    if (loading) {
+        return <div style={{ padding: '2rem', textAlign: 'center' }}>Loading lawyers...</div>;
+    }
 
     return (
         <div className="lawyerup-container">

@@ -1,14 +1,39 @@
 import React, { useState } from 'react';
-import '../css/UserReview.css'; // updated to proper CSS file
+import axios from 'axios';
+import '../css/UserReview.css';
 
 const UserReview = ({ bookingId, onClose }) => {
     const [rating, setRating] = useState(0);
     const [hover, setHover] = useState(0);
     const [comment, setComment] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const handleSubmit = () => {
-        alert(`Submitted review for ${bookingId} ⭐${rating}: ${comment}`);
-        onClose();
+    const handleSubmit = async () => {
+        if (!rating || !comment.trim()) {
+            alert('Please give a rating and write a comment.');
+            return;
+        }
+
+        try {
+            setLoading(true);
+            const user = JSON.parse(localStorage.getItem('lawyerup_user'));
+
+            const payload = {
+                user: user.fullName, // or user._id if needed
+                comment,
+                rating,
+            };
+
+            await axios.post(`http://localhost:5000/api/reviews/${bookingId}`, payload);
+
+            alert('✅ Review submitted successfully!');
+            onClose(); // Close the modal
+        } catch (err) {
+            console.error('Review submission error:', err);
+            alert('❌ Failed to submit review. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -39,7 +64,9 @@ const UserReview = ({ bookingId, onClose }) => {
                 />
 
                 <div className="modal-buttons">
-                    <button onClick={handleSubmit}>Submit</button>
+                    <button onClick={handleSubmit} disabled={loading}>
+                        {loading ? 'Submitting...' : 'Submit'}
+                    </button>
                     <button onClick={onClose}>Cancel</button>
                 </div>
             </div>

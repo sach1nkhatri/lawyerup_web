@@ -7,7 +7,7 @@ import NewsPage from './NewsPage';
 import LawyerUp from "../lawuerUp/component/LawyerUp";
 import PdfLibrary from "../components/PdfLibrary";
 import SettingsPage from '../pages/SettingsPage';
-import ReportModal from '../modals/ReportModal';
+import ReportModal from '../report/component/ReportModal';
 import HelpFAQPage from '../pages/HelpFAQPage';
 import JoinLawyerPage from '../list_lawyer/component/JoinLawyerPage';
 import LawyerStatusPanel from '../list_lawyer/component/LawyerStatusPanel';

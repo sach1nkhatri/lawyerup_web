@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import LandingPage from './pages/LandingPage';
-import AuthForm from './components/LoginSignup';
+import AuthForm from './auth/components/LoginSignup';
 import Dashboard from './pages/Dashboard';
 import PricingPlans from './components/PricingPlans';
 import CheckoutPage from './pages/CheckoutPage';

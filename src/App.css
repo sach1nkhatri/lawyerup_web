@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+.Toastify__toast--success {
+  background-color: #16a34a;
+}
+
+.Toastify__toast--error {
+  background-color: #dc2626;
+}
+
+.Toastify__toast--warn {
+  background-color: #f59e0b;
+}
+
+.Toastify__toast-body {
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 500;
+}

@@ -7,9 +7,7 @@ import '../css/UserBookingCard.css';
 import '../css/LawyerBookingCard.css';
 
 const BookingPage = () => {
-    const user = useMemo(() => {
-        return JSON.parse(localStorage.getItem('lawyerup_user'));
-    }, []);
+    const user = useMemo(() => JSON.parse(localStorage.getItem('lawyerup_user')), []);
     const [bookings, setBookings] = useState([]);
     const [activeTab, setActiveTab] = useState('pending');
     const [loading, setLoading] = useState(true);
@@ -25,7 +23,7 @@ const BookingPage = () => {
                         : `http://localhost:5000/api/bookings/user/${user._id}`;
                 const res = await axios.get(endpoint);
                 setBookings(res.data);
-                console.log("Full bookings from server:", res.data); // DEBUG
+                console.log("Full bookings from server:", res.data);
             } catch (err) {
                 console.error('Failed to fetch bookings:', err);
             } finally {
@@ -36,11 +34,32 @@ const BookingPage = () => {
         fetchBookings();
     }, [user]);
 
-    const filtered = bookings.filter((b) => {
-        const status = b.status?.toLowerCase().trim();
-        if (activeTab === 'pending') return status === 'pending';
-        return ['approved', 'completed', 'cancelled'].includes(status);
-    });
+    useEffect(() => {
+        if (loading) return;
+
+        const hasPending = bookings.some(b => b.status?.toLowerCase() === 'pending');
+        const hasAccepted = bookings.some(b => b.status?.toLowerCase() === 'approved');
+        const hasHistory = bookings.some(b =>
+            ['completed', 'cancelled'].includes(b.status?.toLowerCase())
+        );
+
+        if (hasPending) setActiveTab('pending');
+        else if (hasAccepted) setActiveTab('accepted');
+        else if (hasHistory) setActiveTab('history');
+        else setActiveTab('pending');
+    }, [loading, bookings]);
+
+    const filterBookings = (status) => {
+        return bookings.filter(b => {
+            const s = b.status?.toLowerCase().trim();
+            if (status === 'pending') return s === 'pending';
+            if (status === 'accepted') return s === 'approved';
+            if (status === 'history') return ['completed', 'cancelled'].includes(s);
+            return false;
+        });
+    };
+
+    const filtered = filterBookings(activeTab);
 
     const handleCancel = (id) => {
         setBookings(prev => prev.filter(b => b._id !== id));
@@ -58,6 +77,12 @@ const BookingPage = () => {
                     Pending
                 </button>
                 <button
+                    className={activeTab === 'accepted' ? 'active' : ''}
+                    onClick={() => setActiveTab('accepted')}
+                >
+                    Accepted
+                </button>
+                <button
                     className={activeTab === 'history' ? 'active' : ''}
                     onClick={() => setActiveTab('history')}
                 >
@@ -70,7 +95,9 @@ const BookingPage = () => {
             ) : (
                 <div className="booking-list">
                     {filtered.length === 0 ? (
-                        <p style={{ textAlign: 'center', marginTop: '2rem' }}>No bookings found.</p>
+                        <p style={{ textAlign: 'center', marginTop: '2rem' }}>
+                            No bookings found in {activeTab} tab.
+                        </p>
                     ) : (
                         filtered.map((booking) =>
                             user.role === 'lawyer' ? (
@@ -78,7 +105,6 @@ const BookingPage = () => {
                                     key={booking._id}
                                     booking={booking}
                                     onStatusChange={() => {
-                                        // Optional: refresh just this one
                                         setBookings(prev =>
                                             prev.map((b) =>
                                                 b._id === booking._id ? { ...b, status: 'updated' } : b

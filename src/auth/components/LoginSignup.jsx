@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import '../css/LoginSignup.css';
-import hammerIcon from '../assets/hammer.png';
-import logoIcon from '../assets/logo2.png';
-import logoText from '../assets/textlogoblack.png';
+import hammerIcon from '../../assets/hammer.png';
+import logoIcon from '../../assets/logo2.png';
+import logoText from '../../assets/textlogoblack.png';
+import { startLoader, stopLoader } from '../../utils/loader';
+import { notify } from '../../utils/notify';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -32,6 +34,7 @@ const LoginSignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        startLoader(); // 🌀 Start loader
 
         const endpoint = isLogin
             ? 'http://localhost:5000/api/auth/login'
@@ -51,20 +54,34 @@ const LoginSignUp = () => {
             };
 
         try {
+            startLoader();
+
             const res = await axios.post(endpoint, payload);
             const { user, token } = res.data;
 
-            // Save auth info
             localStorage.setItem('lawyerup_token', token);
             localStorage.setItem('lawyerup_user', JSON.stringify(user));
+
             if (isLogin) {
-                localStorage.setItem('auth', 'true'); // ✅ THIS IS NEEDED
-                console.log('Logging in user:', formData.email);
-                navigate('/dashboard'); // ✅ Should work if auth is set
+                localStorage.setItem('auth', 'true');
             }
+
+            notify('success', '🎉 Logged in successfully!');
+            navigate('/dashboard');
         } catch (err) {
-            console.error(err);
-            alert(err.response?.data?.message || 'Something went wrong!');
+            const msg = err.response?.data?.message || err.message;
+
+            if (msg.toLowerCase().includes('user')) {
+                notify('error', '❌ User not found.');
+            } else if (msg.toLowerCase().includes('password')) {
+                notify('warn', '🔐 Incorrect password.');
+            } else {
+                notify('error', '⚠️ Network error. Please try again.');
+            }
+
+            console.error('[Login error]', err);
+        } finally {
+            stopLoader();
         }
     };
 

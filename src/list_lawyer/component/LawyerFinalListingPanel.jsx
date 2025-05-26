@@ -39,10 +39,10 @@ const LawyerFinalListingPanel = ({ lawyer, onReapply, onBack, onHold }) => {
                     body: JSON.stringify({ photo: reader.result }),
                 });
                 if (!res.ok) throw new Error();
-                toast.success('✅ Profile photo updated!');
+                toast.success('Profile photo updated!');
                 setProfilePhoto(reader.result);
             } catch {
-                toast.error('❌ Failed to update photo');
+                toast.error('Failed to update photo');
             } finally {
                 stopLoader();
             }
@@ -60,9 +60,9 @@ const LawyerFinalListingPanel = ({ lawyer, onReapply, onBack, onHold }) => {
             });
 
             if (res.ok) {
-                toast.success('✅ Changes saved successfully!');
+                toast.success('Changes saved successfully!');
             } else {
-                toast.error('❌ Failed to save changes.');
+                toast.error('Failed to save changes.');
             }
         } catch (error) {
             console.error('Error updating listing:', error);
@@ -85,7 +85,7 @@ const LawyerFinalListingPanel = ({ lawyer, onReapply, onBack, onHold }) => {
                 toast.info('⚪ Profile put on hold');
                 onHold(); // ✅ go back to status, not join form
             } else {
-                toast.error('❌ Failed to hold profile');
+                toast.error('Failed to hold profile');
             }
         } catch {
             toast.error('⚠️ Network error');
@@ -108,7 +108,7 @@ const LawyerFinalListingPanel = ({ lawyer, onReapply, onBack, onHold }) => {
                 toast.warn('🗑️ Profile deleted');
                 onReapply(); // Clear view
             } else {
-                toast.error('❌ Failed to delete profile');
+                toast.error('Failed to delete profile');
             }
         } catch {
             toast.error('⚠️ Network error while deleting');
