@@ -66,7 +66,7 @@ const LoginSignUp = () => {
                 localStorage.setItem('auth', 'true');
             }
 
-            notify('success', '🎉 Logged in successfully!');
+            notify('success', 'Logged in successfully!');
             navigate('/dashboard');
         } catch (err) {
             const msg = err.response?.data?.message || err.message;

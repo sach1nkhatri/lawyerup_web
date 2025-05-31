@@ -57,7 +57,7 @@ const LawyerStatusPanel = ({ lawyer, onNext }) => {
             });
 
             if (res.ok) {
-                notify('success', '🎉 Your profile is now public!');
+                notify('success', 'Your profile is now public!');
                 onNext();
             } else {
                 notify('error', '❌ Failed to list profile.');

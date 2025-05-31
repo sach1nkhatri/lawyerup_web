@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../css/UserReview.css';
+import { notify } from '../../utils/notify'; // ✅ uses your custom sound-based toast
 
 const UserReview = ({ bookingId, onClose }) => {
     const [rating, setRating] = useState(0);
@@ -10,7 +11,7 @@ const UserReview = ({ bookingId, onClose }) => {
 
     const handleSubmit = async () => {
         if (!rating || !comment.trim()) {
-            alert('Please give a rating and write a comment.');
+            notify('error', 'Please give a rating and write a comment.');
             return;
         }
 
@@ -26,11 +27,11 @@ const UserReview = ({ bookingId, onClose }) => {
 
             await axios.post(`http://localhost:5000/api/reviews/${bookingId}`, payload);
 
-            alert('✅ Review submitted successfully!');
-            onClose(); // Close the modal
+            notify('success', 'Review submitted successfully!');
+            onClose();
         } catch (err) {
             console.error('Review submission error:', err);
-            alert('❌ Failed to submit review. Please try again.');
+            notify('error', '❌ Failed to submit review. Please try again.');
         } finally {
             setLoading(false);
         }
