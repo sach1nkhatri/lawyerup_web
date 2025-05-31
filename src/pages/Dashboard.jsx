@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 
-import Sidebar from '../components/Sidebar';
+import Sidebar from '../sidebar/component/Sidebar';
 import ChatWindow from './ChatWindow';
 import NewsPage from './NewsPage';
 import LawyerUp from "../lawuerUp/component/LawyerUp";

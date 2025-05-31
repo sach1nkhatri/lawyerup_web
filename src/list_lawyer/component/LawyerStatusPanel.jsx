@@ -1,6 +1,8 @@
 import React from 'react';
 import styles from '../css/LawyerStatusPanel.module.css';
 import defaultAvatar from '../../assets/avatar.png';
+import Swal from 'sweetalert2'; // ✅ import SweetAlert2
+import { notify } from '../../utils/notify'; // ✅ import your notify
 
 const LawyerStatusPanel = ({ lawyer, onNext }) => {
     if (!lawyer) return null;
@@ -20,7 +22,6 @@ const LawyerStatusPanel = ({ lawyer, onNext }) => {
         ? lawyer.profilePhoto
         : `http://localhost:5000/uploads/${lawyer.profilePhoto || ''}`;
 
-
     const getStatusLabel = (status) => {
         switch (status) {
             case 'pending': return '🟠 Pending Review';
@@ -34,9 +35,19 @@ const LawyerStatusPanel = ({ lawyer, onNext }) => {
     };
 
     const handleStartListing = async () => {
+        const result = await Swal.fire({
+            title: 'List Your Profile?',
+            text: 'Your profile will be made public to clients.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, List It!',
+        });
+
+        if (!result.isConfirmed) return;
+
         const token = localStorage.getItem('lawyerup_token');
         try {
-            await fetch(`http://localhost:5000/api/lawyers/${lawyer._id}/status`, {
+            const res = await fetch(`http://localhost:5000/api/lawyers/${lawyer._id}/status`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -44,23 +55,31 @@ const LawyerStatusPanel = ({ lawyer, onNext }) => {
                 },
                 body: JSON.stringify({ status: 'listed' }),
             });
-            onNext(); // Reload to reflect new status
+
+            if (res.ok) {
+                notify('success', '🎉 Your profile is now public!');
+                onNext();
+            } else {
+                notify('error', '❌ Failed to list profile.');
+            }
         } catch (error) {
-            alert('Failed to update status. Please try again.');
+            notify('error', '⚠️ Network error while updating status.');
         }
     };
 
     return (
         <div className={styles.statusContainer}>
             <div className={styles.panel}>
-
                 {/* Lawyer Photo */}
                 <div className={styles.avatarWrapper}>
                     <img
                         src={imageURL}
                         alt="Lawyer"
                         className={styles.avatar}
-                        onError={(e) => { e.target.onerror = null; e.target.src = defaultAvatar; }}
+                        onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = defaultAvatar;
+                        }}
                     />
                 </div>
 
@@ -104,19 +123,33 @@ const LawyerStatusPanel = ({ lawyer, onNext }) => {
                 {/* Action Buttons */}
                 {status === 'hold' && (
                     <div className={styles.actionRow}>
-                        <button className={styles.nextButton} onClick={handleStartListing}>Start Listing →</button>
+                        <button className={styles.nextButton} onClick={handleStartListing}>
+                            Start Listing →
+                        </button>
                     </div>
                 )}
 
-                {(status === 'verified' || status === 'listed') && (
+                {status === 'verified' && (
                     <div className={styles.actionRow}>
-                        <button className={styles.nextButton} onClick={onNext}>Edit Listing →</button>
+                        <button className={styles.nextButton} onClick={onNext}>
+                            Edit Listing (Not Public Yet) →
+                        </button>
+                    </div>
+                )}
+
+                {status === 'listed' && (
+                    <div className={styles.actionRow}>
+                        <button className={styles.nextButton} onClick={onNext}>
+                            Edit Public Listing →
+                        </button>
                     </div>
                 )}
 
                 {status === 'rejected' && (
                     <div className={styles.actionRow}>
-                        <button className={styles.nextButton} onClick={onNext}>Edit Application →</button>
+                        <button className={styles.nextButton} onClick={onNext}>
+                            Edit Application →
+                        </button>
                     </div>
                 )}
             </div>

@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import UserReview from './UserReview';
 import defaultAvatar from '../../assets/avatar.png';
 import '../css/UserBookingCard.css';
+import {notify} from "../../utils/notify";
+import axios from "axios";
+import Swal from 'sweetalert2';
 
-const UserBookingCard = ({ booking }) => {
+const UserBookingCard = ({ booking, onCancel }) => {
     const [showReview, setShowReview] = useState(false);
 
     const lawyerProfile = booking.lawyerList;   // 👈 Public listing info (photo, specialization)
@@ -17,6 +20,30 @@ const UserBookingCard = ({ booking }) => {
     const lawyerImg = lawyerProfile.profilePhoto?.startsWith('data:image')
         ? lawyerProfile.profilePhoto
         : `http://localhost:5000/uploads/${lawyerProfile.profilePhoto || ''}`;
+
+    const handleCancel = async () => {
+        const result = await Swal.fire({
+            title: 'Cancel Booking?',
+            text: "This action cannot be undone.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#e24c4c',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, cancel it!',
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await axios.delete(`http://localhost:5000/api/bookings/${booking._id}`);
+                notify('success', 'Booking cancelled.');
+                onCancel?.(booking._id);
+            } catch (err) {
+                console.error('Cancel error:', err);
+                notify('error', '❌ Failed to cancel booking.');
+            }
+        }
+    };
+
 
     return (
         <div className="user-booking-card">
@@ -67,10 +94,11 @@ const UserBookingCard = ({ booking }) => {
 
             <div className="card-actions">
                 {booking.status === 'pending' && (
-                    <button className="cancel-btn" onClick={() => alert("Cancel feature coming soon!")}>
+                    <button className="cancel-btn" onClick={handleCancel}>
                         Cancel Booking
                     </button>
                 )}
+
                 {booking.status === 'completed' && !booking.reviewed && (
                     <button className="review-btn" onClick={() => setShowReview(true)}>
                         Rate Lawyer

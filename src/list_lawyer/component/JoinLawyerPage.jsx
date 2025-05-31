@@ -10,30 +10,30 @@ const JoinLawyerPage = () => {
     const [lawyerData, setLawyerData] = useState(null);
     const navigate = useNavigate();
 
+    const getToken = () => localStorage.getItem('lawyerup_token');
+    const getNextClicked = () => localStorage.getItem('lawyerup_nextClicked') === 'true';
+
     const loadProfile = async () => {
-        const token = localStorage.getItem('lawyerup_token');
-        if (!token) {
-            setView('form');
-            return;
-        }
+        const token = getToken();
+        if (!token) return setView('form');
 
         try {
             const res = await fetch('http://localhost:5000/api/lawyers/me', {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
-            if (!res.ok) throw new Error('no-application');
+            if (!res.ok) throw new Error('No application found');
 
             const data = await res.json();
             setLawyerData(data);
 
             const status = data?.status || 'pending';
-
             if (['pending', 'hold', 'rejected'].includes(status)) {
                 setView('status');
             } else if (['verified', 'listed'].includes(status)) {
-                const nextClicked = localStorage.getItem('lawyerup_nextClicked') === 'true';
-                setView(nextClicked ? 'control' : 'status');
+                setView(getNextClicked() ? 'control' : 'status');
+            } else {
+                setView('form');
             }
         } catch (err) {
             setView('form');
@@ -44,6 +44,7 @@ const JoinLawyerPage = () => {
         loadProfile();
     }, []);
 
+    // Handlers
     const handleNext = () => {
         localStorage.setItem('lawyerup_nextClicked', 'true');
         setView('control');
@@ -51,7 +52,7 @@ const JoinLawyerPage = () => {
 
     const handleBackToStatus = () => {
         localStorage.removeItem('lawyerup_nextClicked');
-        setView('status');
+        loadProfile(); // handles setting correct view
     };
 
     const handleReapply = () => {
@@ -59,12 +60,14 @@ const JoinLawyerPage = () => {
         setLawyerData(null);
         setView('form');
     };
-    const handleGoToStatus = () => {
+
+    const handleGoToStatus = async () => {
         localStorage.removeItem('lawyerup_nextClicked');
-        setView('status');
+        await loadProfile(); // 🔁 fetch updated lawyer data and update view
     };
 
 
+    // View rendering
     if (view === 'loading') return <p style={{ padding: '2rem' }}>Loading your application…</p>;
     if (view === 'form') return <JoinAsLawyerForm onSubmitted={loadProfile} />;
     if (view === 'status') return <LawyerStatusPanel lawyer={lawyerData} onNext={handleNext} />;
@@ -73,7 +76,7 @@ const JoinLawyerPage = () => {
             <LawyerFinalListingPanel
                 lawyer={lawyerData}
                 onReapply={handleReapply}
-                onBack={handleBackToStatus} // ✅ here!
+                onBack={handleBackToStatus}
                 onHold={handleGoToStatus}
             />
         );

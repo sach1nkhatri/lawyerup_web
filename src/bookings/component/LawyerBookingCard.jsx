@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../css/LawyerBookingCard.css';
+import { notify } from '../../utils/notify'; // ✅ Toasts
 
 const LawyerBookingCard = ({ booking, onStatusChange }) => {
-    const user = booking.user; // client
+    const user = booking.user;
     const [link, setLink] = useState('');
     const [isUpdating, setIsUpdating] = useState(false);
 
@@ -16,24 +17,34 @@ const LawyerBookingCard = ({ booking, onStatusChange }) => {
             await axios.patch(`http://localhost:5000/api/bookings/${booking._id}/status`, {
                 status: newStatus,
             });
+            notify('success', `Status updated to "${newStatus}"`);
             if (onStatusChange) onStatusChange();
         } catch (error) {
             console.error('Failed to update status:', error);
+            notify('error', '❌ Failed to update booking status');
         }
     };
 
     const updateLink = async () => {
+        if (!link.trim()) {
+            notify('error', 'Please add a meeting link before updating.');
+            return;
+        }
+
         try {
             setIsUpdating(true);
             await axios.patch(`http://localhost:5000/api/bookings/${booking._id}/meeting-link`, {
                 meetingLink: link,
             });
+            notify('success', 'Meeting link updated!');
         } catch (error) {
             console.error('Failed to update meeting link:', error);
+            notify('error', 'Failed to update meeting link');
         } finally {
             setIsUpdating(false);
         }
     };
+
 
     return (
         <div className="user-booking-card">
@@ -53,6 +64,9 @@ const LawyerBookingCard = ({ booking, onStatusChange }) => {
                         <p><b>Time:</b> {booking.time}</p>
                         <p><b>Status:</b> {booking.status}</p>
                         <p><b>Type:</b> {booking.mode}</p>
+                        {booking.description && (
+                            <p><b>Description:</b> {booking.description}</p>
+                        )}
                     </div>
                     <div>
                         <label><b>Meeting Link:</b></label>
@@ -80,6 +94,7 @@ const LawyerBookingCard = ({ booking, onStatusChange }) => {
                         Mark Completed
                     </button>
                 )}
+
             </div>
         </div>
     );

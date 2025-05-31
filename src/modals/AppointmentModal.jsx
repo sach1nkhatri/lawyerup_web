@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './css/AppointmentModal.css';
+import { startLoader, stopLoader } from '../utils/loader';
+import { notify } from '../utils/notify';
+;
 
 const AppointmentModal = ({ lawyer, onClose }) => {
     const [availableDates, setAvailableDates] = useState([]);
@@ -13,28 +16,38 @@ const AppointmentModal = ({ lawyer, onClose }) => {
 
     const user = JSON.parse(localStorage.getItem('lawyerup_user'));
 
-    // Generate next 14 bookable days
+// ✅ Get valid dates from lawyer schedule (Nepal time)
     useEffect(() => {
         const validDates = [];
         const today = new Date();
 
         for (let i = 0; i < 14; i++) {
-            const date = new Date(today);
+            const date = new Date();
             date.setDate(today.getDate() + i);
-            const weekday = date.toLocaleDateString('en-US', { weekday: 'long' });
 
-            if (lawyer.schedule[weekday] && lawyer.schedule[weekday].length > 0) {
-                validDates.push(date.toISOString().split('T')[0]);
+            const weekday = date.toLocaleDateString('en-US', {
+                weekday: 'long',
+                timeZone: 'Asia/Kathmandu'
+            });
+
+            const formatted = getNepalDateString(date); // "YYYY-MM-DD"
+
+            if (lawyer.schedule[weekday]?.length > 0) {
+                validDates.push(formatted);
             }
         }
 
         setAvailableDates(validDates);
+        if (validDates.length > 0) {
+            setSelectedDate(validDates[0]);
+        }
     }, [lawyer.schedule]);
 
-    // Fetch time slots when date or duration changes
+
+// ✅ Fetch available + booked slots (objects with availability flag)
     useEffect(() => {
-        const fetchSlots = async () => {
-            if (!selectedDate || !duration) return;
+        const fetchAvailableSlots = async () => {
+            if (!selectedDate || !duration || !lawyer._id) return;
 
             try {
                 const res = await axios.get(`http://localhost:5000/api/bookings/slots`, {
@@ -44,30 +57,43 @@ const AppointmentModal = ({ lawyer, onClose }) => {
                         duration
                     }
                 });
-                setTimeSlots(res.data);
+
+                const slots = res.data || []; // e.g., [{ time: '10:00', available: true }, ...]
+                setTimeSlots(slots);
+
+                const firstAvailable = slots.find(slot =>
+                    typeof slot === 'string' || slot.available === true
+                );
+
+                setSelectedTime(
+                    typeof firstAvailable === 'string' ? firstAvailable : firstAvailable?.time || ''
+                );
             } catch (err) {
-                console.error("Failed to load slots:", err);
+                console.error('Failed to load available slots:', err);
                 setTimeSlots([]);
+                setSelectedTime('');
             }
         };
 
-        fetchSlots();
+        fetchAvailableSlots();
     }, [selectedDate, duration, lawyer._id]);
+;
 
+
+    // ✅ Booking submission
     const handleConfirm = async () => {
         const clientId = user?._id;
-        const lawyerUserId = lawyer.user?._id || lawyer.user;  // ✅ must be User ID
-        const lawyerListId = lawyer._id;                       // ✅ public listing ID
+        const lawyerUserId = lawyer.user?._id || lawyer.user;
+        const lawyerListId = lawyer._id;
 
         if (!clientId || !lawyerUserId || !lawyerListId || !selectedDate || !selectedTime) {
-            alert("Please fill in all fields.");
+            notify('warn', '⚠️ Please fill in all required fields.');
             return;
         }
 
-
         const bookingData = {
             user: clientId,
-            lawyer: lawyer.user?._id || lawyer.user || lawyer._id,
+            lawyer: lawyerUserId,
             lawyerList: lawyerListId,
             date: selectedDate,
             time: selectedTime,
@@ -79,14 +105,31 @@ const AppointmentModal = ({ lawyer, onClose }) => {
         };
 
         try {
+            startLoader();
             await axios.post('http://localhost:5000/api/bookings', bookingData);
-            alert("Appointment booked successfully!");
+
+            notify('success', `Appointment booked successfully!`);
             onClose();
         } catch (err) {
-            console.error("Booking failed:", err);
-            alert("Failed to book appointment.");
+            const msg = err.response?.data?.message || err.message || 'Unknown error occurred.';
+            notify('error', `Booking failed: ${msg}`);
+            console.error('[Booking failed]', err);
+        } finally {
+            stopLoader();
         }
     };
+
+
+    function getNepalDateString(date = new Date()) {
+        const options = { timeZone: 'Asia/Kathmandu', year: 'numeric', month: '2-digit', day: '2-digit' };
+        const parts = new Intl.DateTimeFormat('en-CA', options).formatToParts(date);
+
+        const year = parts.find(p => p.type === 'year').value;
+        const month = parts.find(p => p.type === 'month').value;
+        const day = parts.find(p => p.type === 'day').value;
+
+        return `${year}-${month}-${day}`; // e.g. "2025-06-01"
+    }
 
 
     return (
@@ -97,7 +140,6 @@ const AppointmentModal = ({ lawyer, onClose }) => {
 
                 <label>Select Date</label>
                 <select value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)}>
-                    <option value="">-- Select --</option>
                     {availableDates.map((d, i) => (
                         <option key={i} value={d}>{d}</option>
                     ))}
@@ -105,10 +147,16 @@ const AppointmentModal = ({ lawyer, onClose }) => {
 
                 <label>Available Time Slots</label>
                 <select value={selectedTime} onChange={(e) => setSelectedTime(e.target.value)}>
-                    <option value="">-- Select --</option>
-                    {timeSlots.map((slot, i) => (
-                        <option key={i} value={slot}>{slot}</option>
-                    ))}
+                    {timeSlots.map((slot, i) => {
+                        const [hour, minute] = slot.split(':');
+                        const h = parseInt(hour);
+                        const ampm = h >= 12 ? 'PM' : 'AM';
+                        const hour12 = h % 12 === 0 ? 12 : h % 12;
+                        const formatted = `${hour12}:${minute} ${ampm}`;
+                        return (
+                            <option key={i} value={slot}>{formatted}</option>
+                        );
+                    })}
                 </select>
 
                 <label>Duration (hrs)</label>

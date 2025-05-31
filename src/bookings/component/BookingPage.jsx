@@ -50,14 +50,18 @@ const BookingPage = () => {
     }, [loading, bookings]);
 
     const filterBookings = (status) => {
-        return bookings.filter(b => {
+        const filtered = bookings.filter(b => {
             const s = b.status?.toLowerCase().trim();
             if (status === 'pending') return s === 'pending';
             if (status === 'accepted') return s === 'approved';
             if (status === 'history') return ['completed', 'cancelled'].includes(s);
             return false;
         });
+
+        // Sort by newest (most recent createdAt first)
+        return filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     };
+
 
     const filtered = filterBookings(activeTab);
 
@@ -107,7 +111,7 @@ const BookingPage = () => {
                                     onStatusChange={() => {
                                         setBookings(prev =>
                                             prev.map((b) =>
-                                                b._id === booking._id ? { ...b, status: 'updated' } : b
+                                                b._id === booking._id ? { ...b, status: 'approved' } : b
                                             )
                                         );
                                     }}

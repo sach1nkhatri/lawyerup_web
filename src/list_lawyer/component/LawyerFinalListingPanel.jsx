@@ -2,15 +2,18 @@ import React, { useState } from 'react';
 import LawyerScheduleBuilder from './LawyerScheduleBuilder';
 import '../css/LawyerFinalListingPanel.css';
 import defaultAvatar from '../../assets/avatar.png';
-import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+
 import { startLoader, stopLoader } from '../utils/loader';
+import { notify } from '../../utils/notify'; // ✅ your custom alert with sound
 
 const LawyerFinalListingPanel = ({ lawyer, onReapply, onBack, onHold }) => {
     const [form, setForm] = useState({
         phone: lawyer.phone || '',
         state: lawyer.state || '',
         city: lawyer.city || '',
-        address: lawyer.address || ''
+        address: lawyer.address || '',
+        qualification: lawyer.qualification || ''
     });
 
     const [editableSchedule, setEditableSchedule] = useState(lawyer.schedule || {});
@@ -39,10 +42,10 @@ const LawyerFinalListingPanel = ({ lawyer, onReapply, onBack, onHold }) => {
                     body: JSON.stringify({ photo: reader.result }),
                 });
                 if (!res.ok) throw new Error();
-                toast.success('Profile photo updated!');
+                notify('success', 'Profile photo updated!');
                 setProfilePhoto(reader.result);
             } catch {
-                toast.error('Failed to update photo');
+                notify('error', 'Failed to update photo');
             } finally {
                 stopLoader();
             }
@@ -51,6 +54,16 @@ const LawyerFinalListingPanel = ({ lawyer, onReapply, onBack, onHold }) => {
     };
 
     const handleSave = async () => {
+        const result = await Swal.fire({
+            title: 'Save Changes?',
+            text: 'Do you want to save your profile updates?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Save',
+        });
+
+        if (!result.isConfirmed) return;
+
         try {
             startLoader();
             const res = await fetch(`http://localhost:5000/api/lawyers/${lawyer._id}`, {
@@ -60,13 +73,43 @@ const LawyerFinalListingPanel = ({ lawyer, onReapply, onBack, onHold }) => {
             });
 
             if (res.ok) {
-                toast.success('Changes saved successfully!');
+                notify('success', 'Changes saved successfully!');
             } else {
-                toast.error('Failed to save changes.');
+                notify('error', 'Failed to save changes.');
             }
-        } catch (error) {
-            console.error('Error updating listing:', error);
-            toast.error('⚠️ Error occurred during update.');
+        } catch {
+            notify('error', 'Error occurred during update.');
+        } finally {
+            stopLoader();
+        }
+    };
+
+    const handleDelete = async () => {
+        const result = await Swal.fire({
+            title: 'Delete Profile?',
+            text: 'This will permanently delete your profile.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+        });
+
+        if (!result.isConfirmed) return;
+
+        try {
+            startLoader();
+            const res = await fetch(`http://localhost:5000/api/lawyers/${lawyer._id}`, {
+                method: 'DELETE',
+            });
+
+            if (res.ok) {
+                notify('warn', 'Profile deleted');
+                onReapply();
+            } else {
+                notify('error', 'Failed to delete profile');
+            }
+        } catch {
+            notify('error', 'Network error while deleting');
         } finally {
             stopLoader();
         }
@@ -82,36 +125,13 @@ const LawyerFinalListingPanel = ({ lawyer, onReapply, onBack, onHold }) => {
             });
 
             if (res.ok) {
-                toast.info('⚪ Profile put on hold');
-                onHold(); // ✅ go back to status, not join form
+                notify('warn', 'Profile put on hold');
+                onHold();
             } else {
-                toast.error('Failed to hold profile');
+                notify('error', 'Failed to hold profile');
             }
         } catch {
-            toast.error('⚠️ Network error');
-        } finally {
-            stopLoader();
-        }
-    };
-
-    const handleDelete = async () => {
-        const confirmed = window.confirm('⚠️ Are you sure you want to delete your profile?');
-        if (!confirmed) return;
-
-        try {
-            startLoader();
-            const res = await fetch(`http://localhost:5000/api/lawyers/${lawyer._id}`, {
-                method: 'DELETE',
-            });
-
-            if (res.ok) {
-                toast.warn('🗑️ Profile deleted');
-                onReapply(); // Clear view
-            } else {
-                toast.error('Failed to delete profile');
-            }
-        } catch {
-            toast.error('⚠️ Network error while deleting');
+            notify('error', 'Network error');
         } finally {
             stopLoader();
         }

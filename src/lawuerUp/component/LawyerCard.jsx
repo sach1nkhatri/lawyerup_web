@@ -30,9 +30,11 @@ const LawyerCard = ({ lawyer, onViewProfile, showShare }) => {
                     {stars}
                 </div>
                 {showShare && <button className="share-btn">Share</button>}
-                <button onClick={onViewProfile}>
-                    {showShare ? 'Book Appointment' : 'View Profile'}
-                </button>
+                {!showShare && (
+                    <button onClick={onViewProfile}>
+                        View Profile
+                    </button>
+                )}
             </div>
         </div>
     );

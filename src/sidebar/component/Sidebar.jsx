@@ -2,20 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import '../css/Sidebar.css';
 
-import logoIcon from '../assets/logo2.png';
-import logoText from '../assets/textlogowhite.png';
-import iconLawAI from '../assets/chatbotWhite.png';
-import iconNews from '../assets/newsWhite.png';
-import iconLawyer from '../assets/hammerwhite.png';
-import iconPdf from '../assets/pdfweb.png';
-import iconSettings from '../assets/settings.png';
-import iconReport from '../assets/warning.png';
-import iconHelp from '../assets/faq.png';
-import iconUser from '../assets/user.png';
-import arrowUp from '../assets/up.png';
-import arrowDown from '../assets/down.png';
-import bookingLogo from '../assets/bookingicon.png';
-import listLawyer from '../assets/listaslawyer.png';
+import logoIcon from '../../assets/logo2.png';
+import logoText from '../../assets/textlogowhite.png';
+import iconLawAI from '../../assets/chatbotWhite.png';
+import iconNews from '../../assets/newsWhite.png';
+import iconLawyer from '../../assets/hammerwhite.png';
+import iconPdf from '../../assets/pdfweb.png';
+import iconSettings from '../../assets/settings.png';
+import iconReport from '../../assets/warning.png';
+import iconHelp from '../../assets/faq.png';
+import iconUser from '../../assets/user.png';
+import arrowUp from '../../assets/up.png';
+import arrowDown from '../../assets/down.png';
+import bookingLogo from '../../assets/bookingicon.png';
+import listLawyer from '../../assets/listaslawyer.png';
 
 const Sidebar = ({ onSectionChange, onReportClick }) => {
     const navigate = useNavigate();
@@ -51,11 +51,27 @@ const Sidebar = ({ onSectionChange, onReportClick }) => {
 
     return (
         <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
+            {/* ✅ Sidebar header */}
             <div className="sidebar-header">
-                <img src={logoIcon} alt="Logo" className="logo-icon" />
-                {!collapsed && <img src={logoText} alt="LawyerUp" className="logo-text" />}
-            </div>
+                <img
+                    src={logoIcon}
+                    alt="Logo"
+                    className="logo-icon"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => navigate('/')}
+                />
+                {!collapsed && (
+                    <img
+                        src={logoText}
+                        alt="LawyerUp"
+                        className="logo-text"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => navigate('/')}
+                    />
+                )}
+            </div> {/* ✅ ← This line was missing */}
 
+            {/* Sidebar menu */}
             <div className="sidebar-menu">
                 {menuItems.map((item, idx) =>
                     item.divider ? (
@@ -79,6 +95,7 @@ const Sidebar = ({ onSectionChange, onReportClick }) => {
                 )}
             </div>
 
+            {/* Footer */}
             <div className="sidebar-footer">
                 <div className="user-toggle" onClick={toggleUserInfo}>
                     <img src={iconUser} alt="User" className="user-icon" />
@@ -100,6 +117,7 @@ const Sidebar = ({ onSectionChange, onReportClick }) => {
                             className="logout-btn"
                             onClick={() => {
                                 localStorage.clear();
+                                sessionStorage.clear();
                                 navigate('/');
                             }}
                         >

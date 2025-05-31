@@ -3,11 +3,14 @@ import ReviewList from './ReviewList';
 import AppointmentModal from '../../modals/AppointmentModal';
 import '../css/LawyerUp.css';
 
-const currentUser = JSON.parse(localStorage.getItem('lawyerup_user'));
-const isUser = currentUser?.role === 'user';
+
 
 const LawyerProfilePanel = ({ lawyer, onBack }) => {
     const [showModal, setShowModal] = useState(false);
+
+    const currentUser = JSON.parse(localStorage.getItem('lawyerup_user'));
+    const isUser = currentUser?.role === 'user';
+
 
     if (!lawyer) return <p>Lawyer not found.</p>;
 
