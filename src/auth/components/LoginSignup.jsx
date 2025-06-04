@@ -34,11 +34,10 @@ const LoginSignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        startLoader(); // 🌀 Start loader
-
+        startLoader(); //Start Loadinggggggggg
         const endpoint = isLogin
-            ? 'http://localhost:5000/api/auth/login'
-            : 'http://localhost:5000/api/auth/signup';
+            ? process.env.REACT_APP_API_URL + '/auth/login'
+            : process.env.REACT_APP_API_URL + '/auth/signup';
 
         const payload = isLogin
             ? {
@@ -72,11 +71,11 @@ const LoginSignUp = () => {
             const msg = err.response?.data?.message || err.message;
 
             if (msg.toLowerCase().includes('user')) {
-                notify('error', '❌ User not found.');
+                notify('error', 'User not found.');
             } else if (msg.toLowerCase().includes('password')) {
-                notify('warn', '🔐 Incorrect password.');
+                notify('warn', 'Incorrect password.');
             } else {
-                notify('error', '⚠️ Network error. Please try again.');
+                notify('error', 'Network error. Please try again.');
             }
 
             console.error('[Login error]', err);
@@ -176,3 +175,4 @@ const LoginSignUp = () => {
     );
 };
 export default LoginSignUp;
+
