@@ -25,14 +25,19 @@ const LawyerProfilePanel = ({ lawyer, onBack }) => {
     const renderTabContent = () => {
         switch (activeTab) {
             case 'profile':
+                const latestEducation = lawyer.education?.[lawyer.education.length - 1];
+                const specializationFromEducation = latestEducation?.specialization || lawyer.specialization || 'N/A';
                 return (
                     <>
                         <p><strong>Name:</strong> {lawyer.fullName}</p>
-                        <p><strong>Speciality:</strong> {lawyer.specialization}</p>
+                        <p><strong>Speciality:</strong> {specializationFromEducation}</p>
+                        <p><strong>State:</strong> {lawyer.state || 'N/A'}</p>
+                        <p><strong>City:</strong> {lawyer.city || 'N/A'}</p>
                         <p><strong>Address:</strong> {lawyer.address}</p>
                         <p><strong>Contact:</strong> {lawyer.phone}</p>
                     </>
                 );
+
 
             case 'info':
                 return (

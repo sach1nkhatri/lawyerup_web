@@ -1,0 +1,32 @@
+.chatHeader {
+    position: fixed;
+    top: 0;
+    width: 37%;
+    height: 60px;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    font-size: 20px;
+    font-weight: 600;
+    border-bottom: 1px solid #ddd;
+    z-index: 100;
+}
+
+.title {
+    font-weight: 600;
+    color: #1e2a3a;
+}
+
+.modelSelect {
+    font-size: 14px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #f8f8f8;
+    cursor: pointer;
+    width: fit-content;         /* auto-size to content */
+    min-width: 100px;           /* optional: ensure it doesn’t collapse too much */
+}
+

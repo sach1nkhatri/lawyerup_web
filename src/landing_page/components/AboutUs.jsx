@@ -1,10 +1,10 @@
 import React from 'react';
 import '../css/AboutUs.css';
-import chatbot from '../assets/chatbot.png';
-import news from '../assets/news.png';
-import law from '../assets/law.png';
-import hammer from '../assets/qwhammer.png';
-import gemma from '../assets/gemma3.png';
+import chatbot from '../../assets/chatbot.png';
+import news from '../../assets/news.png';
+import law from '../../assets/law.png';
+import hammer from '../../assets/qwhammer.png';
+import gemma from '../../assets/gemma3.png';
 
 const AboutUs = () => {
     return (

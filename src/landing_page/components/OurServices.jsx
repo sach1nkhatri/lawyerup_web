@@ -1,6 +1,6 @@
 import React from 'react';
 import '../css/OurServices.css';
-import serviceImage from '../assets/Ourservices.png';
+import serviceImage from '../../assets/Ourservices.png';
 
 const services = [
     {

@@ -3,11 +3,11 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import LandingPage from './pages/LandingPage';
+import LandingPage from './landing_page/components/LandingPage';
 import AuthForm from './auth/components/LoginSignup';
-import Dashboard from './pages/Dashboard';
-import PricingPlans from './components/PricingPlans';
-import CheckoutPage from './pages/CheckoutPage';
+import Dashboard from './dashboard/component/Dashboard';
+import PricingPlans from './landing_page/components/PricingPlans';
+import CheckoutPage from './landing_page/components/CheckoutPage';
 import PrivateRoute from './routes/privateRoute';
 
 function App() {

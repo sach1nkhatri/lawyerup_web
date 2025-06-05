@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../css/Header.css';
-import logo from '../assets/logo2.png';
-import logoText from '../assets/textlogoblack.png';
+import logo from '../../assets/logo2.png';
+import logoText from '../../assets/textlogoblack.png';
 import {useNavigate} from "react-router-dom";
 
 const Header = () => {

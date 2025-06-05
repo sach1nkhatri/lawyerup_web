@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/PricingPlans.css';
-import tick from '../assets/tick.png';
-import no from '../assets/no.png';
+import tick from '../../assets/tick.png';
+import no from '../../assets/no.png';
 
 const PricingPlans = () => {
     const [activePlan, setActivePlan] = useState('daily');

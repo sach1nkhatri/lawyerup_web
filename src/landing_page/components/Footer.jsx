@@ -1,10 +1,10 @@
 import React from 'react';
 import '../css/Footer.css';
-import logo from '../assets/logo2.png';
-import play from '../assets/playstore.png';
-import appstore from '../assets/appstore.png';
-import facebook from '../assets/facebook.png';
-import twitter from '../assets/twitter.png';
+import logo from '../../assets/logo2.png';
+import play from '../../assets/playstore.png';
+import appstore from '../../assets/appstore.png';
+import facebook from '../../assets/facebook.png';
+import twitter from '../../assets/twitter.png';
 
 const Footer = () => {
     return (
@@ -12,7 +12,7 @@ const Footer = () => {
             <div className="footer-top">
                 <div className="footer-brand">
                     <img src={logo} alt="LawyerUp Icon" className="footer-logo"/>
-                    <img src={require('../assets/textlogowhite.png')} alt="LawyerUp Text Logo"
+                    <img src={require('../../assets/textlogowhite.png')} alt="LawyerUp Text Logo"
                          className="footer-text-logo"/>
                 </div>
                 <div className="footer-columns">

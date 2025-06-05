@@ -4,6 +4,8 @@ import '../css/LawyerCard.css';
 
 const LawyerCard = ({ lawyer, onViewProfile, showShare }) => {
     const hasReviews = lawyer.reviews && lawyer.reviews.length > 0;
+    const latestEducation = lawyer.education?.[lawyer.education.length - 1];
+    const specialization = latestEducation?.specialization || lawyer.specialization || 'N/A';
 
     const totalRatings = hasReviews
         ? lawyer.reviews.reduce((sum, r) => sum + r.rating, 0)
@@ -59,7 +61,7 @@ const LawyerCard = ({ lawyer, onViewProfile, showShare }) => {
             />
             <div className="lawyer-info">
                 <p><strong>{lawyer.fullName}</strong></p>
-                <p>{lawyer.specialization}</p>
+                <p>{specialization}</p>
                 <div className="rating">{stars}</div>
 
                 {showShare ? (

@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 
-import Sidebar from '../sidebar/component/Sidebar';
-import ChatWindow from './ChatWindow';
-import NewsPage from '../news/componet/NewsPage';
-import LawyerUp from "../lawuerUp/component/LawyerUp";
-import PdfLibrary from "../components/PdfLibrary";
-import SettingsPage from '../pages/SettingsPage';
-import ReportModal from '../report/component/ReportModal';
-import HelpFAQPage from '../pages/HelpFAQPage';
-import JoinLawyerPage from '../list_lawyer/component/JoinLawyerPage';
-import LawyerStatusPanel from '../list_lawyer/component/LawyerStatusPanel';
-import Bookings from '../bookings/component/BookingPage';
+import Sidebar from '../../sidebar/component/Sidebar';
+import ChatWindow from '../../ai_chat/component/ChatWindow';
+import NewsPage from '../../news/componet/NewsPage';
+import LawyerUp from "../../lawuerUp/component/LawyerUp";
+import PdfLibrary from "../../components/PdfLibrary";
+import SettingsPage from '../../pages/SettingsPage';
+import ReportModal from '../../report/component/ReportModal';
+import HelpFAQPage from '../../pages/HelpFAQPage';
+import JoinLawyerPage from '../../list_lawyer/component/JoinLawyerPage';
+import LawyerStatusPanel from '../../list_lawyer/component/LawyerStatusPanel';
+import Bookings from '../../bookings/component/BookingPage';
 
 
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import '../css/WelcomeSection.css';
-import lawyerImg from '../assets/lawyerstanding.png';
+import lawyerImg from '../../assets/lawyerstanding.png';
 
 const WelcomeSection = () => {
     return (

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import khaltiLogo from '../assets/khalti-logo.png';
-import esewaLogo from '../assets/esewa.png';
-import visaLogo from '../assets/visa.png';
-import imeLogo from '../assets/imelogo.png'
+import khaltiLogo from '../../assets/khalti-logo.png';
+import esewaLogo from '../../assets/esewa.png';
+import visaLogo from '../../assets/visa.png';
+import imeLogo from '../../assets/imelogo.png'
 import '../css/CheckoutPage.css';
 
 const CheckoutPage = () => {

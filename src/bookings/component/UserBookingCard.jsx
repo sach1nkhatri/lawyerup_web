@@ -14,7 +14,7 @@ const UserBookingCard = ({ booking, onCancel }) => {
     const client = booking.user;
 
     if (!lawyerProfile || !lawyerUser) {
-        return <div style={{ padding: '1rem' }}>Loading lawyer info...</div>;
+        return <div style={{ padding: '1rem' }}></div>;
     }
 
     const lawyerImg = lawyerProfile.profilePhoto?.startsWith('data:image')
