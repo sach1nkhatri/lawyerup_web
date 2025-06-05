@@ -1,5 +1,5 @@
 import React from 'react';
-import FAQItem from '../components/FAQItem';
+import FAQItem from './FAQItem';
 import '../css/HelpFAQPage.css';
 
 const faqs = [

@@ -1,7 +1,7 @@
 import React from 'react';
 import '../css/PdfLibrary.css';
-import pdfIcon from '../assets/pdf.png';
-import downloadIcon from '../assets/download.png';
+import pdfIcon from '../../assets/pdf.png';
+import downloadIcon from '../../assets/download.png';
 
 const pdfList = [
     { title: "Constitution of Nepal 2072" },

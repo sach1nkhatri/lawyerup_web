@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Sun, Moon } from 'lucide-react';
 import '../css/SettingPage.css';
-import profileImage from '../assets/profile.png';
+import profileImage from '../../assets/profile.png';
 
 const SettingsPage = () => {
     const [darkMode, setDarkMode] = useState(false);

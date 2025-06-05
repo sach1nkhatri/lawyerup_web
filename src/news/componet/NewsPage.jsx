@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import NewsCard from './NewsCard';
 import '../css/NewsPage.css';
-import '../../css/nprogress.css';
+import '../../utils/css/nprogress.css';
 import NProgress from 'nprogress';
 
 const API_URL = `${process.env.REACT_APP_API_URL}news`;
