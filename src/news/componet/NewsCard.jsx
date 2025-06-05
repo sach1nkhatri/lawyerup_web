@@ -1,7 +1,7 @@
 import React from 'react';
 import '../css/NewsCard.css';
 
-const NewsCard = ({ title, author, summary, date, image, onClick }) => (
+const NewsCard = ({ title, author, summary, date, image, onClick, likes = 0, dislikes = 0 }) => (
     <div className="news-card" onClick={onClick}>
         <img className="news-image" src={image} alt={title} />
         <div className="news-content">
@@ -9,6 +9,10 @@ const NewsCard = ({ title, author, summary, date, image, onClick }) => (
             <p className="news-author">{author}</p>
             <p className="news-summary">{summary}</p>
             <p className="news-date">{date}</p>
+        </div>
+        <div className="news-reactions">
+            <span>👍 {likes}</span>
+            <span>👎 {dislikes}</span>
         </div>
     </div>
 );
