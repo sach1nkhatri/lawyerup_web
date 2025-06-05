@@ -201,22 +201,29 @@ const LawyerFinalListingPanel = ({ lawyer, onReapply, onBack, onHold }) => {
 
             <div className="listing-grid">
                 <div className="listing-left">
-                    <p><b>Full Name</b> <input value={lawyer.fullName} disabled style={{ backgroundColor: '#f3f4f6' }} /></p>
-                    <p><b>Email</b> <input value={lawyer.email} disabled style={{ backgroundColor: '#f3f4f6' }} /></p>
-                    <p><b>Specialization</b> <input name="specialization" value={form.specialization} onChange={handleInputChange} /></p>
-                    <p><b>Phone</b> <input name="phone" value={form.phone} onChange={handleInputChange} /></p>
-                    <p><b>State</b> <input name="state" value={form.state} onChange={handleInputChange} /></p>
-                    <p><b>City</b> <input name="city" value={form.city} onChange={handleInputChange} /></p>
-                    <p><b>Address</b> <input name="address" value={form.address} onChange={handleInputChange} /></p>
-                    <p><b>Qualification</b> <input name="qualification" value={form.qualification} onChange={handleInputChange} /></p>
+                    <p><b>Full Name</b> <input value={lawyer.fullName} disabled style={{backgroundColor: '#f3f4f6'}}/>
+                    </p>
+                    <p><b>Email</b> <input value={lawyer.email} disabled style={{backgroundColor: '#f3f4f6'}}/></p>
+                    <p><b>Specialization</b> <input name="specialization" value={form.specialization}
+                                                    onChange={handleInputChange}/></p>
+                    <p><b>Phone</b> <input name="phone" value={form.phone} onChange={handleInputChange}/></p>
+                    <p><b>State</b> <input name="state" value={form.state} onChange={handleInputChange}/></p>
+                    <p><b>City</b> <input name="city" value={form.city} onChange={handleInputChange}/></p>
+                    <p><b>Address</b> <input name="address" value={form.address} onChange={handleInputChange}/></p>
+                    <p><b>Qualification</b> <input name="qualification" value={form.qualification}
+                                                   onChange={handleInputChange}/></p>
 
                     <h3>Education</h3>
                     {education.map((edu, idx) => (
                         <div key={idx} className="array-entry">
-                            <input placeholder="Degree" value={edu.degree} onChange={(e) => handleEducationChange(idx, 'degree', e.target.value)} />
-                            <input placeholder="Institute" value={edu.institute} onChange={(e) => handleEducationChange(idx, 'institute', e.target.value)} />
-                            <input placeholder="Year" value={edu.year} onChange={(e) => handleEducationChange(idx, 'year', e.target.value)} />
-                            <input placeholder="Specialization" value={edu.specialization} onChange={(e) => handleEducationChange(idx, 'specialization', e.target.value)} />
+                            <input placeholder="Degree" value={edu.degree}
+                                   onChange={(e) => handleEducationChange(idx, 'degree', e.target.value)}/>
+                            <input placeholder="Institute" value={edu.institute}
+                                   onChange={(e) => handleEducationChange(idx, 'institute', e.target.value)}/>
+                            <input placeholder="Year" value={edu.year}
+                                   onChange={(e) => handleEducationChange(idx, 'year', e.target.value)}/>
+                            <input placeholder="Specialization" value={edu.specialization}
+                                   onChange={(e) => handleEducationChange(idx, 'specialization', e.target.value)}/>
                             <button onClick={() => removeEducation(idx)}>Remove</button>
                         </div>
                     ))}
@@ -225,17 +232,42 @@ const LawyerFinalListingPanel = ({ lawyer, onReapply, onBack, onHold }) => {
                     <h3>Work Experience</h3>
                     {workExperience.map((work, idx) => (
                         <div key={idx} className="array-entry">
-                            <input placeholder="Court" value={work.court} onChange={(e) => handleWorkChange(idx, 'court', e.target.value)} />
-                            <input placeholder="From" value={work.from} onChange={(e) => handleWorkChange(idx, 'from', e.target.value)} />
-                            <input placeholder="To" value={work.to} onChange={(e) => handleWorkChange(idx, 'to', e.target.value)} />
+                            <input placeholder="Court" value={work.court}
+                                   onChange={(e) => handleWorkChange(idx, 'court', e.target.value)}/>
+                            <input placeholder="From" value={work.from}
+                                   onChange={(e) => handleWorkChange(idx, 'from', e.target.value)}/>
+                            <input placeholder="To" value={work.to}
+                                   onChange={(e) => handleWorkChange(idx, 'to', e.target.value)}/>
                             <button onClick={() => removeWork(idx)}>Remove</button>
                         </div>
                     ))}
                     <button onClick={addWork}>Add Work</button>
 
-                    <p><b>Special Case</b> <textarea name="specialCase" value={form.specialCase} onChange={handleInputChange} /></p>
-                    <p><b>Social Link</b> <input name="socialLink" value={form.socialLink} onChange={handleInputChange} /></p>
-                    <p><b>Description</b> <textarea name="description" value={form.description} onChange={handleInputChange} /></p>
+
+                    <p><b>Social Link</b> <input name="socialLink" value={form.socialLink}
+                                                 onChange={handleInputChange}/></p>
+                    <p>
+                        <b>Special Case</b><br/>
+                        <textarea
+                            name="specialCase"
+                            value={form.specialCase}
+                            onChange={handleInputChange}
+                            maxLength={200}
+                        />
+                        <small>{form.specialCase.length}/200</small>
+                    </p>
+
+                    <p>
+                        <b>Description</b><br/>
+                        <textarea
+                            name="description"
+                            value={form.description}
+                            onChange={handleInputChange}
+                            maxLength={200}
+                        />
+                        <small>{form.description.length}/200</small>
+                    </p>
+
 
                     <LawyerScheduleBuilder
                         onScheduleChange={handleScheduleChange}
@@ -250,7 +282,7 @@ const LawyerFinalListingPanel = ({ lawyer, onReapply, onBack, onHold }) => {
                         onError={(e) => e.target.src = defaultAvatar}
                         className="listing-profile-pic"
                     />
-                    <input type="file" accept="image/*" onChange={handleFileChange} />
+                    <input type="file" accept="image/*" onChange={handleFileChange}/>
                     <button onClick={handleHold}>Hold Profile</button>
                 </div>
             </div>

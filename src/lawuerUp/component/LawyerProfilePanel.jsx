@@ -63,7 +63,7 @@ const LawyerProfilePanel = ({ lawyer, onBack }) => {
                     </>
                 );
 
-            case 'work':
+            case 'Education':
                 return (
                     <>
                         <div className="box-section">
@@ -71,7 +71,7 @@ const LawyerProfilePanel = ({ lawyer, onBack }) => {
                             <ul>
                                 {lawyer.education?.length ? lawyer.education.map((e, i) => (
                                     <li key={i}>
-                                        <FaGraduationCap /> {e.degree} - {e.institution}, {e.year} ({e.specialization})
+                                        <FaGraduationCap /> {e.degree} - {e.institute}, {e.year} ({e.specialization})
                                     </li>
                                 )) : <li>No education records.</li>}
                             </ul>
@@ -101,7 +101,7 @@ const LawyerProfilePanel = ({ lawyer, onBack }) => {
         <div className="profile-panel">
             <h3>LawyerUp</h3>
             <div className="tab-menu">
-                {['profile', 'info', 'work'].map((t) => (
+                {['profile', 'info', 'Education'].map((t) => (
                     <button
                         key={t}
                         onClick={() => setActiveTab(t)}

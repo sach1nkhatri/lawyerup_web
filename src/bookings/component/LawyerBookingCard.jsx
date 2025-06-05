@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 import '../css/LawyerBookingCard.css';
-import { notify } from '../../utils/notify'; // ✅ Toasts
+import { notify } from '../../utils/notify';
 
 const LawyerBookingCard = ({ booking, onStatusChange }) => {
     const user = booking.user;
@@ -12,24 +13,44 @@ const LawyerBookingCard = ({ booking, onStatusChange }) => {
         setLink(booking.meetingLink || '');
     }, [booking.meetingLink]);
 
-    const updateStatus = async (newStatus) => {
-        try {
-            await axios.patch(`${process.env.REACT_APP_API_URL}bookings/${booking._id}/status`, {
-                status: newStatus,
-            })
-            notify('success', `Status updated to "${newStatus}"`);
-            if (onStatusChange) onStatusChange();
-        } catch (error) {
-            console.error('Failed to update status:', error);
-            notify('error', '❌ Failed to update booking status');
+    const confirmAndUpdateStatus = async (newStatus, label) => {
+        const result = await Swal.fire({
+            title: `Confirm ${label}?`,
+            text: `Are you sure you want to mark this booking as "${label}"?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: `Yes, ${label}`,
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await axios.patch(`${process.env.REACT_APP_API_URL}bookings/${booking._id}/status`, {
+                    status: newStatus,
+                });
+                notify('success', `Status updated to "${newStatus}"`);
+                if (onStatusChange) onStatusChange();
+            } catch (error) {
+                console.error('Failed to update status:', error);
+                notify('error', '❌ Failed to update booking status');
+            }
         }
     };
 
-    const updateLink = async () => {
+    const confirmAndUpdateLink = async () => {
         if (!link.trim()) {
             notify('error', 'Please add a meeting link before updating.');
             return;
         }
+
+        const result = await Swal.fire({
+            title: 'Update Meeting Link?',
+            text: 'Are you sure you want to update the meeting link for this booking?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Update',
+        });
+
+        if (!result.isConfirmed) return;
 
         try {
             setIsUpdating(true);
@@ -44,7 +65,6 @@ const LawyerBookingCard = ({ booking, onStatusChange }) => {
             setIsUpdating(false);
         }
     };
-
 
     return (
         <div className="user-booking-card">
@@ -76,7 +96,7 @@ const LawyerBookingCard = ({ booking, onStatusChange }) => {
                             onChange={(e) => setLink(e.target.value)}
                             style={{ width: '100%' }}
                         />
-                        <button className="update-btn" onClick={updateLink} disabled={isUpdating}>
+                        <button className="update-btn" onClick={confirmAndUpdateLink} disabled={isUpdating}>
                             {isUpdating ? 'Updating...' : 'Update Link'}
                         </button>
                     </div>
@@ -85,16 +105,15 @@ const LawyerBookingCard = ({ booking, onStatusChange }) => {
 
             <div className="card-actions">
                 {booking.status === 'pending' && (
-                    <button className="approve-btn" onClick={() => updateStatus('approved')}>
+                    <button className="approve-btn" onClick={() => confirmAndUpdateStatus('approved', 'approve')}>
                         Approve
                     </button>
                 )}
                 {booking.status === 'approved' && (
-                    <button className="complete-btn" onClick={() => updateStatus('completed')}>
+                    <button className="complete-btn" onClick={() => confirmAndUpdateStatus('completed', 'complete')}>
                         Mark Completed
                     </button>
                 )}
-
             </div>
         </div>
     );

@@ -202,19 +202,40 @@ const JoinAsLawyerForm = ({ onSubmitted }) => {
           {step === 2 && (
               <>
                 {isJunior && (
-                    <input name="expectedGraduation" placeholder="Expected Graduation Year" value={form.expectedGraduation} onChange={handleChange} />
+                    <input name="expectedGraduation" placeholder="Expected Graduation Year"
+                           value={form.expectedGraduation} onChange={handleChange}/>
                 )}
-                <textarea name="description" placeholder="Short Description" value={form.description} onChange={handleChange} />
-                <textarea name="specialCase" placeholder="Special Case or Interest" value={form.specialCase} onChange={handleChange} />
-                <input name="socialLink" placeholder="Social Link (optional)" value={form.socialLink} onChange={handleChange} />
+                <div>
+                <textarea
+                    name="description"
+                    placeholder="Short Description"
+                    value={form.description}
+                    onChange={handleChange}
+                    maxLength={200}
+
+                />
+                  <small>{form.description.length}/200</small>
+                </div>
+                <div>
+                  <textarea
+                      name="specialCase"
+                      placeholder="Special Case or Interest"
+                      value={form.specialCase}
+                      onChange={handleChange}
+                      maxLength={200}
+                  />
+                  <small>{form.specialCase.length}/200</small>
+                </div>
+                <input name="socialLink" placeholder="Social Link (optional)" value={form.socialLink}
+                       onChange={handleChange}/>
 
                 {!isJunior && (
                     <>
                       <h3>Work Experience</h3>
                       <div className="form-grid">
-                        <input name="workCourt" placeholder="Court" value={form.workCourt} onChange={handleChange} />
-                        <input name="workFrom" placeholder="From" value={form.workFrom} onChange={handleChange} />
-                        <input name="workTo" placeholder="To" value={form.workTo} onChange={handleChange} />
+                        <input name="workCourt" placeholder="Court" value={form.workCourt} onChange={handleChange}/>
+                        <input name="workFrom" placeholder="From" value={form.workFrom} onChange={handleChange}/>
+                        <input name="workTo" placeholder="To" value={form.workTo} onChange={handleChange}/>
                         <button type="button" onClick={addWork}>Add</button>
                       </div>
                       <ul>
@@ -227,10 +248,12 @@ const JoinAsLawyerForm = ({ onSubmitted }) => {
 
                 <h3>Your Academic Details</h3>
                 <div className="form-grid">
-                  <input name="eduDegree" placeholder="Degree" value={form.eduDegree} onChange={handleChange} />
-                  <input name="eduInstitute" placeholder="Institute name" value={form.eduInstitute} onChange={handleChange} />
-                  <input name="eduYear" placeholder="Year" value={form.eduYear} onChange={handleChange} />
-                  <input name="eduSpecialization" placeholder="Specialization" value={form.eduSpecialization} onChange={handleChange} />
+                  <input name="eduDegree" placeholder="Degree" value={form.eduDegree} onChange={handleChange}/>
+                  <input name="eduInstitute" placeholder="Institute name" value={form.eduInstitute}
+                         onChange={handleChange}/>
+                  <input name="eduYear" placeholder="Year" value={form.eduYear} onChange={handleChange}/>
+                  <input name="eduSpecialization" placeholder="Specialization" value={form.eduSpecialization}
+                         onChange={handleChange}/>
                   <button type="button" onClick={addEducation}>Add</button>
                 </div>
                 <ul>
