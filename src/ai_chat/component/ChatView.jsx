@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import styles from '../css/ChatView.module.css';
 import plusIcon from '../../assets/plus.png';
 import sendIcon from '../../assets/send.png';
-import ChatHeader from './ChatHeader'; // ✅ Modular Header
+import ChatHeader from './ChatHeader';
 
 const ChatView = ({ messages, input, setInput, handleSend, textareaRef }) => {
     const messageEndRef = useRef(null);
@@ -12,21 +12,20 @@ const ChatView = ({ messages, input, setInput, handleSend, textareaRef }) => {
     }, [messages]);
 
     return (
-        <div className={styles.chatContainer}>
-            {/* ✅ Modular Header */}
-            <ChatHeader />
-
-            {/* ✅ Scrollable Chat Body */}
-            <div className={styles.chatBody}>
-                {messages.map((msg, i) => (
-                    <div key={i} className={`${styles.messageBubble} ${styles[msg.sender]}`}>
-                        {msg.text}
-                    </div>
-                ))}
-                <div ref={messageEndRef} />
+        <>
+            <div className={styles.chatContainer}>
+                <ChatHeader />
+                <div className={styles.chatBody}>
+                    {messages.map((msg, i) => (
+                        <div key={i} className={`${styles.messageBubble} ${styles[msg.sender]}`}>
+                            {msg.text}
+                        </div>
+                    ))}
+                    <div ref={messageEndRef} />
+                </div>
             </div>
 
-            {/* ✅ Fixed Input Box */}
+            {/* ✅ Fixed Input Outside the chat container */}
             <div className={styles.chatInputBox}>
                 <div className={styles.chatBar}>
                     <div className={styles.chatButton}>
@@ -39,12 +38,12 @@ const ChatView = ({ messages, input, setInput, handleSend, textareaRef }) => {
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                     />
-                    <div className={styles.chatButton} onClick={() => handleSend()}>
+                    <div className={styles.chatButton} onClick={handleSend}>
                         <img src={sendIcon} alt="send" />
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

@@ -57,11 +57,12 @@ const ChatWindow = () => {
     };
 
     useEffect(() => {
-        document.body.style.overflow = hasStarted ? 'auto' : 'hidden';
+        document.body.style.overflow = hasStarted ? 'hidden' : 'auto';
         return () => {
             document.body.style.overflow = 'auto';
         };
     }, [hasStarted]);
+
 
     return (
         <div className={styles.chatWrapper}>
