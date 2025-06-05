@@ -1,24 +1,25 @@
 .join-lawyer-container {
-    max-width: 900px;
+    max-width: 960px;
     margin: 2rem auto;
-    background: #ffffff;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    background: #fff;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     font-family: 'Segoe UI', sans-serif;
 }
 
 .form-title {
-    font-size: 2rem;
-    font-weight: 600;
-    color: #1e293b;
-    margin-bottom: 0.5rem;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #1f2937;
     text-align: center;
+    margin-bottom: 0.25rem;
 }
 
 .form-subtitle {
     text-align: center;
-    color: #64748b;
+    color: #6b7280;
+    font-size: 1rem;
     margin-bottom: 2rem;
 }
 
@@ -28,89 +29,83 @@
 
 .form-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 1.5rem;
+    margin-bottom: 2rem;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="file"] {
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
+input,
+select,
+textarea {
+    padding: 0.9rem 1rem;
+    border-radius: 10px;
     border: 1px solid #d1d5db;
     font-size: 1rem;
     width: 100%;
+    background-color: #ecfdf5;
+    transition: all 0.2s ease;
 }
 
-input[type="file"] {
-    padding: 0.4rem;
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #6366f1;
+    background-color: #f0f9ff;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.file-input {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
 }
 
 .file-input label {
+    font-weight: 600;
+    color: #374151;
     font-size: 0.9rem;
-    font-weight: 500;
-    color: #334155;
-    margin-bottom: 0.3rem;
-    display: block;
 }
 
+.file-input input {
+    padding: 0.6rem;
+    background-color: #ecfdf5;
+}
+
+button,
 .submit-btn {
-    margin-top: 2rem;
     padding: 0.8rem 2rem;
     font-size: 1rem;
     border: none;
     background-color: #4f46e5;
     color: white;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
 }
 
+button:hover,
 .submit-btn:hover {
     background-color: #4338ca;
 }
 
-@media (max-width: 500px) {
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
+h3 {
+    font-size: 1.3rem;
+    margin: 1.5rem 0 0.5rem;
+    color: #111827;
+    font-weight: 600;
 }
+
 .schedule-builder {
-    margin-top: 2rem;
-    padding: 1rem;
+    margin-top: 1rem;
+    padding: 1.25rem;
     background: #f9fafb;
     border: 1px solid #e5e7eb;
-    border-radius: 8px;
-}
-
-.slot-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-    align-items: center;
-}
-
-.slot-row select,
-.slot-row input[type="time"] {
-    padding: 0.5rem;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-}
-
-.schedule-preview {
-    font-size: 0.95rem;
-}
-
-.schedule-preview ul {
-    padding-left: 1rem;
-    margin: 0.25rem 0 1rem 0;
-}
-
-.schedule-preview li {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    border-radius: 10px;
 }
 
 .status-page-container {
@@ -118,7 +113,27 @@ input[type="file"] {
     max-width: 800px;
     margin: auto;
     background-color: #f9fafb;
-    border-radius: 12px;
+    border-radius: 16px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    font-family: 'Segoe UI', sans-serif;
+}
+
+.add-button {
+    background-color: #e0f2fe;
+    color: #1d4ed8;
+    font-weight: 600;
+    border: 1px solid #93c5fd;
+    padding: 0.6rem 1.25rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.add-button:hover {
+    background-color: #bae6fd;
+    border-color: #60a5fa;
+}
+
+@media (max-width: 500px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
 }

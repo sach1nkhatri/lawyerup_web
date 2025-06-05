@@ -36,11 +36,12 @@ const LawyerFinalListingPanel = ({ lawyer, onReapply, onBack, onHold }) => {
         reader.onloadend = async () => {
             try {
                 startLoader();
-                const res = await fetch(`http://localhost:5000/api/lawyers/${lawyer._id}/photo`, {
+                const res = await fetch(`${process.env.REACT_APP_API_URL}lawyers/${lawyer._id}/photo`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ photo: reader.result }),
                 });
+
                 if (!res.ok) throw new Error();
                 notify('success', 'Profile photo updated!');
                 setProfilePhoto(reader.result);
@@ -66,11 +67,12 @@ const LawyerFinalListingPanel = ({ lawyer, onReapply, onBack, onHold }) => {
 
         try {
             startLoader();
-            const res = await fetch(`http://localhost:5000/api/lawyers/${lawyer._id}`, {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}lawyers/${lawyer._id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...form, schedule: editableSchedule }),
             });
+
 
             if (res.ok) {
                 notify('success', 'Changes saved successfully!');
@@ -98,9 +100,10 @@ const LawyerFinalListingPanel = ({ lawyer, onReapply, onBack, onHold }) => {
 
         try {
             startLoader();
-            const res = await fetch(`http://localhost:5000/api/lawyers/${lawyer._id}`, {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}lawyers/${lawyer._id}`, {
                 method: 'DELETE',
             });
+
 
             if (res.ok) {
                 notify('warn', 'Profile deleted');
@@ -118,7 +121,7 @@ const LawyerFinalListingPanel = ({ lawyer, onReapply, onBack, onHold }) => {
     const handleHold = async () => {
         try {
             startLoader();
-            const res = await fetch(`http://localhost:5000/api/lawyers/${lawyer._id}/status`, {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}lawyers/${lawyer._id}/status`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: 'hold' }),

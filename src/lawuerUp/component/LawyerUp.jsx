@@ -18,7 +18,7 @@ const LawyerUp = () => {
         const fetchLawyers = async () => {
             try {
                 startLoader(); // ✅ show loader
-                const response = await axios.get('http://localhost:5000/api/lawyers');
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}lawyers`);
                 setLawyers(response.data);
             } catch (err) {
                 console.error("Failed to fetch lawyers", err);
@@ -29,6 +29,7 @@ const LawyerUp = () => {
         };
         fetchLawyers();
     }, []);
+
 
     useEffect(() => {
         if (id && lawyers.length > 0) {
@@ -45,8 +46,9 @@ const LawyerUp = () => {
         if (!profilePhoto) return null;
         return profilePhoto.startsWith('data:image')
             ? profilePhoto
-            : `http://localhost:5000/uploads/${profilePhoto}`;
+            : `${process.env.REACT_APP_UPLOADS_URL}${profilePhoto}`;
     };
+
 
     if (loading) {
         return <div style={{ padding: '2rem', textAlign: 'center' }}>Loading lawyers...</div>;

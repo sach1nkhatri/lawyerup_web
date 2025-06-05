@@ -47,7 +47,7 @@ const LawyerStatusPanel = ({ lawyer, onNext }) => {
 
         const token = localStorage.getItem('lawyerup_token');
         try {
-            const res = await fetch(`http://localhost:5000/api/lawyers/${lawyer._id}/status`, {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}lawyers/${lawyer._id}/status`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -55,7 +55,6 @@ const LawyerStatusPanel = ({ lawyer, onNext }) => {
                 },
                 body: JSON.stringify({ status: 'listed' }),
             });
-
             if (res.ok) {
                 notify('success', 'Your profile is now public!');
                 onNext();

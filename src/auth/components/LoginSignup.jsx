@@ -36,8 +36,16 @@ const LoginSignUp = () => {
         e.preventDefault();
         startLoader(); //Start Loadinggggggggg
         const endpoint = isLogin
+<<<<<<< HEAD
             ? process.env.REACT_APP_API_URL + '/auth/login'
             : process.env.REACT_APP_API_URL + '/auth/signup';
+=======
+            ? process.env.REACT_APP_API_URL+ 'auth/login'
+            : process.env.REACT_APP_API_URL + 'auth/signup';
+            // ? 'http://localhost:5000/api/auth/login'
+            // : 'http://localhost:5000/api/auth/signup';
+
+>>>>>>> 0ebfda0 (Booking DB ACID properties)
 
         const payload = isLogin
             ? {

@@ -27,8 +27,10 @@ const JoinAsLawyerForm = () => {
         console.log('🧪 Token in localStorage (loadProfile):', token);
         if (!token) return setLoading(false);
         try {
-            const res = await fetch('http://localhost:5000/api/lawyers/me', {
-                headers: { Authorization: `Bearer ${token}` },
+            const res = await fetch(`${process.env.REACT_APP_API_URL}lawyers/me`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             });
             if (res.ok) {
                 const data = await res.json();
@@ -68,7 +70,7 @@ const JoinAsLawyerForm = () => {
             console.log('🧪 Token in localStorage (handleSubmit):', token); // ✅ Add here
             const payload = { ...form, schedule };
 
-            const res = await fetch('http://localhost:5000/api/lawyers', {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}lawyers`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

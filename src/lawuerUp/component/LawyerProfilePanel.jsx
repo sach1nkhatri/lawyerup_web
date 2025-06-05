@@ -25,6 +25,7 @@ const LawyerProfilePanel = ({ lawyer, onBack }) => {
     const avgRating = hasReviews ? totalRatings / lawyer.reviews.length : 0;
     const rounded = Math.round(avgRating);
     const filledStars = '⭐'.repeat(rounded);
+
     const emptyStars = '☆'.repeat(5 - rounded);
 
     return (

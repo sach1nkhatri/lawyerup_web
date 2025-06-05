@@ -18,9 +18,12 @@ const JoinLawyerPage = () => {
         if (!token) return setView('form');
 
         try {
-            const res = await fetch('http://localhost:5000/api/lawyers/me', {
-                headers: { Authorization: `Bearer ${token}` },
+            const res = await fetch(`${process.env.REACT_APP_API_URL}lawyers/me`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             });
+;
 
             if (!res.ok) throw new Error('No application found');
 

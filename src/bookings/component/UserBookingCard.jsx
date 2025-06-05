@@ -19,7 +19,8 @@ const UserBookingCard = ({ booking, onCancel }) => {
 
     const lawyerImg = lawyerProfile.profilePhoto?.startsWith('data:image')
         ? lawyerProfile.profilePhoto
-        : `http://localhost:5000/uploads/${lawyerProfile.profilePhoto || ''}`;
+        : `${process.env.REACT_APP_UPLOADS_URL}${lawyerProfile.profilePhoto || 'avatar.png'}`;
+
 
     const handleCancel = async () => {
         const result = await Swal.fire({
@@ -34,7 +35,7 @@ const UserBookingCard = ({ booking, onCancel }) => {
 
         if (result.isConfirmed) {
             try {
-                await axios.delete(`http://localhost:5000/api/bookings/${booking._id}`);
+                await axios.delete(`${process.env.REACT_APP_API_URL}bookings/${booking._id}`);
                 notify('success', 'Booking cancelled.');
                 onCancel?.(booking._id);
             } catch (err) {
@@ -43,7 +44,6 @@ const UserBookingCard = ({ booking, onCancel }) => {
             }
         }
     };
-
 
     return (
         <div className="user-booking-card">

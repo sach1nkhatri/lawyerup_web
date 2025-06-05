@@ -14,9 +14,9 @@ const LawyerBookingCard = ({ booking, onStatusChange }) => {
 
     const updateStatus = async (newStatus) => {
         try {
-            await axios.patch(`http://localhost:5000/api/bookings/${booking._id}/status`, {
+            await axios.patch(`${process.env.REACT_APP_API_URL}bookings/${booking._id}/status`, {
                 status: newStatus,
-            });
+            })
             notify('success', `Status updated to "${newStatus}"`);
             if (onStatusChange) onStatusChange();
         } catch (error) {
@@ -33,7 +33,7 @@ const LawyerBookingCard = ({ booking, onStatusChange }) => {
 
         try {
             setIsUpdating(true);
-            await axios.patch(`http://localhost:5000/api/bookings/${booking._id}/meeting-link`, {
+            await axios.patch(`${process.env.REACT_APP_API_URL}bookings/${booking._id}/meeting-link`, {
                 meetingLink: link,
             });
             notify('success', 'Meeting link updated!');

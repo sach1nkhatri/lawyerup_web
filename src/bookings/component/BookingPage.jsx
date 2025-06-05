@@ -19,8 +19,9 @@ const BookingPage = () => {
             try {
                 const endpoint =
                     user.role === 'lawyer'
-                        ? `http://localhost:5000/api/bookings/lawyer/${user._id}`
-                        : `http://localhost:5000/api/bookings/user/${user._id}`;
+                    ? `${process.env.REACT_APP_API_URL}bookings/lawyer/${user._id}`
+                    : `${process.env.REACT_APP_API_URL}bookings/user/${user._id}`;
+
                 const res = await axios.get(endpoint);
                 setBookings(res.data);
                 console.log("Full bookings from server:", res.data);

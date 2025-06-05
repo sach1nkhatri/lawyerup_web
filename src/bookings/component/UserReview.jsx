@@ -25,7 +25,8 @@ const UserReview = ({ bookingId, onClose }) => {
                 rating,
             };
 
-            await axios.post(`http://localhost:5000/api/reviews/${bookingId}`, payload);
+            await axios.post(`${process.env.REACT_APP_API_URL}reviews/${bookingId}`, payload);
+
 
             notify('success', 'Review submitted successfully!');
             onClose();

@@ -18,7 +18,7 @@ const LawyerCard = ({ lawyer, onViewProfile, showShare }) => {
                 src={
                     lawyer.profilePhoto?.startsWith('data:image')
                         ? lawyer.profilePhoto
-                        : `http://localhost:5000/uploads/${lawyer.profilePhoto || 'avatar.png'}`
+                        : `${process.env.REACT_APP_UPLOADS_URL}${lawyer.profilePhoto || 'avatar.png'}`
                 }
                 alt="Lawyer"
                 className="lawyer-photo"
@@ -29,8 +29,9 @@ const LawyerCard = ({ lawyer, onViewProfile, showShare }) => {
                 <div className="rating">
                     {stars}
                 </div>
-                {showShare && <button className="share-btn">Share</button>}
-                {!showShare && (
+                {showShare ? (
+                    <button className="share-btn">Share</button>
+                ) : (
                     <button onClick={onViewProfile}>
                         View Profile
                     </button>
