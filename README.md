@@ -1,46 +1,105 @@
-# Getting Started with Create React App
+⚖️ LawyerUp AI — Intelligent Legal Assistant for Nepal
+A civic-tech platform leveraging AI and web APIs to make Nepalese legal knowledge, documents, and professionals accessible for all.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+🧠 Project Summary
+LawyerUp AI is a smart, mobile-first legal platform that empowers users with:
 
-## Available Scripts
+Instant legal Q&A via chatbot
 
-In the project directory, you can run:
+Lawyer discovery and appointment booking
 
-### `npm start`
+Access to Nepalese Constitution and major legal codes
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Tiered role-based access for free and paid users
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Legal news, searchable PDFs, and interpretation tools
 
-### `npm test`
+Built for students, citizens, lawyers, and researchers.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+🎯 Project Objectives
+✅ Provide AI-powered answers to Nepalese legal queries
 
-### `npm run build`
+📚 Offer categorized access to national codes: Civil, Criminal, Land, Tax, Company Acts
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+👩‍⚖️ Help users find and book verified legal professionals
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+🧑‍🎓 Support research, legal education, and documentation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+🌐 Build a scalable, multilingual legal assistant platform
 
-### `npm run eject`
+🏗️ System Architecture
+Users: Free, Basic, Premium, and Lawyer tiers
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Resources: News posts, lawyers, legal documents, and chat logs
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Auth: JWT-secured login, session-based routing
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Monetization: Tiered services (chat limits, appointments, support access)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+🛠️ Technology Stack
+Layer	Stack Used
+Frontend	React (Web), Flutter (Mobile)
+Backend	Flask (Python API)
+AI/NLP	Gemma LLM, SentenceTransformers
+Search	FAISS for vector-based document retrieval
+Database	MongoDB
 
-## Learn More
+🚀 Key Features
+🤖 AI Chatbot trained on Nepalese law
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+📄 Law Document Library with searchable PDFs
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+👨‍⚖️ Lawyer Booking System with filters (location, expertise, rating)
+
+📰 Legal News Feed from verified sources
+
+👍👎 Like/Dislike & Comments (1 action per user)
+
+🧩 Role-based Access Control (Free, Basic, Premium, Lawyer)
+
+📎 PDF Upload & Interpretation (planned)
+
+🌐 Multi-language Support (future scope)
+
+🧪 Setup & Deployment (Web)
+bash
+Copy
+Edit
+# Clone & enter project
+git clone https://github.com/sachin/lawyerup-web
+cd lawyerup-web
+
+# Install dependencies
+npm install
+
+# Environment config
+echo "REACT_APP_API_URL=http://localhost:5000/api/" > .env
+
+# Start dev server
+npm start
+🔐 Auth Flow
+JWT stored in localStorage as lawyerup_token
+
+Logged-in user info stored as lawyerup_user
+
+Protected API routes use Authorization: Bearer <token> header
+
+📚 References
+Constitution of Nepal (2015)
+
+Nepal Law Commission (legal codes, acts)
+
+OpenAI: SentenceTransformers
+
+Google AI: Gemma LLM
+
+Facebook AI: FAISS
+
+Figma, MongoDB, Flask
+
+📜 License & Copyright
+© 2025 Sachin Khatri — All rights reserved.
+
+This project was developed as part of a final year Web API Development module (ST6003CEM) at Softwarica College of IT and E-Commerce / Coventry University.
+
+This code and design are not to be reproduced, modified, or distributed without explicit written permission.
