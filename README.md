@@ -1,105 +1,161 @@
-⚖️ LawyerUp AI — Intelligent Legal Assistant for Nepal
-A civic-tech platform leveraging AI and web APIs to make Nepalese legal knowledge, documents, and professionals accessible for all.
+⚖️ LawyerUp AI – Intelligent Legal Assistant for Nepal
+Web + AI platform for legal awareness, lawyer booking, and automated legal queries
 
-🧠 Project Summary
-LawyerUp AI is a smart, mobile-first legal platform that empowers users with:
+📘 Overview
+LawyerUp AI is a civic-tech platform that empowers Nepali citizens with access to legal information, AI-powered chatbot support, and lawyer consultation — all from a modern web interface. The app combines React, Node/Express, MongoDB, and NLP tools to create a legal assistant for students, citizens, and professionals alike.
 
-Instant legal Q&A via chatbot
+🔑 Features
+Secure user authentication with JWT
 
-Lawyer discovery and appointment booking
+AI chatbot trained on Constitution, Civil & Criminal Code
 
-Access to Nepalese Constitution and major legal codes
+Lawyer directory with appointment booking
 
-Tiered role-based access for free and paid users
+Legal news and articles viewer
 
-Legal news, searchable PDFs, and interpretation tools
+Commenting and reaction system on news (like/dislike)
 
-Built for students, citizens, lawyers, and researchers.
+Role-based access (Free, Basic, Premium, Lawyer)
 
-🎯 Project Objectives
-✅ Provide AI-powered answers to Nepalese legal queries
+🧰 Technologies Used
+Frontend: React, Axios, React Router
 
-📚 Offer categorized access to national codes: Civil, Criminal, Land, Tax, Company Acts
+Backend: Node.js, Express
 
-👩‍⚖️ Help users find and book verified legal professionals
+Auth: JWT
 
-🧑‍🎓 Support research, legal education, and documentation
+AI: Gemma LLM, SentenceTransformers
 
-🌐 Build a scalable, multilingual legal assistant platform
+Database: MongoDB
 
-🏗️ System Architecture
-Users: Free, Basic, Premium, and Lawyer tiers
+Styling: CSS Modules + Custom Components
 
-Resources: News posts, lawyers, legal documents, and chat logs
+🚀 Installation
+Prerequisites
+Node.js (v16 or higher)
 
-Auth: JWT-secured login, session-based routing
+MongoDB instance running
 
-Monetization: Tiered services (chat limits, appointments, support access)
+A .env file configured
 
-🛠️ Technology Stack
-Layer	Stack Used
-Frontend	React (Web), Flutter (Mobile)
-Backend	Flask (Python API)
-AI/NLP	Gemma LLM, SentenceTransformers
-Search	FAISS for vector-based document retrieval
-Database	MongoDB
+Steps
+Clone the repo:
 
-🚀 Key Features
-🤖 AI Chatbot trained on Nepalese law
-
-📄 Law Document Library with searchable PDFs
-
-👨‍⚖️ Lawyer Booking System with filters (location, expertise, rating)
-
-📰 Legal News Feed from verified sources
-
-👍👎 Like/Dislike & Comments (1 action per user)
-
-🧩 Role-based Access Control (Free, Basic, Premium, Lawyer)
-
-📎 PDF Upload & Interpretation (planned)
-
-🌐 Multi-language Support (future scope)
-
-🧪 Setup & Deployment (Web)
 bash
 Copy
 Edit
-# Clone & enter project
-git clone https://github.com/sachin/lawyerup-web
+git clone https://github.com/your-username/lawyerup-web.git
 cd lawyerup-web
+Install dependencies:
 
-# Install dependencies
+bash
+Copy
+Edit
 npm install
+Create .env file:
 
-# Environment config
-echo "REACT_APP_API_URL=http://localhost:5000/api/" > .env
+env
+Copy
+Edit
+REACT_APP_API_URL=http://localhost:5000/api/
+Start the development server:
 
-# Start dev server
+bash
+Copy
+Edit
 npm start
+🗂️ Project Structure
+bash
+Copy
+Edit
+lawyerup/
+│── src/
+│   ├── components/         # Reusable components like NewsCard, ChatView
+│   ├── pages/              # LoginSignup, NewsPage, LawyerProfile, etc.
+│   ├── utils/              # API, notify, loader
+│   ├── css/                # CSS Modules
+│   ├── App.js              # Main App
+│   └── index.js            # Entry point
+│── public/                 # Static files
+│── .env                    # Environment config
+│── package.json            # Scripts and dependencies
+📌 Key Modules
+Login & Auth (LoginSignup.jsx)
+
+Chatbot Interface (ChatView.jsx)
+
+News & Articles (NewsPage.jsx, NewsCard.jsx)
+
+Lawyer Booking (LawyerBrowse.jsx, AppointmentForm.jsx)
+
+Admin Dashboard (planned)
+
+PDF Document Viewer (planned)
+
 🔐 Auth Flow
-JWT stored in localStorage as lawyerup_token
+JWT is used for user sessions:
 
-Logged-in user info stored as lawyerup_user
+Token stored as lawyerup_token
 
-Protected API routes use Authorization: Bearer <token> header
+User profile stored as lawyerup_user
 
-📚 References
-Constitution of Nepal (2015)
+Protected routes send Authorization: Bearer <token> header
 
-Nepal Law Commission (legal codes, acts)
+📡 API Endpoints (Node.js)
+POST /auth/login
 
-OpenAI: SentenceTransformers
+POST /auth/signup
 
-Google AI: Gemma LLM
+GET /news/
 
-Facebook AI: FAISS
+POST /news/:id/like
 
-Figma, MongoDB, Flask
+POST /news/:id/dislike
 
-📜 License & Copyright
-© 2025 Sachin Khatri — All rights reserved.
+POST /news/:id/comment
 
-This project was developed as part of a final year Web API Development module (ST6003CEM) at Softwarica College of IT and E-Commerce / Coventry University.
+GET /lawyers/
 
-This code and design are not to be reproduced, modified, or distributed without explicit written permission.
+POST /lawyer/:id/appointment
+
+🚢 Deployment
+To deploy frontend (e.g., Netlify or Firebase):
+
+bash
+Copy
+Edit
+npm run build
+For backend:
+
+Host with Render, Railway, or VPS (Ubuntu/Nginx/Mongo)
+
+🤝 Contribution
+Feel free to fork this repository, suggest improvements, or open pull requests.
+
+TODO / Contributions Welcome:
+ PDF search and vector-based doc retrieval
+
+ In-app real-time lawyer chat
+
+ Multi-language chatbot
+
+ Dashboard for analytics
+
+📜 License
+© 2025 Sachin Khatri — All rights reserved
+This project was created for academic and civic engagement use only. No commercial use or redistribution allowed without permission.
+
+🔗 References
+Nepal Law Commission
+
+OpenAI SentenceTransformers
+
+Gemma LLM (Google)
+
+FAISS (Facebook AI)
+
+MongoDB Docs
+
+React Docs
+
+Figma UI Prototypes
