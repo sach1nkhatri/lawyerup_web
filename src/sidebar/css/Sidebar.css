@@ -149,27 +149,3 @@
     }
 }
 
-
-
-/* ===== Mobile Responsive Add-on ===== */
-@media (max-width: 768px) {
-  .container, .card, .section, .box, .content, .wrapper {
-    width: 100% !important;
-    padding: 0 10px !important;
-    box-sizing: border-box;
-  }
-
-  .grid, .row {
-    flex-direction: column !important;
-  }
-
-  img {
-    max-width: 100%;
-    height: auto;
-  }
-
-  button, input, select, textarea {
-    width: 100%;
-    font-size: 1rem;
-  }
-}

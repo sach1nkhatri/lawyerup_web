@@ -128,27 +128,26 @@
     font-size: 0.9rem;
     color: #7f1d1d;
 }
+.section {
+    margin-top: 2rem;
+    padding: 1rem 1.5rem;
+    background-color: #f9fafb;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+}
 
+.section h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #1f2937;
+}
 
-/* ===== Mobile Responsive Add-on ===== */
-@media (max-width: 768px) {
-  .container, .card, .section, .box, .content, .wrapper {
-    width: 100% !important;
-    padding: 0 10px !important;
-    box-sizing: border-box;
-  }
+.section p, .section li {
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+}
 
-  .grid, .row {
-    flex-direction: column !important;
-  }
-
-  img {
-    max-width: 100%;
-    height: auto;
-  }
-
-  button, input, select, textarea {
-    width: 100%;
-    font-size: 1rem;
-  }
+.section a {
+    color: #2563eb;
+    text-decoration: underline;
 }

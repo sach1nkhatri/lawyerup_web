@@ -1,8 +1,8 @@
 import React from 'react';
 import styles from '../css/LawyerStatusPanel.module.css';
 import defaultAvatar from '../../assets/avatar.png';
-import Swal from 'sweetalert2'; // ✅ import SweetAlert2
-import { notify } from '../../utils/notify'; // ✅ import your notify
+import Swal from 'sweetalert2';
+import { notify } from '../../utils/notify';
 
 const LawyerStatusPanel = ({ lawyer, onNext }) => {
     if (!lawyer) return null;
@@ -69,7 +69,7 @@ const LawyerStatusPanel = ({ lawyer, onNext }) => {
     return (
         <div className={styles.statusContainer}>
             <div className={styles.panel}>
-                {/* Lawyer Photo */}
+                {/* Avatar */}
                 <div className={styles.avatarWrapper}>
                     <img
                         src={imageURL}
@@ -93,7 +93,6 @@ const LawyerStatusPanel = ({ lawyer, onNext }) => {
                         <p><strong>Contact:</strong> {lawyer.phone}</p>
                         <p><strong>Status:</strong> <span>{getStatusLabel(status)}</span></p>
                     </div>
-
                     <div className={styles.right}>
                         <h3>Availability</h3>
                         {Object.entries(lawyer.schedule || {}).map(([day, slots], idx) => (
@@ -104,7 +103,55 @@ const LawyerStatusPanel = ({ lawyer, onNext }) => {
                     </div>
                 </div>
 
-                {/* Rejection Reason */}
+                {/* Optional Sections */}
+                {lawyer.description && (
+                    <div className={styles.section}>
+                        <h3>Description</h3>
+                        <p>{lawyer.description}</p>
+                    </div>
+                )}
+
+                {lawyer.specialCase && (
+                    <div className={styles.section}>
+                        <h3>Special Case</h3>
+                        <p>{lawyer.specialCase}</p>
+                    </div>
+                )}
+
+                {lawyer.socialLink && (
+                    <div className={styles.section}>
+                        <h3>Social Link</h3>
+                        <a href={lawyer.socialLink} target="_blank" rel="noreferrer">{lawyer.socialLink}</a>
+                    </div>
+                )}
+
+                {lawyer.education?.length > 0 && (
+                    <div className={styles.section}>
+                        <h3>Education</h3>
+                        <ul>
+                            {lawyer.education.map((e, i) => (
+                                <li key={i}>
+                                    🎓 {e.degree} - {e.institute}, {e.year} ({e.specialization})
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+
+                {lawyer.workExperience?.length > 0 && (
+                    <div className={styles.section}>
+                        <h3>Work Experience</h3>
+                        <ul>
+                            {lawyer.workExperience.map((w, i) => (
+                                <li key={i}>
+                                    📁 {w.court} ({w.from} to {w.to})
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+
+                {/* Rejection Box */}
                 {status === 'rejected' && lawyer.rejectionReason && (
                     <div className={styles.rejectionBox}>
                         <h4>❌ Application Rejected</h4>
@@ -120,34 +167,10 @@ const LawyerStatusPanel = ({ lawyer, onNext }) => {
                 </div>
 
                 {/* Action Buttons */}
-                {status === 'hold' && (
+                {(status === 'hold' || status === 'verified' || status === 'listed' || status === 'rejected') && (
                     <div className={styles.actionRow}>
-                        <button className={styles.nextButton} onClick={handleStartListing}>
-                            Start Listing →
-                        </button>
-                    </div>
-                )}
-
-                {status === 'verified' && (
-                    <div className={styles.actionRow}>
-                        <button className={styles.nextButton} onClick={onNext}>
-                            Edit Listing (Not Public Yet) →
-                        </button>
-                    </div>
-                )}
-
-                {status === 'listed' && (
-                    <div className={styles.actionRow}>
-                        <button className={styles.nextButton} onClick={onNext}>
-                            Edit Public Listing →
-                        </button>
-                    </div>
-                )}
-
-                {status === 'rejected' && (
-                    <div className={styles.actionRow}>
-                        <button className={styles.nextButton} onClick={onNext}>
-                            Edit Application →
+                        <button className={styles.nextButton} onClick={status === 'hold' ? handleStartListing : onNext}>
+                            {status === 'listed' ? 'Edit Public Listing →' : 'Edit Application →'}
                         </button>
                     </div>
                 )}

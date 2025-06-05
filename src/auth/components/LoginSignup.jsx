@@ -24,7 +24,7 @@ const LoginSignUp = () => {
         if (token) {
             navigate('/dashboard');
         }
-    }, []);
+    }, );
 
 
     const handleInputChange = (e) => {
@@ -160,7 +160,7 @@ const LoginSignUp = () => {
                             <button type="submit">{isLogin ? 'Login' : 'Sign Up'}</button>
 
                             {isLogin && (
-                                <a href="#" className="forgot-pass">
+                                <a href="https://sachin.bio/contact" className="forgot-pass">
                                     Forgot password?
                                 </a>
                             )}

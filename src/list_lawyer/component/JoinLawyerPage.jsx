@@ -8,8 +8,7 @@ import LawyerFinalListingPanel from './LawyerFinalListingPanel';
 const JoinLawyerPage = () => {
     const [view, setView] = useState('loading');
     const [lawyerData, setLawyerData] = useState(null);
-    const navigate = useNavigate();
-
+    useNavigate();
     const getToken = () => localStorage.getItem('lawyerup_token');
     const getNextClicked = () => localStorage.getItem('lawyerup_nextClicked') === 'true';
 
@@ -45,7 +44,7 @@ const JoinLawyerPage = () => {
 
     useEffect(() => {
         loadProfile();
-    }, []);
+    }, );
 
     // Handlers
     const handleNext = () => {

@@ -179,27 +179,36 @@
 .toggle-wrapper input:checked + .toggle-slider:before {
     transform: translateX(20px);
 }
+.tab-menu {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
 
+.tab-menu button {
+    background: none;
+    border: none;
+    font-weight: bold;
+    padding-bottom: 4px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+}
 
-/* ===== Mobile Responsive Add-on ===== */
-@media (max-width: 768px) {
-  .container, .card, .section, .box, .content, .wrapper {
-    width: 100% !important;
-    padding: 0 10px !important;
-    box-sizing: border-box;
-  }
+.tab-menu button.active-tab {
+    border-bottom: 5px solid #84abda;
+    color: #0c0c0c;
+}
+.info-container {
+    padding: 0.5rem;
+    background-color: #eafff7;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
 
-  .grid, .row {
-    flex-direction: column !important;
-  }
-
-  img {
-    max-width: 100%;
-    height: auto;
-  }
-
-  button, input, select, textarea {
-    width: 100%;
-    font-size: 1rem;
-  }
+.info-box {
+    background: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
 }
