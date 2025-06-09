@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import '../css/ReportModal.css';
+import { notify } from '../../utils/notify'
+import axios from "axios";
 
 const ReportModal = ({ isOpen, onClose }) => {
     const [selectedIssue, setSelectedIssue] = useState('');
@@ -13,11 +15,40 @@ const ReportModal = ({ isOpen, onClose }) => {
         'Other',
     ];
 
-    const handleSubmit = () => {
+
+
+    const handleSubmit = async () => {
         const finalIssue = selectedIssue === 'Other' ? customIssue : selectedIssue;
-        console.log('Reported Issue:', finalIssue);
-        onClose(); // close modal
+
+        if (!selectedIssue || (selectedIssue === 'Other' && !customIssue.trim())) {
+            notify('warn', 'Please select or describe an issue');
+            return;
+        }
+
+        try {
+            const user = JSON.parse(localStorage.getItem('lawyerup_user')); // ✅ same as in UserReview
+
+            if (!user || !user._id) {
+                notify('error', 'User not found. Please log in again.');
+                return;
+            }
+
+            const res = await axios.post(`${process.env.REACT_APP_API_URL}report`, {
+                user: user._id, // ✅ sending ObjectId as required by backend
+                message: finalIssue
+            });
+
+            console.log('Response:', res.data);
+            notify('success', res.data.message || 'Report submitted!');
+            onClose();
+        } catch (error) {
+            console.error('Report error:', error);
+            notify('error', 'Failed to submit report');
+        }
     };
+
+
+
 
     if (!isOpen) return null;
 
