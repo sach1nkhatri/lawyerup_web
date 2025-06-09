@@ -1,46 +1,135 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# ⚖️ LawyerUp AI – Intelligent Legal Assistant for Nepal
+> Web + AI platform for legal awareness, lawyer booking, and automated legal queries
 
-## Available Scripts
+## 📘 Overview
 
-In the project directory, you can run:
+**LawyerUp AI** is a civic-tech platform that empowers Nepali citizens with access to legal information, AI-powered chatbot support, and lawyer consultation — all from a modern web interface. The app combines React, Node/Express, MongoDB, and NLP tools to create a legal assistant for students, citizens, and professionals alike.
 
-### `npm start`
+## 🔑 Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Secure user authentication with JWT
+- AI chatbot trained on Constitution, Civil & Criminal Code
+- Lawyer directory with appointment booking
+- Legal news and articles viewer
+- Commenting and reaction system on news (like/dislike)
+- Role-based access (Free, Basic, Premium, Lawyer)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 🧰 Technologies Used
 
-### `npm test`
+- **Frontend**: React, Axios, React Router
+- **Backend**: Node.js, Express
+- **Auth**: JWT
+- **AI**: Gemma LLM, SentenceTransformers
+- **Database**: MongoDB
+- **Styling**: CSS Modules + Custom Components
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🚀 Installation
 
-### `npm run build`
+### Prerequisites
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Node.js (v16 or higher)
+- MongoDB instance running
+- A `.env` file configured
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Steps
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Clone the repo:
+```bash
+git clone https://github.com/your-username/lawyerup-web.git
+cd lawyerup-web
+```
 
-### `npm run eject`
+2. Install dependencies:
+```bash
+npm install
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+3. Create `.env` file:
+```env
+REACT_APP_API_URL=http://localhost:5000/api/
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. Start the development server:
+```bash
+npm start
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## 🗂️ Project Structure
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```
+lawyerup/
+│── src/
+│   ├── components/         # Reusable components like NewsCard, ChatView
+│   ├── pages/              # LoginSignup, NewsPage, LawyerProfile, etc.
+│   ├── utils/              # API, notify, loader
+│   ├── css/                # CSS Modules
+│   ├── App.js              # Main App
+│   └── index.js            # Entry point
+│── public/                 # Static files
+│── .env                    # Environment config
+│── package.json            # Scripts and dependencies
+```
 
-## Learn More
+## 📌 Key Modules
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **Login & Auth** (`LoginSignup.jsx`)
+- **Chatbot Interface** (`ChatView.jsx`)
+- **News & Articles** (`NewsPage.jsx`, `NewsCard.jsx`)
+- **Lawyer Booking** (`LawyerBrowse.jsx`, `AppointmentForm.jsx`)
+- **Admin Dashboard** *(planned)*
+- **PDF Document Viewer** *(planned)*
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 🔐 Auth Flow
+
+JWT is used for user sessions:
+
+- Token stored as `lawyerup_token`
+- User profile stored as `lawyerup_user`
+- Protected routes send `Authorization: Bearer <token>` header
+
+## 📡 API Endpoints (Node.js)
+
+- `POST /auth/login`
+- `POST /auth/signup`
+- `GET /news/`
+- `POST /news/:id/like`
+- `POST /news/:id/dislike`
+- `POST /news/:id/comment`
+- `GET /lawyers/`
+- `POST /lawyer/:id/appointment`
+
+## 🚢 Deployment
+
+To deploy frontend (e.g., Netlify or Firebase):
+```bash
+npm run build
+```
+
+For backend:
+- Host with Render, Railway, or VPS (Ubuntu/Nginx/Mongo)
+
+## 🤝 Contribution
+
+Feel free to fork this repository, suggest improvements, or open pull requests.
+
+### TODO / Contributions Welcome:
+- [ ] PDF search and vector-based doc retrieval
+- [ ] In-app real-time lawyer chat
+- [ ] Multi-language chatbot
+- [ ] Dashboard for analytics
+
+## 📜 License
+
+**© 2025 Sachin Khatri — All rights reserved**  
+This project was created for academic and civic engagement use only. No commercial use or redistribution allowed without permission.
+
+## 🔗 References
+
+- Nepal Law Commission
+- OpenAI SentenceTransformers
+- Gemma LLM (Google)
+- FAISS (Facebook AI)
+- MongoDB Docs
+- React Docs
+- Figma UI Prototypes
