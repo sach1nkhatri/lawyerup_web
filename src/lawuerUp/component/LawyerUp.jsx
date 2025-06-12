@@ -1,54 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import LawyerCard from './LawyerCard';
 import LawyerProfilePanel from './LawyerProfilePanel';
+import { useLawyerUp } from '../hooks/useLawyerUp';
 import '../css/LawyerUp.css';
-import axios from 'axios';
-import { startLoader, stopLoader } from '../../utils/loader'; // ✅ NProgress loader
 
 const LawyerUp = () => {
     const navigate = useNavigate();
-    const { id } = useParams();
-
-    const [lawyers, setLawyers] = useState([]);
-    const [selectedLawyer, setSelectedLawyer] = useState(null);
-    const [loading, setLoading] = useState(true); // ✅ local flag for fallback UI
-
-    useEffect(() => {
-        const fetchLawyers = async () => {
-            try {
-                startLoader(); // ✅ show loader
-                const response = await axios.get(`${process.env.REACT_APP_API_URL}lawyers`);
-                setLawyers(response.data);
-            } catch (err) {
-                console.error("Failed to fetch lawyers", err);
-            } finally {
-                stopLoader(); // ✅ stop loader
-                setLoading(false);
-            }
-        };
-        fetchLawyers();
-    }, []);
-
-
-    useEffect(() => {
-        if (id && lawyers.length > 0) {
-            const match = lawyers.find((l) => String(l._id) === id);
-            setSelectedLawyer(match || null);
-        } else {
-            setSelectedLawyer(null);
-        }
-    }, [id, lawyers]);
-
-    const listedLawyers = lawyers.filter((l) => l.status === 'listed');
-
-    const resolveImage = (profilePhoto) => {
-        if (!profilePhoto) return null;
-        return profilePhoto.startsWith('data:image')
-            ? profilePhoto
-            : `${process.env.REACT_APP_UPLOADS_URL}${profilePhoto}`;
-    };
-
+    const {
+        listedLawyers,
+        selectedLawyer,
+        loading,
+        resolveImage
+    } = useLawyerUp();
 
     if (loading) {
         return <div style={{ padding: '2rem', textAlign: 'center' }}>Loading lawyers...</div>;

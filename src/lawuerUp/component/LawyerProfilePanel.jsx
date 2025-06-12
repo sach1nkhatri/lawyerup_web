@@ -1,43 +1,41 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReviewList from './ReviewList';
 import AppointmentModal from '../../modals/AppointmentModal';
 import '../css/LawyerUp.css';
 import { FaGraduationCap, FaFolderOpen } from 'react-icons/fa';
+import { useLawyerProfile } from '../hooks/useLawyerProfile';
 
 const LawyerProfilePanel = ({ lawyer, onBack }) => {
-    const [showModal, setShowModal] = useState(false);
-    const [activeTab, setActiveTab] = useState('profile'); // profile | info | work
-
-    const currentUser = JSON.parse(localStorage.getItem('lawyerup_user'));
-    const isUser = currentUser?.role === 'user';
+    const {
+        activeTab,
+        setActiveTab,
+        showModal,
+        setShowModal,
+        isUser,
+        hasAvailability,
+        hasReviews,
+        avgRating,
+        filledStars,
+        emptyStars
+    } = useLawyerProfile(lawyer);
 
     if (!lawyer) return <p>Lawyer not found.</p>;
-
-    const hasAvailability = lawyer.schedule && Object.keys(lawyer.schedule).length > 0;
-    const hasReviews = lawyer.reviews && lawyer.reviews.length > 0;
-
-    const totalRatings = hasReviews ? lawyer.reviews.reduce((sum, r) => sum + r.rating, 0) : 0;
-    const avgRating = hasReviews ? totalRatings / lawyer.reviews.length : 0;
-    const rounded = Math.round(avgRating);
-    const filledStars = '⭐'.repeat(rounded);
-    const emptyStars = '☆'.repeat(5 - rounded);
 
     const renderTabContent = () => {
         switch (activeTab) {
             case 'profile':
                 const latestEducation = lawyer.education?.[lawyer.education.length - 1];
-                const specializationFromEducation = latestEducation?.specialization || lawyer.specialization || 'N/A';
+                const specialization = latestEducation?.specialization || lawyer.specialization || 'N/A';
                 return (
                     <>
                         <p><strong>Name:</strong> {lawyer.fullName}</p>
-                        <p><strong>Speciality:</strong> {specializationFromEducation}</p>
+                        <p><strong>Speciality:</strong> {specialization}</p>
                         <p><strong>State:</strong> {lawyer.state || 'N/A'}</p>
                         <p><strong>City:</strong> {lawyer.city || 'N/A'}</p>
                         <p><strong>Address:</strong> {lawyer.address}</p>
                         <p><strong>Contact:</strong> {lawyer.phone}</p>
                     </>
                 );
-
 
             case 'info':
                 return (
@@ -94,25 +92,22 @@ const LawyerProfilePanel = ({ lawyer, onBack }) => {
                     </>
                 );
 
-
             default:
                 return null;
         }
     };
 
-
-
     return (
         <div className="profile-panel">
             <h3>LawyerUp</h3>
             <div className="tab-menu">
-                {['profile', 'info', 'Education'].map((t) => (
+                {['profile', 'info', 'Education'].map((tab) => (
                     <button
-                        key={t}
-                        onClick={() => setActiveTab(t)}
-                        className={activeTab === t ? 'active-tab' : ''}
+                        key={tab}
+                        onClick={() => setActiveTab(tab)}
+                        className={activeTab === tab ? 'active-tab' : ''}
                     >
-                        {t.charAt(0).toUpperCase() + t.slice(1)}
+                        {tab.charAt(0).toUpperCase() + tab.slice(1)}
                     </button>
                 ))}
             </div>
