@@ -1,42 +1,18 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 import '../css/UserReview.css';
-import { notify } from '../../utils/notify'; // ✅ uses your custom sound-based toast
+import { useUserReview } from '../hooks/useUserReview';
 
 const UserReview = ({ bookingId, onClose }) => {
-    const [rating, setRating] = useState(0);
-    const [hover, setHover] = useState(0);
-    const [comment, setComment] = useState('');
-    const [loading, setLoading] = useState(false);
-
-    const handleSubmit = async () => {
-        if (!rating || !comment.trim()) {
-            notify('error', 'Please give a rating and write a comment.');
-            return;
-        }
-
-        try {
-            setLoading(true);
-            const user = JSON.parse(localStorage.getItem('lawyerup_user'));
-
-            const payload = {
-                user: user.fullName, // or user._id if needed
-                comment,
-                rating,
-            };
-
-            await axios.post(`${process.env.REACT_APP_API_URL}reviews/${bookingId}`, payload);
-
-
-            notify('success', 'Review submitted successfully!');
-            onClose();
-        } catch (err) {
-            console.error('Review submission error:', err);
-            notify('error', '❌ Failed to submit review. Please try again.');
-        } finally {
-            setLoading(false);
-        }
-    };
+    const {
+        rating,
+        setRating,
+        hover,
+        setHover,
+        comment,
+        setComment,
+        loading,
+        handleSubmit
+    } = useUserReview(bookingId, onClose);
 
     return (
         <div className="review-modal-overlay">

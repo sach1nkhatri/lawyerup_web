@@ -1,92 +1,49 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import '../css/LoginSignup.css';
 import hammerIcon from '../../assets/hammer.png';
 import logoIcon from '../../assets/logo2.png';
 import logoText from '../../assets/textlogoblack.png';
-import { startLoader, stopLoader } from '../../utils/loader';
-import { notify } from '../../utils/notify';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import useAuthForm from '../hooks/useAuthForm';
 
 const LoginSignUp = () => {
-    const navigate = useNavigate();
-    const [isLogin, setIsLogin] = useState(true);
-    const [formData, setFormData] = useState({
-        role: 'user',
-        fullName: '',
-        email: '',
-        password: '',
-        contactNumber: '',
-    });
+    const {
+        formData,
+        isLogin,
+        setIsLogin,
+        handleInputChange,
+        handleSubmit,
+    } = useAuthForm();
 
-    useEffect(() => {
-        const token = localStorage.getItem('lawyerup_token');
-        if (token) {
-            navigate('/dashboard');
-        }
-    }, );
-
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        startLoader(); // 🌀 Start loader
-
-        const endpoint = isLogin
-            ? process.env.REACT_APP_API_URL+ 'auth/login'
-            : process.env.REACT_APP_API_URL + 'auth/signup';
-            // ? 'http://localhost:5000/api/auth/login'
-            // : 'http://localhost:5000/api/auth/signup';
-
-
-        const payload = isLogin
-            ? {
-                email: formData.email,
-                password: formData.password,
-            }
-            : {
-                fullName: formData.fullName,
-                email: formData.email,
-                password: formData.password,
-                role: formData.role,
-                contactNumber: formData.contactNumber,
-            };
-
-        try {
-            startLoader();
-
-            const res = await axios.post(endpoint, payload);
-            const { user, token } = res.data;
-
-            localStorage.setItem('lawyerup_token', token);
-            localStorage.setItem('lawyerup_user', JSON.stringify(user));
-
-            if (isLogin) {
-                localStorage.setItem('auth', 'true');
-            }
-
-            notify('success', 'Logged in successfully!');
-            navigate('/dashboard');
-        } catch (err) {
-            const msg = err.response?.data?.message || err.message;
-
-            if (msg.toLowerCase().includes('user')) {
-                notify('error', '❌ User not found.');
-            } else if (msg.toLowerCase().includes('password')) {
-                notify('warn', '🔐 Incorrect password.');
-            } else {
-                notify('error', '⚠️ Network error. Please try again.');
-            }
-
-            console.error('[Login error]', err);
-        } finally {
-            stopLoader();
-        }
-    };
+    const renderSignupFields = () => (
+        <>
+            <select
+                name="role"
+                value={formData.role}
+                onChange={handleInputChange}
+                className="input-dropdown"
+                required
+            >
+                <option value="user">User</option>
+                <option value="lawyer">Lawyer</option>
+            </select>
+            <input
+                type="text"
+                name="fullName"
+                placeholder="Full Name"
+                value={formData.fullName}
+                onChange={handleInputChange}
+                required
+            />
+            <input
+                type="text"
+                name="contactNumber"
+                placeholder="Contact Number"
+                value={formData.contactNumber}
+                onChange={handleInputChange}
+                required
+            />
+        </>
+    );
 
     return (
         <div className="login-signup-page">
@@ -106,37 +63,8 @@ const LoginSignUp = () => {
                         </div>
 
                         <form onSubmit={handleSubmit}>
-                            {!isLogin && (
-                                <>
-                                    <select
-                                        name="role"
-                                        value={formData.role}
-                                        onChange={handleInputChange}
-                                        className="input-dropdown"
-                                        required
-                                    >
-                                        <option value="user">User</option>
-                                        <option value="lawyer">Lawyer</option>
-                                    </select>
+                            {!isLogin && renderSignupFields()}
 
-                                    <input
-                                        type="text"
-                                        name="fullName"
-                                        placeholder="Full Name"
-                                        value={formData.fullName}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                    <input
-                                        type="text"
-                                        name="contactNumber"
-                                        placeholder="Contact Number"
-                                        value={formData.contactNumber}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </>
-                            )}
                             <input
                                 type="email"
                                 name="email"
@@ -178,4 +106,5 @@ const LoginSignUp = () => {
         </div>
     );
 };
+
 export default LoginSignUp;

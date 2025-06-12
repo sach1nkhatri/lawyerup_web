@@ -1,49 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import UserReview from './UserReview';
 import defaultAvatar from '../../assets/avatar.png';
 import '../css/UserBookingCard.css';
-import {notify} from "../../utils/notify";
-import axios from "axios";
-import Swal from 'sweetalert2';
+import { useUserBookingCard } from '../hooks/useUserBookingCard';
 
 const UserBookingCard = ({ booking, onCancel }) => {
-    const [showReview, setShowReview] = useState(false);
-
-    const lawyerProfile = booking.lawyerList;   // 👈 Public listing info (photo, specialization)
-    const lawyerUser = booking.lawyer;          // 👈 Actual user (fullName, email, phone)
-    const client = booking.user;
+    const {
+        showReview,
+        setShowReview,
+        lawyerProfile,
+        lawyerUser,
+        client,
+        lawyerImg,
+        handleCancel
+    } = useUserBookingCard(booking, onCancel);
 
     if (!lawyerProfile || !lawyerUser) {
         return <div style={{ padding: '1rem' }}></div>;
     }
-
-    const lawyerImg = lawyerProfile.profilePhoto?.startsWith('data:image')
-        ? lawyerProfile.profilePhoto
-        : `${process.env.REACT_APP_UPLOADS_URL}${lawyerProfile.profilePhoto || 'avatar.png'}`;
-
-
-    const handleCancel = async () => {
-        const result = await Swal.fire({
-            title: 'Cancel Booking?',
-            text: "This action cannot be undone.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#e24c4c',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, cancel it!',
-        });
-
-        if (result.isConfirmed) {
-            try {
-                await axios.delete(`${process.env.REACT_APP_API_URL}bookings/${booking._id}`);
-                notify('success', 'Booking cancelled.');
-                onCancel?.(booking._id);
-            } catch (err) {
-                console.error('Cancel error:', err);
-                notify('error', '❌ Failed to cancel booking.');
-            }
-        }
-    };
 
     return (
         <div className="user-booking-card">
