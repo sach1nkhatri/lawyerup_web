@@ -7,7 +7,7 @@ const NewsCard = ({ title, author, summary, date, image, onClick, likes = 0, dis
         <div className="news-content">
             <h3 className="news-title">{title}</h3>
             <p className="news-author">{author}</p>
-            <p className="news-summary">{summary}</p>
+            <p className="news-summary">{summary?.replace(/\\n|\\n\\n|\n|\n\n/g, ' ')}</p>
             <p className="news-date">{date}</p>
         </div>
         <div className="news-reactions">
