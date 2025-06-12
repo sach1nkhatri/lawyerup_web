@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import LawyerCard from './LawyerCard';
 import LawyerProfilePanel from './LawyerProfilePanel';
 import { useLawyerUp } from '../hooks/useLawyerUp';
+import { LawyerCardSkeleton, LawyerProfileSkeleton } from './LawyerSkeletons'; // ✅ import
 import '../css/LawyerUp.css';
 
 const LawyerUp = () => {
@@ -13,10 +14,6 @@ const LawyerUp = () => {
         loading,
         resolveImage
     } = useLawyerUp();
-
-    if (loading) {
-        return <div style={{ padding: '2rem', textAlign: 'center' }}>Loading lawyers...</div>;
-    }
 
     return (
         <div className="lawyerup-container">
@@ -31,7 +28,20 @@ const LawyerUp = () => {
                 </div>
             </div>
 
-            {!selectedLawyer ? (
+            {loading ? (
+                selectedLawyer ? (
+                    <div className="profile-split-view">
+                        <LawyerCardSkeleton />
+                        <LawyerProfileSkeleton />
+                    </div>
+                ) : (
+                    <div className="lawyer-grid">
+                        {Array.from({ length: 6 }).map((_, i) => (
+                            <LawyerCardSkeleton key={i} />
+                        ))}
+                    </div>
+                )
+            ) : !selectedLawyer ? (
                 <div className="lawyer-grid">
                     {listedLawyers.map((lawyer) => (
                         <LawyerCard

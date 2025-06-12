@@ -11,6 +11,7 @@ export const useNewsPage = () => {
     const [selectedNews, setSelectedNews] = useState(null);
     const [commentText, setCommentText] = useState('');
     const [comments, setComments] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchNews = async () => {
@@ -23,6 +24,7 @@ export const useNewsPage = () => {
                 notify('error', '❌ Failed to load news.');
             } finally {
                 NProgress.done();
+                setLoading(false);
             }
         };
         fetchNews();
@@ -153,6 +155,7 @@ export const useNewsPage = () => {
         commentText,
         comments,
         setCommentText,
+        loading,
         handleCardClick,
         handleBackClick,
         handleLike,

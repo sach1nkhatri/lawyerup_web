@@ -1,4 +1,3 @@
-// hooks/useLawyerUp.js
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -10,6 +9,7 @@ export const useLawyerUp = () => {
     const [selectedLawyer, setSelectedLawyer] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    // Fetch lawyers on mount
     useEffect(() => {
         const fetchLawyers = async () => {
             try {
@@ -17,25 +17,30 @@ export const useLawyerUp = () => {
                 const res = await axios.get(`${process.env.REACT_APP_API_URL}lawyers`);
                 setLawyers(res.data);
             } catch (err) {
-                console.error("Failed to fetch lawyers", err);
+                console.error("❌ Failed to fetch lawyers", err);
             } finally {
                 stopLoader();
-                setLoading(false);
             }
         };
 
         fetchLawyers();
     }, []);
 
+    // Sync selected lawyer based on URL param
     useEffect(() => {
-        if (id && lawyers.length > 0) {
+        if (lawyers.length === 0) return;
+
+        if (id) {
             const match = lawyers.find(l => String(l._id) === id);
             setSelectedLawyer(match || null);
         } else {
             setSelectedLawyer(null);
         }
+
+        setLoading(false); // ✅ Only after resolving the selection
     }, [id, lawyers]);
 
+    // Construct image URL
     const resolveImage = (profilePhoto) => {
         if (!profilePhoto) return null;
         return profilePhoto.startsWith('data:image')

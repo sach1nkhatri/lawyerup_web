@@ -1,5 +1,6 @@
 import React from 'react';
 import NewsCard from './NewsCard';
+import NewsCardSkeleton from './NewsCardSkeleton';
 import '../css/NewsPage.css';
 import '../../utils/css/nprogress.css';
 import { useNewsPage } from '../hooks/useNewsPage';
@@ -11,6 +12,7 @@ const NewsPage = () => {
         commentText,
         comments,
         setCommentText,
+        loading,
         handleCardClick,
         handleBackClick,
         handleLike,
@@ -29,7 +31,7 @@ const NewsPage = () => {
             {selectedNews ? (
                 <div className="news-detail-view">
                     <button className="back-button" onClick={handleBackClick}>← Back to all news</button>
-                    <img className="news-detail-image" src={selectedNews.image} alt={selectedNews.title}/>
+                    <img className="news-detail-image" src={selectedNews.image} alt={selectedNews.title} />
                     <h3 className="news-detail-title">{selectedNews.title}</h3>
                     <p className="news-detail-meta">By {selectedNews.author} | {selectedNews.date}</p>
 
@@ -37,13 +39,12 @@ const NewsPage = () => {
                         className="news-detail-body"
                         dangerouslySetInnerHTML={{
                             __html: (selectedNews.fullText || selectedNews.summary || '')
-                                .replace(/\\n\\n/g, '<br/><br/>') // for escaped \n\n
-                                .replace(/\n\n/g, '<br/><br/>')   // for real line breaks
-                                .replace(/\\n/g, '<br/>')         // optional: for single line breaks
+                                .replace(/\\n\\n/g, '<br/><br/>')
+                                .replace(/\n\n/g, '<br/><br/>')
+                                .replace(/\\n/g, '<br/>')
                                 .replace(/\n/g, '<br/>'),
                         }}
                     />
-
 
                     <div className="news-reactions">
                         <button onClick={handleLike}>👍 {selectedNews.likes || 0}</button>
@@ -67,7 +68,6 @@ const NewsPage = () => {
                             <button className="comment-submit" onClick={handleComment}>Post</button>
                         </div>
 
-
                         <div className="comment-thread">
                             {comments.length === 0 ? (
                                 <p className="comment-item">💬 No comments yet.</p>
@@ -90,19 +90,21 @@ const NewsPage = () => {
                 </div>
             ) : (
                 <div className="news-grid">
-                    {newsData.map((item) => (
-                        <NewsCard
-                            key={item._id}
-                            title={item.title}
-                            author={item.author}
-                            summary={item.summary}
-                            date={item.date}
-                            image={item.image}
-                            onClick={() => handleCardClick(item)}
-                            likes={item.likes}
-                            dislikes={item.dislikes}
-                        />
-                    ))}
+                    {loading
+                        ? Array.from({ length: 6 }).map((_, i) => <NewsCardSkeleton key={i} />)
+                        : newsData.map((item) => (
+                            <NewsCard
+                                key={item._id}
+                                title={item.title}
+                                author={item.author}
+                                summary={item.summary}
+                                date={item.date}
+                                image={item.image}
+                                onClick={() => handleCardClick(item)}
+                                likes={item.likes}
+                                dislikes={item.dislikes}
+                            />
+                        ))}
                 </div>
             )}
         </div>

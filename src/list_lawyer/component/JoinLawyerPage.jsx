@@ -3,6 +3,7 @@ import JoinAsLawyerForm from './JoinAsLawyerForm';
 import LawyerStatusPanel from './LawyerStatusPanel';
 import LawyerFinalListingPanel from './LawyerFinalListingPanel';
 import { useJoinLawyerPage } from '../hooks/useJoinLawyerPage';
+import LawyerStatusPanelSkeleton from './LawyerStatusPanelSkeleton'
 
 const JoinLawyerPage = () => {
     const {
@@ -15,7 +16,7 @@ const JoinLawyerPage = () => {
         handleGoToStatus
     } = useJoinLawyerPage();
 
-    if (view === 'loading') return <p style={{ padding: '2rem' }}>Loading your application…</p>;
+    if (view === 'loading') return <LawyerStatusPanelSkeleton />;
     if (view === 'form') return <JoinAsLawyerForm onSubmitted={loadProfile} />;
     if (view === 'status') return <LawyerStatusPanel lawyer={lawyerData} onNext={handleNext} />;
     if (view === 'control') {
