@@ -66,5 +66,6 @@ export const useLawyerStatusPanel = (lawyer, onNext) => {
         statusStep,
         getStatusLabel,
         handleStartListing,
+        status,
     };
 };
