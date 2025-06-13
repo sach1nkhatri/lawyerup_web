@@ -1,6 +1,8 @@
 import React from 'react';
 import '../css/LawyerBookingCard.css';
 import { useLawyerBookingCard } from '../hooks/useLawyerBookingCard';
+import ChatPopup from './ChatPopup';
+const currentUser = JSON.parse(localStorage.getItem('lawyerup_user'));
 
 const LawyerBookingCard = ({ booking, onStatusChange }) => {
     const user = booking.user;
@@ -61,6 +63,14 @@ const LawyerBookingCard = ({ booking, onStatusChange }) => {
                     </button>
                 )}
             </div>
+
+            {booking.status === 'approved' && (
+                <ChatPopup
+                    bookingId={booking._id}
+                    senderId={currentUser._id}
+                    receiver={currentUser.role === 'lawyer' ? booking.user : booking.lawyer}
+                />
+            )}
         </div>
     );
 };

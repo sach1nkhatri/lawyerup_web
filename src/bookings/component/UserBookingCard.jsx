@@ -3,6 +3,8 @@ import UserReview from './UserReview';
 import defaultAvatar from '../../assets/avatar.png';
 import '../css/UserBookingCard.css';
 import { useUserBookingCard } from '../hooks/useUserBookingCard';
+import ChatPopup from './ChatPopup';
+const currentUser = JSON.parse(localStorage.getItem('lawyerup_user'));
 
 const UserBookingCard = ({ booking, onCancel }) => {
     const {
@@ -85,6 +87,14 @@ const UserBookingCard = ({ booking, onCancel }) => {
                     bookingId={booking._id}
                     lawyerId={lawyerUser._id}
                     onClose={() => setShowReview(false)}
+                />
+            )}
+
+            {booking.status === 'approved' && (
+                <ChatPopup
+                    bookingId={booking._id}
+                    senderId={currentUser._id}
+                    receiver={currentUser.role === 'lawyer' ? booking.user : booking.lawyer}
                 />
             )}
         </div>
