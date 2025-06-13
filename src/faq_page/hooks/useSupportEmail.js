@@ -8,7 +8,10 @@ export const useSupportEmail = () => {
                 Swal.fire({
                     title: 'Need Help?',
                     html: `<p>Email copied to clipboard:</p><a href="mailto:${supportEmail}">${supportEmail}</a>`,
-                    icon: 'success',
+                    icon: 'question',
+                    customClass: {
+                        icon: 'no-border'
+                    },
                     confirmButtonText: 'Close',
                 });
             })
