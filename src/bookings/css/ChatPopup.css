@@ -67,6 +67,8 @@
 
 .chat-footer button {
     margin-left: 8px;
+    margin-bottom: 8px;
+    margin-top: 5px;
     padding: 6px 14px;
     background-color: #007bff;
     border: none;
@@ -124,4 +126,17 @@
     margin-top: 4px;
     text-align: right;
     opacity: 0.6;
+}
+.typing-indicator {
+    font-size: 0.75rem;
+    color: #555;
+    font-style: italic;
+    margin: 0 0 8px 10px;
+    animation: typingFade 1.2s infinite ease-in-out;
+}
+
+@keyframes typingFade {
+    0% { opacity: 0.3; }
+    50% { opacity: 1; }
+    100% { opacity: 0.3; }
 }

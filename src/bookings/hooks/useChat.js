@@ -1,55 +1,64 @@
 import { useEffect, useState, useRef } from 'react';
 import { io } from 'socket.io-client';
+import { notify } from '../../utils/notify';
 
 const socket = io(process.env.REACT_APP_SOCKET_URL, {
-    transports: ['websocket'], // 🔧 Optional: enforce WebSocket for stability
+    transports: ['websocket'],
     withCredentials: true,
 });
 
-export const useChat = (bookingId, senderId) => {
+export const useChat = (bookingId, senderId, isChatVisible = false) => {
     const [messages, setMessages] = useState([]);
     const [text, setText] = useState('');
+    const [isTyping, setIsTyping] = useState(false);
     const messagesEndRef = useRef(null);
+    const user = JSON.parse(localStorage.getItem('lawyerup_user'));
 
-    // 🔁 Join room and listen for messages
     useEffect(() => {
         if (!bookingId) return;
 
-        console.log('Joining room:', bookingId);
         socket.emit('joinRoom', bookingId);
 
         socket.on('receiveMessage', (msg) => {
-            console.log('📥 Message received:', msg);
             setMessages(prev => [...prev, msg]);
+            if (msg.sender?._id !== user._id && !isChatVisible) {
+                notify('success', `New message from ${msg.sender?.fullName || 'the other user'}`);
+            }
+        });
+
+        socket.on('userTyping', () => {
+            setIsTyping(true);
+            setTimeout(() => setIsTyping(false), 1500);
         });
 
         return () => {
             socket.off('receiveMessage');
+            socket.off('userTyping');
         };
-    }, [bookingId]);
+    }, [bookingId, isChatVisible, user._id]);
 
-    // 🔁 Fetch message history
     useEffect(() => {
         if (!bookingId) return;
 
         fetch(`${process.env.REACT_APP_API_URL}bookings/${bookingId}/chat`)
             .then(res => res.json())
-            .then(data => {
-                setMessages(data || []);
-                console.log('📚 Chat loaded:', data);
-            })
+            .then(data => setMessages(data || []))
             .catch(console.error);
     }, [bookingId]);
 
-    // 📤 Send a message
     const sendMessage = () => {
         if (!text.trim()) return;
 
-        const messagePayload = { bookingId, senderId, text };
-        console.log('📤 Sending:', messagePayload);
+        const messagePayload = {
+            bookingId,
+            senderId: user._id,
+            text,
+            senderName: user.fullName
+        };
+
         socket.emit('sendMessage', messagePayload);
         setText('');
     };
 
-    return { messages, text, setText, sendMessage, messagesEndRef };
+    return { messages, text, setText, sendMessage, messagesEndRef, isTyping };
 };
