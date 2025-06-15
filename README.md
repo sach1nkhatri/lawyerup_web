@@ -1,166 +1,132 @@
-# ⚖️ LawyerUp AI – Intelligent Legal Assistant for Nepal
-> Full-stack cross-platform solution for legal access, AI chatbot support, and lawyer consultation.
+# ⚖️ LawyerUp AI – Fullstack Legal Assistant Platform for Nepal
 
-## 📘 Overview
-
-**LawyerUp AI** is a civic-tech platform designed to empower Nepali citizens with reliable legal information, automated legal assistance, and direct lawyer consultation. It combines a modern **React** frontend, a robust **Node.js/Express** backend, and powerful **LLM-driven AI** for real-time legal query support.
+> 🧠 A civic-tech project built from scratch: web app, AI chatbot, real-time lawyer booking, and secure user roles — by a self-taught developer.
 
 ---
 
-## 🔑 Key Features
+## 🧭 Overview
 
-- 🔐 Secure user authentication with JWT
-- 🤖 AI chatbot trained on Nepal’s Constitution, Civil & Criminal Codes
-- 🧑‍⚖️ Lawyer directory with appointment system
-- 📰 Legal news viewer with comments and reactions
-- 🗂️ PDF document upload & search *(coming soon)*
-- 🧑‍💻 Role-based access control (Free, Basic, Premium, Lawyer)
-- 📊 Admin dashboard *(in progress)*
+**LawyerUp AI** is a cross-platform legal assistant platform designed for Nepali citizens.  
+It provides **legal awareness, lawyer consultations, and AI-powered support** via a clean, responsive web interface and real-time backend services.
 
 ---
 
-## 🧰 Tech Stack
+## 🔥 Highlights
 
-| Layer       | Technology                             |
-|-------------|-----------------------------------------|
-| Frontend    | React, React Router, Axios              |
-| Backend     | Node.js, Express                        |
-| Auth        | JWT                                     |
-| AI Engine   | Gemma LLM, SentenceTransformers, FAISS |
-| Database    | MongoDB                                 |
-| Styling     | CSS Modules + Custom Components         |
+- 🧠 Built from scratch by a self-taught undergraduate
+- ✅ Clean Architecture – Fully modular and scalable (React + Node + MongoDB)
+- 💬 Real-time chat using **Socket.IO**
+- 📚 AI chatbot trained on **Nepali legal data**
+- 🔐 Role-based access: Free, Basic, Premium, and Lawyer
+- 🎯 Designed for deployment and civic impact
 
 ---
 
-## 🚀 Getting Started
+## 🛠️ Tech Stack
 
-### 🛠 Prerequisites
+| Layer        | Tools Used                                     |
+|--------------|------------------------------------------------|
+| Frontend     | React, React Router, Axios, CSS Modules        |
+| Backend      | Node.js, Express, MongoDB                      |
+| Auth         | JWT, Middleware-based protection               |
+| Realtime     | Socket.IO + MongoDB persistence per booking    |
+| AI           | SentenceTransformers, Google Gemma LLM         |
+| Database     | MongoDB (Mongoose ODM)                         |
+| Styling      | SweetAlert2, Toastify, custom components       |
 
-- Node.js v16+
-- MongoDB (local or Atlas)
-- `.env` file configured with API base URL
+---
 
-### 📦 Installation Steps
+## 🧠 Features
 
-```bash
-git clone https://github.com/your-username/lawyerup-web.git
-cd lawyerup-web
-npm install
+### 🔐 Authentication & Roles
+- JWT auth
+- User roles (Free, Basic, Premium, Lawyer)
+- Profile update + plan upgrade
+
+### 🤖 AI Chatbot
+- Constitution + Civil/Criminal knowledge
+- Limits by plan (Free: 500 words/day)
+
+### 📅 Lawyer Booking System
+- Browse lawyers by expertise
+- Book appointments
+- Real-time chat with lawyers (via Socket.IO)
+
+### 📰 News & Reactions
+- Legal news feed
+- Like, Dislike, Comment on articles
+
+### 📄 PDF Library *(RAG-ready)*
+- Upload & store legal documents
+- (Future) FAISS-powered PDF search
+
+### 📦 Admin Tools
+- Manage FAQs
+- Manage reports
+- Dashboard skeleton included
+
+### 🧼 UX Additions
+- Shimmer loaders, dark mode, sound feedback, toast system
+- Profile completeness reminder
+
+---
+
+## 💬 Real-Time Chat Architecture
+
+- `joinRoom(bookingId)` — Users and lawyers enter a private room
+- `sendMessage()` — Stores message in MongoDB (`Booking.messages`)
+- `receiveMessage()` — Sent to other participants live
+
+**Tech used:** Socket.IO, Mongoose, Booking schema.
+
+---
+
+## 📂 Project Structure Snapshot
+
 ```
-
-Create `.env`:
-
-```env
-REACT_APP_API_URL=http://localhost:5000/api/
-```
-
-Start the dev server:
-
-```bash
-npm start
-```
-
----
-
-## 📂 Project Structure
-
-```
-lawyerup/
-├── public/                  # Static assets
-├── src/
-│   ├── auth/                # Login, signup, token handling
-│   ├── ai_chat/             # Chat interface with legal AI
-│   ├── bookings/            # Appointment logic & forms
-│   ├── dashboard/           # Admin views & analytics
-│   ├── faq_page/            # FAQs with collapsibles
-│   ├── landing_page/        # Home, pricing, and CTA pages
-│   ├── lawyerUp/            # Core business logic
-│   ├── modals/, news/, report/, routes/...
-│   ├── settings/            # Profile + preferences
-│   ├── utils/               # API hooks, helpers, toasts
-│   ├── App.tsx              # Main React app
-│   └── index.tsx            # Entry point
-```
-
----
-
-## 🔐 Authentication Flow
-
-- Token is stored in `localStorage` as `lawyerup_token`
-- User object is cached as `lawyerup_user`
-- Auth-protected routes require `Authorization: Bearer <token>`
-
----
-
-## 📡 REST API Endpoints
-
-| Method | Endpoint                      | Description                 |
-|--------|-------------------------------|-----------------------------|
-| POST   | `/auth/signup`                | Register new user           |
-| POST   | `/auth/login`                 | Login and get token         |
-| PATCH  | `/auth/update-profile`        | Update user data            |
-| GET    | `/news/`                      | Fetch news articles         |
-| POST   | `/news/:id/like`              | Like a news item            |
-| POST   | `/news/:id/comment`           | Comment on news             |
-| GET    | `/lawyers/`                   | List all lawyers            |
-| POST   | `/lawyer/:id/appointment`     | Book a consultation         |
-
----
-
-## ⚙️ Deployment
-
-### Frontend (e.g., Vercel/Netlify)
-```bash
-npm run build
-```
-
-### Backend (e.g., Railway/Render/VPS)
-- Ensure `.env` is set with DB_URI and CORS
-- Setup a `Procfile` or PM2 for VPS
-- Enable HTTPS if needed (Nginx recommended)
-
----
-
-## ✨ Planned Features
-
-- [ ] PDF Search & RAG-based chatbot knowledge
-- [ ] In-app lawyer chat (web socket or polling)
-- [ ] Multi-language support (Nepali & English)
-- [ ] Admin dashboard with user/plan metrics
-- [ ] Mobile app (Flutter) with identical features
-
----
-
-## 🤝 Contributing
-
-Pull requests are welcome!  
-Open an issue for bugs, suggestions, or enhancements.
-
-```bash
-git checkout -b your-feature
-git commit -m "Add awesome feature"
-git push origin your-feature
+frontend/
+├── features/
+│   ├── auth/              # Signup/Login
+│   ├── ai_chat/           # AI bot UI
+│   ├── bookings/          # Appointments + messaging
+│   ├── settings/          # Theme, plan, profile
+│   ├── lawyerUp/          # Directory + profile
+│   └── dashboard/         # Admin (WIP)
+backend/
+├── routes/                # API endpoints
+├── controllers/           # Logic handlers
+├── models/                # Mongoose schemas
+├── socket.js              # Realtime event setup
+├── middleware/            # Auth protection
+├── uploads/               # PDF storage
 ```
 
 ---
 
-## 📜 License
+## 🚀 Deployment-Ready
+
+- `.env` for configs
+- API base structure
+- Netlify/Render/Vercel friendly
+- RAG-ready PDF system
+
+---
+
+## 📜 License & Attribution
 
 **© 2025 Sachin Khatri**  
-Academic / Civic engagement only. Redistribution or commercial use prohibited without permission.
+Strictly for academic and civic purposes.  
+Commercial reuse or redistribution is **prohibited without permission.**
 
 ---
 
-## 🔗 References & Tools
+## 🙏 Final Note
 
-- Nepal Law Commission
-- Google Gemma LLM
-- OpenAI SentenceTransformers
-- MongoDB Atlas
-- Facebook FAISS
-- React, Vite, Tailwind (planned)
-- Figma Design System
+This fullstack platform was built solo — no degree, no bootcamp — just vision, consistency, and code.
+
+🧠 *If this inspires you to build something for your community, do it.*  
+I’ll help you if I can. ✊
 
 ---
 
-🧠 *Crafted with late nights, brain cells, and lots of console.logs.*
+**This is LawyerUp. Built from zero. Shipped with pride.**
