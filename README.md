@@ -1,132 +1,107 @@
-# ⚖️ LawyerUp AI – Fullstack Legal Assistant Platform for Nepal
-
-> 🧠 A civic-tech project built from scratch: web app, AI chatbot, real-time lawyer booking, and secure user roles — by a self-taught developer.
+# ⚖️ LawyerUp AI – Legal Assistant Platform for Nepal
+> Complete civic-tech stack with AI chatbot, lawyer booking, and full admin control.
 
 ---
 
 ## 🧭 Overview
 
-**LawyerUp AI** is a cross-platform legal assistant platform designed for Nepali citizens.  
-It provides **legal awareness, lawyer consultations, and AI-powered support** via a clean, responsive web interface and real-time backend services.
+**LawyerUp AI** is a fullstack platform designed to bring legal access to Nepali citizens.  
+It offers lawyer consultations, legal content, AI-based assistance, and secure multi-role access across users and admins — all built with scalable architecture and attention to real-world usability.
 
 ---
 
-## 🔥 Highlights
+## 🧰 Technologies Used
 
-- 🧠 Built from scratch by a self-taught undergraduate
-- ✅ Clean Architecture – Fully modular and scalable (React + Node + MongoDB)
-- 💬 Real-time chat using **Socket.IO**
-- 📚 AI chatbot trained on **Nepali legal data**
-- 🔐 Role-based access: Free, Basic, Premium, and Lawyer
-- 🎯 Designed for deployment and civic impact
+### Frontend (Client)
+- React + React Router
+- Axios
+- CSS Modules
+- Toastify / SweetAlert2
+- Socket.IO (Chat Client)
+- Responsive Design with custom loaders
 
----
+### Backend (API)
+- Node.js + Express
+- MongoDB + Mongoose
+- JWT Authentication
+- Socket.IO (Realtime Chat)
+- PDF Upload & Access (RAG-ready)
+- RESTful routing structure
 
-## 🛠️ Tech Stack
-
-| Layer        | Tools Used                                     |
-|--------------|------------------------------------------------|
-| Frontend     | React, React Router, Axios, CSS Modules        |
-| Backend      | Node.js, Express, MongoDB                      |
-| Auth         | JWT, Middleware-based protection               |
-| Realtime     | Socket.IO + MongoDB persistence per booking    |
-| AI           | SentenceTransformers, Google Gemma LLM         |
-| Database     | MongoDB (Mongoose ODM)                         |
-| Styling      | SweetAlert2, Toastify, custom components       |
-
----
-
-## 🧠 Features
-
-### 🔐 Authentication & Roles
-- JWT auth
-- User roles (Free, Basic, Premium, Lawyer)
-- Profile update + plan upgrade
-
-### 🤖 AI Chatbot
-- Constitution + Civil/Criminal knowledge
-- Limits by plan (Free: 500 words/day)
-
-### 📅 Lawyer Booking System
-- Browse lawyers by expertise
-- Book appointments
-- Real-time chat with lawyers (via Socket.IO)
-
-### 📰 News & Reactions
-- Legal news feed
-- Like, Dislike, Comment on articles
-
-### 📄 PDF Library *(RAG-ready)*
-- Upload & store legal documents
-- (Future) FAISS-powered PDF search
-
-### 📦 Admin Tools
-- Manage FAQs
-- Manage reports
-- Dashboard skeleton included
-
-### 🧼 UX Additions
-- Shimmer loaders, dark mode, sound feedback, toast system
-- Profile completeness reminder
+### Admin Portal
+- React + TypeScript
+- Modular Dashboard Cards
+- Analytics (Revenue/User Plan Breakdown)
+- Lawyer Approval Management
+- News Publishing & FAQ Editor
+- PDF Uploader and Viewer
+- Modal system and protected routes
 
 ---
 
-## 💬 Real-Time Chat Architecture
+## 💬 Features
 
-- `joinRoom(bookingId)` — Users and lawyers enter a private room
-- `sendMessage()` — Stores message in MongoDB (`Booking.messages`)
-- `receiveMessage()` — Sent to other participants live
+### ✅ User Features
+- 🔐 JWT-based Login & Signup
+- 🧠 AI Chatbot trained on Nepali laws (Free/Paid tier limits)
+- 📰 Legal News Feed + Like/Dislike/Comment
+- 📄 PDF Library Viewer (RAG integration planned)
+- 👨‍⚖️ Lawyer Directory + Appointment Booking
+- 💬 Booking-based Real-time Chat with Lawyers (Socket.IO)
+- 🎨 Settings Page: Dark Mode, Profile Edit, Plan View
+- 🎯 Personalized recommendations via profile completeness
 
-**Tech used:** Socket.IO, Mongoose, Booking schema.
+### ✅ Admin Features
+- 📊 Dashboard with Plan Distribution & Revenue Insights
+- 📰 Publish/Edit/Delete News Articles
+- ✅ Approve & Manage Registered Lawyers
+- 📥 Upload & Manage PDF Legal Resources
+- ❓ FAQ Content Manager
+- 🚨 View and Respond to User Reports
 
 ---
 
-## 📂 Project Structure Snapshot
+## 💡 System Design Insights
 
-```
-frontend/
-├── features/
-│   ├── auth/              # Signup/Login
-│   ├── ai_chat/           # AI bot UI
-│   ├── bookings/          # Appointments + messaging
-│   ├── settings/          # Theme, plan, profile
-│   ├── lawyerUp/          # Directory + profile
-│   └── dashboard/         # Admin (WIP)
-backend/
-├── routes/                # API endpoints
-├── controllers/           # Logic handlers
-├── models/                # Mongoose schemas
-├── socket.js              # Realtime event setup
-├── middleware/            # Auth protection
-├── uploads/               # PDF storage
+- Feature-based file structuring (clean architecture)
+- Auth middleware + route protection across backend/admin
+- Messages are scoped to Booking objects with room-based socket communication
+- Plans handled visually and logically across settings + landing
+- Settings persist theme, enable sweet alerts, and allow profile editing
+
+---
+
+## 🚀 Deployment
+
+```bash
+# Frontend
+npm run build  # then deploy via Netlify/Vercel
+
+# Backend
+node server.js or pm2 start server.js  # deployed via Railway/Render/VPS
+
+# Admin
+npm run build  # or integrate as subdomain
 ```
 
 ---
 
-## 🚀 Deployment-Ready
+## 📌 Status
 
-- `.env` for configs
-- API base structure
-- Netlify/Render/Vercel friendly
-- RAG-ready PDF system
+- ✅ Web: Complete & modular
+- ✅ Admin: Fully functional & styled
+- 🔧 RAG AI (PDF search): Ready for integration
+- 📱 Flutter Mobile App: Work in progress
 
 ---
 
-## 📜 License & Attribution
+## 📜 License & Notice
 
 **© 2025 Sachin Khatri**  
-Strictly for academic and civic purposes.  
-Commercial reuse or redistribution is **prohibited without permission.**
+Built independently as a civic-tech initiative.  
+Reuse or commercial redistribution is **strictly prohibited** without permission.
 
 ---
 
-## 🙏 Final Note
-
-This fullstack platform was built solo — no degree, no bootcamp — just vision, consistency, and code.
-
-🧠 *If this inspires you to build something for your community, do it.*  
-I’ll help you if I can. ✊
-
----
-
-**This is LawyerUp. Built from zero. Shipped with pride.**
+🧠 *Built with real-world design logic, clean architecture, and the drive to build useful tech.*  
+🧱 One dev. Multiple layers. Real functionality.
