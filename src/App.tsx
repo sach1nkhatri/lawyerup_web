@@ -9,6 +9,7 @@ import Dashboard from './dashboard/component/Dashboard';
 import PricingPlans from './landing_page/components/PricingPlans';
 import CheckoutPage from './landing_page/components/CheckoutPage';
 import PrivateRoute from './routes/privateRoute';
+import PlansPricing from './landing_page/components/PricingPlans'
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
                     } />
                     <Route path="/pricing" element={<PricingPlans />} />
                     <Route path="/checkout" element={<CheckoutPage />} />
+                    <Route path="/settings/pricing" element={<PlansPricing />} />
                 </Routes>
             </Router>
 
