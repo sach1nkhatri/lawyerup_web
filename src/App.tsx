@@ -1,15 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import '../src/utils/css/toast.css';
+import './app/shared_components/utils/css/toast.css';
 
-import LandingPage from './landing_page/components/LandingPage';
-import AuthForm from './auth/components/LoginSignup';
-import Dashboard from './dashboard/component/Dashboard';
-import PricingPlans from './landing_page/components/PricingPlans';
-import CheckoutPage from './landing_page/components/CheckoutPage';
-import PrivateRoute from './routes/privateRoute';
-import PlansPricing from './landing_page/components/PricingPlans'
+import LandingPage from './features/landing_page/components/LandingPage';
+import AuthForm from './features/auth/components/LoginSignup';
+import Dashboard from './features/dashboard/component/Dashboard';
+import PricingPlans from './features/landing_page/components/PricingPlans';
+import CheckoutPage from './features/landing_page/components/CheckoutPage';
+import PrivateRoute from './app/routes/privateRoute';
+import PlansPricing from './features/landing_page/components/PricingPlans'
 
 function App() {
     return (

@@ -1,0 +1,50 @@
+import React, { useRef, useEffect } from 'react';
+import styles from '../css/ChatView.module.css';
+import plusIcon from '../../../app/assets/plus.png';
+import sendIcon from '../../../app/assets/send.png';
+import ChatHeader from './ChatHeader';
+
+const ChatView = ({ messages, input, setInput, handleSend, textareaRef }) => {
+    const messageEndRef = useRef(null);
+
+    useEffect(() => {
+        messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages]);
+
+    return (
+        <>
+            <div className={styles.chatContainer}>
+                <ChatHeader />
+                <div className={styles.chatBody}>
+                    {messages.map((msg, i) => (
+                        <div key={i} className={`${styles.messageBubble} ${styles[msg.sender]}`}>
+                            {msg.text}
+                        </div>
+                    ))}
+                    <div ref={messageEndRef} />
+                </div>
+            </div>
+
+            {/* ✅ Fixed Input Outside the chat container */}
+            <div className={styles.chatInputBox}>
+                <div className={styles.chatBar}>
+                    <div className={styles.chatButton}>
+                        <img src={plusIcon} alt="plus" />
+                    </div>
+                    <textarea
+                        ref={textareaRef}
+                        rows={1}
+                        placeholder="Ask a legal question..."
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                    />
+                    <div className={styles.chatButton} onClick={handleSend}>
+                        <img src={sendIcon} alt="send" />
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+};
+
+export default ChatView;
