@@ -1,0 +1,38 @@
+.chatInput {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 12px;
+  background: #c9dafc;
+  border-radius: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.chatInput textarea {
+  flex: 1;
+  resize: none;
+  border: none;
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-size: 14px;
+  outline: none;
+  background: white;
+  min-height: 40px;
+  max-height: 100px;
+  overflow-y: auto;
+  line-height: 1.5;
+}
+
+.btn {
+  background: white;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+}

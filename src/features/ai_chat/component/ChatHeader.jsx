@@ -1,30 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from '../css/ChatHeader.module.css';
+import historyIcon from '../../../app/assets/history.png'; // ⬅️ your chat history icon
 
-const ChatHeader = () => {
-    const [selectedModel, setSelectedModel] = useState('LawAI 3.0');
-
-    const handleChange = (e) => {
-        setSelectedModel(e.target.value);
-        // You can emit to parent or context if needed
-    };
-
-    return (
-        <div className={styles.chatHeader}>
-            <span className={styles.title}>Nepal Law Chat</span>
-            <select
-                className={styles.modelSelect}
-                value={selectedModel}
-                onChange={handleChange}
-            >
-                <option value="" disabled>Select a model </option>
-                <option>LawAI 1.0</option>
-                <option>LawAI 2.0</option>
-                <option>LawAI 3.0</option>
-            </select>
-
+const ChatHeader = () => (
+    <div className={styles.chatHeader}>
+        <div className={styles.chatHeaderLeft}>
+            <img src={historyIcon} alt="history" className={styles.chatIcon} />
+            <span>What is law</span>
+            <span className={styles.chevron}>›</span>
         </div>
-    );
-};
+        <select>
+            <option>LawAI 1.0</option>
+            <option>LawAI 2.0</option>
+        </select>
+    </div>
+);
 
 export default ChatHeader;
