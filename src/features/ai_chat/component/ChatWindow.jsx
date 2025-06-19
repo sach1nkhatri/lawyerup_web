@@ -1,67 +1,29 @@
-import React, { useState, useEffect, useRef } from 'react';
-import styles from '../css/ChatWindow.module.css';
+import React from 'react';
+import useChat from '../hooks/useChat'; // wherever you place the hook
+import ChatView from './ChatView';
 import plusIcon from '../../../app/assets/plus.png';
 import sendIcon from '../../../app/assets/send.png';
-import ChatView from './ChatView'; // 👈 new separate chat UI
+import styles from '../css/ChatWindow.module.css';
 
 const ChatWindow = () => {
-    const [messages, setMessages] = useState([]);
-    const [input, setInput] = useState('');
-    const textareaRef = useRef(null);
+    const {
+        messages,
+        input,
+        setInput,
+        handleSend,
+        textareaRef,
+        resizeTextarea,
+        hasStarted,
+        isGenerating,       // ✅ add this
+        responseTime        // ✅ and this
+    } = useChat();
 
-    const hasStarted = messages.length > 0;
-
-    const handleSend = async (text = input.trim()) => {
-        if (!text) return;
-
-        setMessages(prev => [...prev, { text, sender: 'user' }]);
-        setInput('');
-        resizeTextarea();
-
-        try {
-            const response = await fetch("http://localhost:6000/ask", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ query: text })
-            });
-
-            const data = await response.json();
-
-            setMessages(prev => [
-                ...prev,
-                { text: data.answer || "Could not generate answer.", sender: 'bot' }
-            ]);
-        } catch (err) {
-            console.error(err);
-            setMessages(prev => [
-                ...prev,
-                { text: "Error connecting to AI server.", sender: 'bot' }
-            ]);
-        }
-    };
-;
 
     const handleSampleClick = (sampleText) => {
         setInput(sampleText);
         handleSend(sampleText);
     };
 
-    const resizeTextarea = () => {
-        const el = textareaRef.current;
-        if (el) {
-            el.style.height = 'auto';
-            el.style.height = Math.min(el.scrollHeight, 120) + 'px';
-        }
-    };
-
-    useEffect(() => {
-        document.body.style.overflow = hasStarted ? 'hidden' : 'auto';
-        return () => {
-            document.body.style.overflow = 'auto';
-        };
-    }, [hasStarted]);
 
 
     return (
@@ -98,6 +60,8 @@ const ChatWindow = () => {
                     setInput={setInput}
                     handleSend={handleSend}
                     textareaRef={textareaRef}
+                    isGenerating={isGenerating}
+                    responseTime={responseTime}
                 />
             )}
         </div>

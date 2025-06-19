@@ -5,11 +5,24 @@ import ChatBody from './ChatBody';
 import ChatInputBox from './ChatInputBox';
 import ChatFooter from './ChatFooter';
 
-const ChatView = ({ messages, input, setInput, handleSend, textareaRef }) => {
+const ChatView = ({
+                      messages,
+                      input,
+                      setInput,
+                      handleSend,
+                      textareaRef,
+                      isGenerating,       // ✅ add this
+                      responseTime        // ✅ and this
+                  }) => {
     return (
         <div className={styles.chatWrapper}>
             <ChatHeader />
-            <ChatBody messages={messages} />
+            <ChatBody
+                messages={messages}
+                isGenerating={isGenerating}
+                responseTime={responseTime}
+            />
+
             <div className={styles.chatInputSection}>
                 <ChatInputBox
                     input={input}

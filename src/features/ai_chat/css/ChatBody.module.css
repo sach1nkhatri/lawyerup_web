@@ -15,6 +15,7 @@
   word-wrap: break-word;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   border-radius: 16px;
+  position: relative;
 }
 
 .user {
@@ -27,4 +28,25 @@
   align-self: flex-start;
   background-color: #94a8e8;
   color: #0a1b2f;
+}
+
+.typingDots {
+  display: inline-block;
+  font-size: 18px;
+  animation: blink 1s steps(10, start) infinite;
+  margin-top: 8px;
+  color: #555;
+}
+
+@keyframes blink {
+  0% { opacity: 0.2; }
+  50% { opacity: 1; }
+  100% { opacity: 0.2; }
+}
+
+.responseTime {
+  font-size: 11px;
+  color: #555;
+  margin-top: 4px;
+  text-align: right;
 }
