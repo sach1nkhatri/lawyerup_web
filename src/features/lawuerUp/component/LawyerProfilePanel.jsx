@@ -99,7 +99,6 @@ const LawyerProfilePanel = ({ lawyer, onBack }) => {
 
     return (
         <div className="profile-panel">
-            <h3>LawyerUp</h3>
             <div className="tab-menu">
                 {['profile', 'info', 'Education'].map((tab) => (
                     <button
