@@ -4,6 +4,7 @@ import NewsCardSkeleton from './NewsCardSkeleton';
 import '../css/NewsPage.css';
 import '../../../app/shared_components/utils/css/nprogress.css';
 import { useNewsPage } from '../hooks/useNewsPage';
+import { getImageUrl } from '../utils/getImageUrl';
 
 const NewsPage = () => {
     const {
@@ -31,7 +32,11 @@ const NewsPage = () => {
             {selectedNews ? (
                 <div className="news-detail-view">
                     <button className="back-button" onClick={handleBackClick}>← Back to all news</button>
-                    <img className="news-detail-image" src={selectedNews.image} alt={selectedNews.title} />
+                    <img
+                        className="news-detail-image"
+                        src={getImageUrl(selectedNews.image)}
+                        alt={selectedNews.title}
+                    />
                     <h3 className="news-detail-title">{selectedNews.title}</h3>
                     <p className="news-detail-meta">By {selectedNews.author} | {selectedNews.date}</p>
 

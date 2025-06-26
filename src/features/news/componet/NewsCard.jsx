@@ -1,9 +1,14 @@
 import React from 'react';
 import '../css/NewsCard.css';
+import { getImageUrl } from '../utils/getImageUrl';
 
 const NewsCard = ({ title, author, summary, date, image, onClick, likes = 0, dislikes = 0 }) => (
     <div className="news-card" onClick={onClick}>
-        <img className="news-image" src={image} alt={title} />
+        <img
+            className="news-image"
+            src={getImageUrl(image)}
+            alt={title}
+        />
         <div className="news-content">
             <h3 className="news-title">{title}</h3>
             <p className="news-author">{author}</p>
