@@ -83,7 +83,7 @@ export const useFinalListingForm = (lawyer, { onReapply, onHold }) => {
     };
 
     const handleSave = async () => {
-        const result = await Swal.fire({
+        const confirm = await Swal.fire({
             title: 'Save Changes?',
             text: 'Do you want to save your profile updates?',
             icon: 'question',
@@ -91,32 +91,46 @@ export const useFinalListingForm = (lawyer, { onReapply, onHold }) => {
             confirmButtonText: 'Yes, Save',
         });
 
-        if (!result.isConfirmed) return;
+        if (!confirm.isConfirmed) return;
 
         try {
             startLoader();
-            const res = await fetch(`${process.env.REACT_APP_API_URL}lawyers/${lawyer._id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    ...form,
-                    schedule: editableSchedule,
-                    education,
-                    workExperience,
-                }),
+
+            const token = localStorage.getItem('lawyerup_token');
+            const data = new FormData();
+
+            // Append profile fields
+            Object.entries(form).forEach(([key, value]) => {
+                if (value) data.append(key, value);
             });
 
-            if (res.ok) {
-                notify('success', 'Changes saved successfully!');
-            } else {
-                notify('error', 'Failed to save changes.');
+            // Append updated image file
+            if (profilePhoto instanceof File) {
+                data.append('profilePhoto', profilePhoto);
             }
+
+            // Add arrays as JSON
+            data.append('education', JSON.stringify(education));
+            data.append('workExperience', JSON.stringify(workExperience));
+            data.append('schedule', JSON.stringify(editableSchedule));
+
+            const res = await fetch(`${process.env.REACT_APP_API_URL}lawyers/${lawyer._id}`, {
+                method: 'PUT',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                body: data,
+            });
+
+            if (!res.ok) throw new Error();
+            notify('success', 'Changes saved successfully!');
         } catch {
-            notify('error', 'Error occurred during update.');
+            notify('error', 'Failed to save changes');
         } finally {
             stopLoader();
         }
     };
+
 
     const handleDelete = async () => {
         const result = await Swal.fire({

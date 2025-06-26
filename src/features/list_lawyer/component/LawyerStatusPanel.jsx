@@ -2,11 +2,11 @@ import React from 'react';
 import styles from '../css/LawyerStatusPanel.module.css';
 import defaultAvatar from '../../../app/assets/avatar.png';
 import { useLawyerStatusPanel } from '../hooks/useLawyerStatusPanel';
+import { getImageUrl } from '../utils/getImageUrl';
 
 const LawyerStatusPanel = ({ lawyer, onNext }) => {
     const {
         status,
-        imageURL,
         statusStep,
         getStatusLabel,
         handleStartListing
@@ -19,9 +19,9 @@ const LawyerStatusPanel = ({ lawyer, onNext }) => {
             <div className={styles.panel}>
                 <div className={styles.avatarWrapper}>
                     <img
-                        src={imageURL}
-                        alt="Lawyer"
-                        className={styles.avatar}
+                        src={getImageUrl(lawyer.profilePhoto)}
+                        alt={lawyer.fullName}
+                        className="listing-profile-pic"
                         onError={(e) => {
                             e.target.onerror = null;
                             e.target.src = defaultAvatar;

@@ -10,10 +10,12 @@ const PdfLibrary = () => {
 
     const handleDownload = (url, title) => {
         const link = document.createElement('a');
-        link.href = `${process.env.REACT_APP_UPLOADS_URL}${url.split('/').pop()}`;
-        link.download = title + '.pdf';
+        link.href = `${process.env.REACT_APP_SERVER_URL}${url}`; // Use full URL
+        link.download = `${title}.pdf`;
         link.target = '_blank';
+        document.body.appendChild(link); // required for Firefox
         link.click();
+        document.body.removeChild(link);
     };
 
     return (

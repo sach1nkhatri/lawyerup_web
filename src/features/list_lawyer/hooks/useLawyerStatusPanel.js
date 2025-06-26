@@ -15,7 +15,10 @@ export const useLawyerStatusPanel = (lawyer, onNext) => {
 
     const imageURL = lawyer.profilePhoto?.startsWith('data:image')
         ? lawyer.profilePhoto
-        : `http://localhost:5000/uploads/${lawyer.profilePhoto || ''}`;
+        : `${process.env.REACT_APP_SERVER_URL}${lawyer.profilePhoto}`;
+
+
+
 
     const getStatusLabel = (status) => {
         switch (status) {

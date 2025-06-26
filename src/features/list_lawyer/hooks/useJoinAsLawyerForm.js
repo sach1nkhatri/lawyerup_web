@@ -62,12 +62,9 @@ export const useJoinAsLawyerForm = (onSubmitted) => {
     const handleFileChange = (e, key) => {
         const file = e.target.files[0];
         if (!file) return;
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setForm(prev => ({ ...prev, [key]: reader.result }));
-        };
-        reader.readAsDataURL(file);
+        setForm(prev => ({ ...prev, [key]: file }));
     };
+
 
     const addEducation = () => {
         const { eduDegree, eduInstitute, eduYear, eduSpecialization } = form;
@@ -119,28 +116,33 @@ export const useJoinAsLawyerForm = (onSubmitted) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { description, specialCase } = form;
-        if (!description || !specialCase || educationList.length === 0) {
-            Swal.fire({ icon: 'warning', title: 'Final Step Incomplete', text: 'Fill all required fields and at least 1 education entry.' });
-            return;
-        }
+
+        const token = localStorage.getItem('lawyerup_token');
+        const data = new FormData();
+
+        // Append all string fields
+        Object.entries(form).forEach(([key, val]) => {
+            if (val && typeof val !== 'object') data.append(key, val);
+        });
+
+        // Append files
+        if (form.profilePhoto instanceof File) data.append('profilePhoto', form.profilePhoto);
+        if (form.licenseFile instanceof File) data.append('licenseFile', form.licenseFile);
+
+        // Append complex arrays
+        data.append('education', JSON.stringify(educationList));
+        data.append('workExperience', JSON.stringify(isJunior ? [] : workList));
+        data.append('schedule', JSON.stringify(schedule));
+        data.append('role', isJunior ? 'junior' : 'senior');
+
         try {
             setLoading(true);
-            const token = localStorage.getItem('lawyerup_token');
-            const payload = {
-                ...form,
-                education: educationList,
-                workExperience: isJunior ? [] : workList,
-                schedule,
-                role: isJunior ? 'junior' : 'senior'
-            };
             const res = await fetch(`${process.env.REACT_APP_API_URL}lawyers`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify(payload)
+                body: data,
             });
             if (!res.ok) throw new Error();
             toast.success('Application submitted!');
@@ -151,6 +153,7 @@ export const useJoinAsLawyerForm = (onSubmitted) => {
             setLoading(false);
         }
     };
+
 
     return {
         loading,

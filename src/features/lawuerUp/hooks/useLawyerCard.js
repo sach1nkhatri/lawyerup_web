@@ -48,7 +48,8 @@ export const useLawyerCard = (lawyer) => {
 
     const resolvedImage = lawyer.profilePhoto?.startsWith('data:image')
         ? lawyer.profilePhoto
-        : `${process.env.REACT_APP_UPLOADS_URL}${lawyer.profilePhoto || 'avatar.png'}`;
+        : `${process.env.REACT_APP_SERVER_URL}${lawyer.profilePhoto || 'avatar.png'}`;
+
 
     return {
         specialization,

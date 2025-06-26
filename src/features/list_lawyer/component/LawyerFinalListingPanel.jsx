@@ -91,12 +91,18 @@ const LawyerFinalListingPanel = ({ lawyer, onReapply, onBack, onHold }) => {
 
                 <div className="listing-right">
                     <img
-                        src={profilePhoto || defaultAvatar}
+                        src={
+                            profilePhoto?.startsWith('data:image')
+                                ? profilePhoto
+                                : profilePhoto
+                                    ? `${process.env.REACT_APP_SERVER_URL}${profilePhoto}`
+                                    : defaultAvatar
+                        }
                         alt="profile"
-                        onError={(e) => e.target.src = defaultAvatar}
+                        onError={(e) => (e.target.src = defaultAvatar)}
                         className="listing-profile-pic"
                     />
-                    <input type="file" accept="image/*" onChange={handleFileChange} />
+                    <input type="file" accept="image/*" onChange={handleFileChange}/>
                     <button onClick={handleHold}>Hold Profile</button>
                 </div>
             </div>
