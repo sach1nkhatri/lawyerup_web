@@ -11,12 +11,24 @@ const ChatView = ({
                       setInput,
                       handleSend,
                       textareaRef,
-                      isGenerating,       // ✅ add this
-                      responseTime        // ✅ and this
+                      isGenerating,
+                      responseTime,
+                      title,
+                      model,
+                      setModel,
+                      onNewChat,
+                      onLoadChat,
                   }) => {
     return (
         <div className={styles.chatWrapper}>
-            <ChatHeader />
+            <ChatHeader
+                title={title}
+                selectedModel={model}
+                onModelChange={setModel}
+                onNewChat={onNewChat}
+                onLoadChat={onLoadChat}
+            />
+
             <ChatBody
                 messages={messages}
                 isGenerating={isGenerating}

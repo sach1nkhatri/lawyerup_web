@@ -15,7 +15,13 @@ const ChatWindow = () => {
         resizeTextarea,
         hasStarted,
         isGenerating,       // ✅ add this
-        responseTime        // ✅ and this
+        responseTime,
+        chatId,
+        title,
+        model,
+        setModel,
+        newChat,
+        loadChat,// ✅ and this
     } = useChat();
 
 
@@ -62,7 +68,13 @@ const ChatWindow = () => {
                     textareaRef={textareaRef}
                     isGenerating={isGenerating}
                     responseTime={responseTime}
+                    title={title}
+                    model={model}
+                    setModel={setModel}
+                    onNewChat={newChat}
+                    onLoadChat={loadChat}
                 />
+
             )}
         </div>
     );

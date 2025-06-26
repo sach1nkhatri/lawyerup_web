@@ -1,9 +1,12 @@
-
 import { useState, useRef, useEffect } from 'react';
+import { sendMessageToAI, createNewChat } from '../../../app/api/chatService';
 
 const useChat = () => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
+    const [chatId, setChatId] = useState(null);
+    const [title, setTitle] = useState('New Chat');
+    const [model, setModel] = useState('lawai-2.0');
     const [isGenerating, setIsGenerating] = useState(false);
     const [responseTime, setResponseTime] = useState(null);
     const textareaRef = useRef(null);
@@ -30,13 +33,17 @@ const useChat = () => {
     const handleSend = async (text = input.trim()) => {
         if (!text) return;
 
-        setMessages(prev => [...prev, { text, sender: 'user' }]);
+        const userMessage = { text, sender: 'user' };
+        setMessages(prev => [...prev, userMessage]);
         setInput('');
         resizeTextarea();
         setIsGenerating(true);
 
+        // ➕ placeholder bot message for streaming updates
+        setMessages(prev => [...prev, { text: '', sender: 'bot' }]);
+
         try {
-            const startTime = Date.now();
+            const start = Date.now();
 
             const response = await fetch("http://localhost:8010/proxy/v1/chat/completions", {
                 method: "POST",
@@ -47,23 +54,21 @@ const useChat = () => {
                     messages: [
                         { role: "system", content: "You are a helpful Nepali legal advisor." },
                         ...messages.map(m => ({
-                            role: m.sender === 'user' ? "user" : "assistant",
+                            role: m.sender === 'user' ? 'user' : 'assistant',
                             content: m.text
                         })),
-                        { role: "user", content: text }
+                        { role: 'user', content: text }
                     ]
                 })
             });
 
             if (!response.ok || !response.body) {
-                throw new Error("Stream failed or AI server returned error.");
+                throw new Error("Streaming failed or LLM returned error.");
             }
 
             const reader = response.body.getReader();
             const decoder = new TextDecoder("utf-8");
             let fullText = '';
-            const botMessage = { text: '', sender: 'bot' };
-            setMessages(prev => [...prev, botMessage]);
 
             while (true) {
                 const { done, value } = await reader.read();
@@ -79,44 +84,67 @@ const useChat = () => {
                         try {
                             const json = JSON.parse(line.replace('data: ', ''));
                             const token = json.choices?.[0]?.delta?.content;
+
                             if (token) {
                                 fullText += token;
+
+                                // 💫 Animate token-by-token typing
                                 setMessages(prev => {
-                                    const last = prev.slice(0, -1);
-                                    return [...last, { text: fullText, sender: 'bot' }];
+                                    const updated = [...prev];
+                                    const last = updated[updated.length - 1];
+                                    if (last?.sender === 'bot') {
+                                        updated[updated.length - 1] = {
+                                            ...last,
+                                            text: fullText
+                                        };
+                                    }
+                                    return updated;
                                 });
+
+                                // Optional typing delay
+                                await new Promise(resolve => setTimeout(resolve, 8));
                             }
                         } catch (err) {
-                            console.warn("Malformed stream line skipped:", line);
+                            console.warn("❌ Skipped malformed line:", line);
                         }
                     }
                 }
             }
 
             setIsGenerating(false);
-            setResponseTime(Date.now() - startTime);
+            setResponseTime(Date.now() - start);
+
         } catch (err) {
-            console.error(err);
+            console.error('❌ Streaming error:', err.message);
             setIsGenerating(false);
-            setMessages(prev => [...prev, { text: "⚠️ Error connecting to local AI server.", sender: 'bot' }]);
+            setMessages(prev => [...prev, { text: "⚠️ Error connecting to LLM server.", sender: 'bot' }]);
         }
+    };
+
+    const newChat = () => {
+        setMessages([]);
+        setInput('');
+        setChatId(null);
+        setTitle('New Chat');
+    };
+
+    const loadChat = (chat) => {
+        setChatId(chat._id);
+        setMessages(chat.messages.map(m => ({
+            text: m.content,
+            sender: m.role === 'user' ? 'user' : 'bot',
+        })));
+        setTitle(chat.title);
     };
 
     useEffect(() => {
         const el = scrollRef.current;
-        if (el) {
-            el.addEventListener('scroll', handleScroll);
-        }
-        return () => {
-            if (el) {
-                el.removeEventListener('scroll', handleScroll);
-            }
-        };
+        if (el) el.addEventListener('scroll', handleScroll);
+        return () => el?.removeEventListener('scroll', handleScroll);
     }, []);
 
     useEffect(() => {
-        if (!scrollRef.current || !messages.length) return;
-        if (isGenerating && shouldAutoScroll.current) {
+        if (scrollRef.current && shouldAutoScroll.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
     }, [messages]);
@@ -138,7 +166,13 @@ const useChat = () => {
         hasStarted,
         isGenerating,
         responseTime,
-        scrollRef
+        scrollRef,
+        chatId,
+        title,
+        model,
+        setModel,
+        newChat,
+        loadChat,
     };
 };
 

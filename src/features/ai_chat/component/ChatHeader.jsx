@@ -1,20 +1,23 @@
 import React, { useState } from 'react';
 import styles from '../css/ChatHeader.module.css';
 import historyIcon from '../../../app/assets/history.png';
-import ChatHistoryPopup from './ChatHistoryPopup'; // ✅ new import
+import ChatHistoryPopup from './ChatHistoryPopup';
+import useChatHistory from '../hooks/useChatHistory';
 
-const mockChatHistory = [
-    { id: 1, title: 'Legal Advice with AI' },
-    { id: 2, title: 'Property Law Q&A' },
-    { id: 3, title: 'Startup Legal Support' },
-];
-
-const ChatHeader = ({ title = "New Chat", onLoadChat, onNewChat }) => {
+const ChatHeader = ({ title = "New Chat", onLoadChat, onNewChat, selectedModel, onModelChange }) => {
     const [showPopup, setShowPopup] = useState(false);
-    const [chatHistory, setChatHistory] = useState(mockChatHistory);
+    const { history, removeChat } = useChatHistory();
 
-    const handleDelete = (id) => {
-        setChatHistory(prev => prev.filter(c => c.id !== id));
+    const handleSelect = async (id) => {
+        const chat = history.find(c => c._id === id);
+        if (chat) {
+            onLoadChat?.(chat);
+            setShowPopup(false);
+        }
+    };
+
+    const handleDelete = async (id) => {
+        await removeChat(id);
     };
 
     return (
@@ -30,20 +33,16 @@ const ChatHeader = ({ title = "New Chat", onLoadChat, onNewChat }) => {
                 <span className={styles.chevron}>›</span>
             </div>
 
-            <select>
-                <option>LawAI 1.0</option>
-                <option>LawAI 2.0</option>
-                <option>LawAI 3.0</option>
+            <select value={selectedModel} onChange={(e) => onModelChange(e.target.value)}>
+                <option value="lawai-1.0">LawAI 1.0</option>
+                <option value="lawai-2.0">LawAI 2.0</option>
+                <option value="lawai-3.0">LawAI 3.0</option>
             </select>
 
             {showPopup && (
                 <ChatHistoryPopup
-                    history={chatHistory}
-                    onSelect={(id) => {
-                        const chat = chatHistory.find(c => c.id === id);
-                        onLoadChat?.(chat);
-                        setShowPopup(false);
-                    }}
+                    history={history}
+                    onSelect={handleSelect}
                     onDelete={handleDelete}
                     onNewChat={() => {
                         onNewChat?.();
