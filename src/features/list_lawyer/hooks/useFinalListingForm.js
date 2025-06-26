@@ -60,26 +60,30 @@ export const useFinalListingForm = (lawyer, { onReapply, onHold }) => {
         const file = e.target.files[0];
         if (!file) return;
 
-        const reader = new FileReader();
-        reader.onloadend = async () => {
-            try {
-                startLoader();
-                const res = await fetch(`${process.env.REACT_APP_API_URL}lawyers/${lawyer._id}/photo`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ photo: reader.result }),
-                });
+        try {
+            startLoader();
 
-                if (!res.ok) throw new Error();
-                notify('success', 'Profile photo updated!');
-                setProfilePhoto(reader.result);
-            } catch {
-                notify('error', 'Failed to update photo');
-            } finally {
-                stopLoader();
-            }
-        };
-        reader.readAsDataURL(file);
+            const formData = new FormData();
+            formData.append('profilePhoto', file);
+
+            const res = await fetch(`${process.env.REACT_APP_API_URL}lawyers/${lawyer._id}`, {
+                method: 'PUT',
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('lawyerup_token')}`,
+                },
+                body: formData,
+            });
+
+            if (!res.ok) throw new Error();
+
+            const data = await res.json();
+            notify('success', 'Profile photo updated!');
+            setProfilePhoto(data.profilePhoto); // URL returned from backend
+        } catch {
+            notify('error', 'Failed to update photo');
+        } finally {
+            stopLoader();
+        }
     };
 
     const handleSave = async () => {
