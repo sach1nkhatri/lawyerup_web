@@ -9,7 +9,7 @@ const useChatHistory = () => {
         setLoading(true);
         try {
             const res = await fetchChats();
-            setHistory(res.data);
+            setHistory(res.data); // ✅ Provide all chat data to UI
         } finally {
             setLoading(false);
         }

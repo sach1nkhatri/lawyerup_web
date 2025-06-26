@@ -42,7 +42,7 @@ const ChatHeader = ({ title = "New Chat", onLoadChat, onNewChat, selectedModel, 
             {showPopup && (
                 <ChatHistoryPopup
                     history={history}
-                    onSelect={handleSelect}
+                    onLoadChat={handleSelect}
                     onDelete={handleDelete}
                     onNewChat={() => {
                         onNewChat?.();

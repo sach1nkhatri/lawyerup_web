@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import { sendMessageToAI, createNewChat } from '../../../app/api/chatService';
 
 const useChat = () => {
     const [messages, setMessages] = useState([]);
@@ -39,20 +38,50 @@ const useChat = () => {
         resizeTextarea();
         setIsGenerating(true);
 
-        // ➕ placeholder bot message for streaming updates
+        // ➕ Placeholder for bot stream
         setMessages(prev => [...prev, { text: '', sender: 'bot' }]);
 
         try {
-            const start = Date.now();
+            const startTime = Date.now();
+            let currentChatId = chatId;
 
-            const response = await fetch("http://localhost:8010/proxy/v1/chat/completions", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
+            // ✅ 1. Create Chat if New
+            if (!chatId) {
+                const res = await fetch('http://localhost:5000/api/ai/chats', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem('lawyerup_token')}`
+                    },
+                    body: JSON.stringify({
+                        title: 'New Chat',
+                        model: model || 'gemma-3-12b-it-q4f'
+                    })
+                });
+                const data = await res.json();
+                currentChatId = data._id;
+                setChatId(currentChatId);
+            }
+
+            // ✅ 2. Save User Message to DB
+            await fetch('http://localhost:5000/api/ai/appendUserMessage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('lawyerup_token')}`
+                },
+                body: JSON.stringify({ chatId: currentChatId, message: text })
+            });
+
+            // ✅ 3. Stream AI Response to UI
+            const response = await fetch('http://localhost:8010/proxy/v1/chat/completions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    model: "llama3:8b-instruct",
+                    model: 'llama3:8b-instruct',
                     stream: true,
                     messages: [
-                        { role: "system", content: "You are a helpful Nepali legal advisor." },
+                        { role: 'system', content: 'You are a helpful Nepali legal advisor.' },
                         ...messages.map(m => ({
                             role: m.sender === 'user' ? 'user' : 'assistant',
                             content: m.text
@@ -62,12 +91,10 @@ const useChat = () => {
                 })
             });
 
-            if (!response.ok || !response.body) {
-                throw new Error("Streaming failed or LLM returned error.");
-            }
+            if (!response.ok || !response.body) throw new Error('Streaming failed');
 
             const reader = response.body.getReader();
-            const decoder = new TextDecoder("utf-8");
+            const decoder = new TextDecoder('utf-8');
             let fullText = '';
 
             while (true) {
@@ -84,42 +111,66 @@ const useChat = () => {
                         try {
                             const json = JSON.parse(line.replace('data: ', ''));
                             const token = json.choices?.[0]?.delta?.content;
-
                             if (token) {
                                 fullText += token;
-
-                                // 💫 Animate token-by-token typing
                                 setMessages(prev => {
                                     const updated = [...prev];
-                                    const last = updated[updated.length - 1];
-                                    if (last?.sender === 'bot') {
-                                        updated[updated.length - 1] = {
-                                            ...last,
-                                            text: fullText
-                                        };
-                                    }
+                                    updated[updated.length - 1] = {
+                                        ...updated[updated.length - 1],
+                                        text: fullText
+                                    };
                                     return updated;
                                 });
-
-                                // Optional typing delay
-                                await new Promise(resolve => setTimeout(resolve, 8));
+                                await new Promise(r => setTimeout(r, 8));
                             }
                         } catch (err) {
-                            console.warn("❌ Skipped malformed line:", line);
+                            console.warn("⚠️ Malformed line skipped:", line);
                         }
                     }
                 }
             }
 
             setIsGenerating(false);
-            setResponseTime(Date.now() - start);
+            setResponseTime(Date.now() - startTime);
+
+            // ✅ 4. Save Bot Response to DB
+            if (fullText.trim()) {
+                await fetch('http://localhost:5000/api/ai/saveReply', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem('lawyerup_token')}`
+                    },
+                    body: JSON.stringify({ chatId: currentChatId, reply: fullText })
+                });
+            }
+
+            // ✅ 5. Update Title If Needed
+            if (title === 'New Chat') {
+                const short = text.trim().slice(0, 30);
+                const formattedTitle = short.charAt(0).toUpperCase() + short.slice(1);
+                setTitle(formattedTitle);
+
+                await fetch(`http://localhost:5000/api/ai/chats/${currentChatId}/title`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem('lawyerup_token')}`
+                    },
+                    body: JSON.stringify({ title: formattedTitle })
+                });
+            }
 
         } catch (err) {
             console.error('❌ Streaming error:', err.message);
             setIsGenerating(false);
-            setMessages(prev => [...prev, { text: "⚠️ Error connecting to LLM server.", sender: 'bot' }]);
+            setMessages(prev => [...prev, {
+                text: '⚠️ Error connecting to LLM server.',
+                sender: 'bot'
+            }]);
         }
     };
+
 
     const newChat = () => {
         setMessages([]);
