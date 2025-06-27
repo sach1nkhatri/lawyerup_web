@@ -3,8 +3,7 @@ import axios from 'axios';
 import NProgress from 'nprogress';
 import Swal from 'sweetalert2';
 import { notify } from '../../../app/shared_components/utils/notify';
-
-const API_URL = `${process.env.REACT_APP_API_URL}news`;
+import API from '../../../app/api/api_endpoints';
 
 export const useNewsPage = () => {
     const [newsData, setNewsData] = useState([]);
@@ -17,7 +16,7 @@ export const useNewsPage = () => {
         const fetchNews = async () => {
             try {
                 NProgress.start();
-                const res = await axios.get(API_URL);
+                const res = await axios.get(API.NEWS);
                 setNewsData(res.data);
             } catch (error) {
                 console.error('Failed to fetch news:', error);
@@ -49,7 +48,7 @@ export const useNewsPage = () => {
         const endpoint = alreadyLiked ? 'unlike' : 'like';
 
         try {
-            const res = await axios.post(`${API_URL}/${selectedNews._id}/${endpoint}`, { userId });
+            const res = await axios.post(`${API.NEWS}/${selectedNews._id}/${endpoint}`, { userId });
             setSelectedNews({
                 ...selectedNews,
                 likes: res.data.likes,
@@ -75,7 +74,7 @@ export const useNewsPage = () => {
         const endpoint = alreadyDisliked ? 'undislike' : 'dislike';
 
         try {
-            const res = await axios.post(`${API_URL}/${selectedNews._id}/${endpoint}`, { userId });
+            const res = await axios.post(`${API.NEWS}/${selectedNews._id}/${endpoint}`, { userId });
             setSelectedNews({
                 ...selectedNews,
                 likes: res.data.likes,
@@ -102,7 +101,7 @@ export const useNewsPage = () => {
 
         try {
             const res = await axios.post(
-                `${API_URL}/${selectedNews._id}/comment`,
+                `${API.NEWS}/${selectedNews._id}/comment`,
                 { text: commentText.trim() },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -133,7 +132,7 @@ export const useNewsPage = () => {
 
         try {
             const res = await axios.delete(
-                `${API_URL}/${selectedNews._id}/comment/${index}`,
+                `${API.NEWS}/${selectedNews._id}/comment/${index}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             setComments(res.data.comments);
