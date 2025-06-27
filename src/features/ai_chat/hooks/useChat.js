@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import API from '../../../app/api/api_endpoints';
 
 const useChat = () => {
     const [messages, setMessages] = useState([]);
@@ -45,9 +46,8 @@ const useChat = () => {
             const startTime = Date.now();
             let currentChatId = chatId;
 
-            // ✅ 1. Create Chat if New
             if (!chatId) {
-                const res = await fetch('http://localhost:5000/api/ai/chats', {
+                const res = await fetch(`${API.AI}/chats`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -63,8 +63,7 @@ const useChat = () => {
                 setChatId(currentChatId);
             }
 
-            // ✅ 2. Save User Message to DB
-            await fetch('http://localhost:5000/api/ai/appendUserMessage', {
+            await fetch(`${API.AI}/appendUserMessage`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -73,7 +72,6 @@ const useChat = () => {
                 body: JSON.stringify({ chatId: currentChatId, message: text })
             });
 
-            // ✅ 3. Stream AI Response to UI
             const response = await fetch('http://localhost:8010/proxy/v1/chat/completions', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -133,9 +131,8 @@ const useChat = () => {
             setIsGenerating(false);
             setResponseTime(Date.now() - startTime);
 
-            // ✅ 4. Save Bot Response to DB
             if (fullText.trim()) {
-                await fetch('http://localhost:5000/api/ai/saveReply', {
+                await fetch(`${API.AI}/saveReply`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -145,13 +142,12 @@ const useChat = () => {
                 });
             }
 
-            // ✅ 5. Update Title If Needed
             if (title === 'New Chat') {
                 const short = text.trim().slice(0, 30);
                 const formattedTitle = short.charAt(0).toUpperCase() + short.slice(1);
                 setTitle(formattedTitle);
 
-                await fetch(`http://localhost:5000/api/ai/chats/${currentChatId}/title`, {
+                await fetch(`${API.AI}/chats/${currentChatId}/title`, {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json',
@@ -170,7 +166,6 @@ const useChat = () => {
             }]);
         }
     };
-
 
     const newChat = () => {
         setMessages([]);

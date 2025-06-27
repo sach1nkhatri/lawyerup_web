@@ -20,7 +20,7 @@ const ChatView = ({
                       onLoadChat,
                   }) => {
     return (
-        <div className={styles.chatWrapper}>
+        <div className={styles.chatViewWrapper}>
             <ChatHeader
                 title={title}
                 selectedModel={model}

@@ -7,6 +7,7 @@ import sendIcon from '../../../app/assets/send.png';
 import historyIcon from '../../../app/assets/history.png';
 import styles from '../css/ChatWindow.module.css';
 import useChatHistory from '../hooks/useChatHistory';
+import API from '../../../app/api/api_endpoints';
 
 const ChatWindow = () => {
     const [showHistory, setShowHistory] = useState(false);
@@ -32,21 +33,19 @@ const ChatWindow = () => {
     const handleChatSelect = async (chatId) => {
         const token = localStorage.getItem('lawyerup_token');
         try {
-            const res = await fetch(`http://localhost:5000/api/ai/chats/${chatId}`, {
+            const res = await fetch(`${API.AI}/chats/${chatId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
 
             const fullChat = await res.json();
-            loadChat(fullChat); // from useChat()
+            loadChat(fullChat);
         } catch (err) {
             console.error('❌ Failed to load chat:', err.message);
         }
     };
 
-
-    // ✅ Chat history hook
     const {
         history,
         isLoadingHistory,
@@ -60,7 +59,6 @@ const ChatWindow = () => {
 
     return (
         <div className={styles.chatWrapper}>
-            {/* 🕘 Toggle Chat History */}
             <div className={styles.historyIcon} onClick={() => setShowHistory(true)}>
                 <img src={historyIcon} alt="history" />
             </div>
