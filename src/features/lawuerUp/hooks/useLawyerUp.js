@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { startLoader, stopLoader } from '../../../app/shared_components/utils/loader';
+import API from '../../../app/api/api_endpoints';
 
 export const useLawyerUp = () => {
     const { id } = useParams();
@@ -14,7 +15,7 @@ export const useLawyerUp = () => {
         const fetchLawyers = async () => {
             try {
                 startLoader();
-                const res = await axios.get(`${process.env.REACT_APP_API_URL}lawyers`);
+                const res = await axios.get(API.LAWYERS);
                 setLawyers(res.data);
             } catch (err) {
                 console.error("❌ Failed to fetch lawyers", err);
@@ -37,7 +38,7 @@ export const useLawyerUp = () => {
             setSelectedLawyer(null);
         }
 
-        setLoading(false); // ✅ Only after resolving the selection
+        setLoading(false);
     }, [id, lawyers]);
 
     // Construct image URL

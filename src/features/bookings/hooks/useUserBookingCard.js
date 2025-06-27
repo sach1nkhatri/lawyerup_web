@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { notify } from '../../../app/shared_components/utils/notify';
+import API from '../../../app/api/api_endpoints';
 
 export const useUserBookingCard = (booking, onCancel) => {
     const [showReview, setShowReview] = useState(false);
@@ -27,7 +28,7 @@ export const useUserBookingCard = (booking, onCancel) => {
 
         if (result.isConfirmed) {
             try {
-                await axios.delete(`${process.env.REACT_APP_API_URL}bookings/${booking._id}`);
+                await axios.delete(`${API.BOOKINGS}/${booking._id}`);
                 notify('success', 'Booking cancelled.');
                 onCancel?.(booking._id);
             } catch (err) {
@@ -44,6 +45,6 @@ export const useUserBookingCard = (booking, onCancel) => {
         lawyerUser,
         client,
         lawyerImg,
-        handleCancel
+        handleCancel,
     };
 };

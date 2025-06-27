@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { notify } from '../../../app/shared_components/utils/notify';
+import API from '../../../app/api/api_endpoints';
 
 export const useUserReview = (bookingId, onClose) => {
     const [rating, setRating] = useState(0);
@@ -20,12 +21,12 @@ export const useUserReview = (bookingId, onClose) => {
             const user = JSON.parse(localStorage.getItem('lawyerup_user'));
 
             const payload = {
-                user: user.fullName, // or user._id if required
+                user: user.fullName, // or user._id if backend expects it
                 comment,
                 rating,
             };
 
-            await axios.post(`${process.env.REACT_APP_API_URL}reviews/${bookingId}`, payload);
+            await axios.post(`${API.REVIEWS}/${bookingId}`, payload);
 
             notify('success', 'Review submitted successfully!');
             onClose();
@@ -45,6 +46,6 @@ export const useUserReview = (bookingId, onClose) => {
         comment,
         setComment,
         loading,
-        handleSubmit
+        handleSubmit,
     };
 };

@@ -1,5 +1,6 @@
 import Swal from 'sweetalert2';
 import { notify } from '../../../app/shared_components/utils/notify';
+import API from '../../../app/api/api_endpoints';
 
 export const useLawyerStatusPanel = (lawyer, onNext) => {
     const status = lawyer?.status || 'pending';
@@ -16,9 +17,6 @@ export const useLawyerStatusPanel = (lawyer, onNext) => {
     const imageURL = lawyer.profilePhoto?.startsWith('data:image')
         ? lawyer.profilePhoto
         : `${process.env.REACT_APP_SERVER_URL}${lawyer.profilePhoto}`;
-
-
-
 
     const getStatusLabel = (status) => {
         switch (status) {
@@ -45,7 +43,7 @@ export const useLawyerStatusPanel = (lawyer, onNext) => {
 
         const token = localStorage.getItem('lawyerup_token');
         try {
-            const res = await fetch(`${process.env.REACT_APP_API_URL}lawyers/${lawyer._id}/status`, {
+            const res = await fetch(`${API.LAWYERS}/${lawyer._id}/status`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -53,6 +51,7 @@ export const useLawyerStatusPanel = (lawyer, onNext) => {
                 },
                 body: JSON.stringify({ status: 'listed' }),
             });
+
             if (res.ok) {
                 notify('success', 'Your profile is now public!');
                 onNext?.();

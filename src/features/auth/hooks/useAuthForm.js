@@ -1,12 +1,14 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { notify } from '../../../app/shared_components/utils/notify';
 import { startLoader, stopLoader } from '../../../app/shared_components/utils/loader';
-import {useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
-import axios from "axios";
+import API from '../../../app/api/api_endpoints';
 
 const useAuthForm = () => {
     const navigate = useNavigate();
     const [isLogin, setIsLogin] = useState(true);
+
     const [formData, setFormData] = useState({
         role: 'user',
         fullName: '',
@@ -28,7 +30,7 @@ const useAuthForm = () => {
         e.preventDefault();
         startLoader();
 
-        const endpoint = `${process.env.REACT_APP_API_URL}auth/${isLogin ? 'login' : 'signup'}`;
+        const endpoint = `${API.AUTH}/${isLogin ? 'login' : 'signup'}`;
         const payload = isLogin
             ? { email: formData.email, password: formData.password }
             : {
@@ -61,7 +63,7 @@ const useAuthForm = () => {
                 setIsLogin(true);
             }
         } catch (err) {
-            const msg = err.response?.data?.message || err.message;
+            const msg = err.response?.data?.message || err.message || '';
             if (msg.toLowerCase().includes('user')) {
                 notify('error', '❌ User not found.');
             } else if (msg.toLowerCase().includes('password')) {

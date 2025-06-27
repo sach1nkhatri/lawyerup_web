@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { notify } from '../../../app/shared_components/utils/notify';
+import API from '../../../app/api/api_endpoints';
 
 const socket = io(process.env.REACT_APP_SOCKET_URL, {
     transports: ['websocket'],
@@ -40,7 +41,7 @@ export const useChat = (bookingId, senderId, isChatVisible = false) => {
     useEffect(() => {
         if (!bookingId) return;
 
-        fetch(`${process.env.REACT_APP_API_URL}bookings/${bookingId}/chat`)
+        fetch(`${API.BOOKINGS}/${bookingId}/chat`)
             .then(res => res.json())
             .then(data => setMessages(data || []))
             .catch(console.error);
@@ -53,7 +54,7 @@ export const useChat = (bookingId, senderId, isChatVisible = false) => {
             bookingId,
             senderId: user._id,
             text,
-            senderName: user.fullName
+            senderName: user.fullName,
         };
 
         socket.emit('sendMessage', messagePayload);

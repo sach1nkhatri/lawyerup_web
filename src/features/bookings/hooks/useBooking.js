@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
+import API from '../../../app/api/api_endpoints';
 
 const useBooking = () => {
     const user = useMemo(() => JSON.parse(localStorage.getItem('lawyerup_user')), []);
@@ -14,8 +15,8 @@ const useBooking = () => {
             try {
                 const endpoint =
                     user.role === 'lawyer'
-                        ? `${process.env.REACT_APP_API_URL}bookings/lawyer/${user._id}`
-                        : `${process.env.REACT_APP_API_URL}bookings/user/${user._id}`;
+                        ? `${API.BOOKINGS}/lawyer/${user._id}`
+                        : `${API.BOOKINGS}/user/${user._id}`;
 
                 const res = await axios.get(endpoint);
                 setBookings(res.data);

@@ -31,7 +31,7 @@ export const useLawyerCard = (lawyer) => {
                 if (navigator.share) {
                     navigator
                         .share({
-                            title: `${lawyer.fullName} - ${lawyer.specialization}`,
+                            title: `${lawyer.fullName} - ${specialization}`,
                             text: `Check out ${lawyer.fullName} on LawyerUp`,
                             url: profileLink,
                         })
@@ -48,8 +48,7 @@ export const useLawyerCard = (lawyer) => {
 
     const resolvedImage = lawyer.profilePhoto?.startsWith('data:image')
         ? lawyer.profilePhoto
-        : `${process.env.REACT_APP_SERVER_URL}${lawyer.profilePhoto || 'avatar.png'}`;
-
+        : `${process.env.REACT_APP_SERVER_URL}${lawyer.profilePhoto || '/uploads/avatar.png'}`;
 
     return {
         specialization,

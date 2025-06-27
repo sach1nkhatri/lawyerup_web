@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
+import API from '../../../app/api/api_endpoints';
 
 export const useJoinAsLawyerForm = (onSubmitted) => {
     const [loading, setLoading] = useState(true);
@@ -39,15 +40,18 @@ export const useJoinAsLawyerForm = (onSubmitted) => {
             const token = localStorage.getItem('lawyerup_token');
             if (!token) return setLoading(false);
             try {
-                const res = await fetch(`${process.env.REACT_APP_API_URL}lawyers/me`, {
-                    headers: { Authorization: `Bearer ${token}` },
+                const res = await fetch(`${API.LAWYERS}/me`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 });
                 if (res.ok) {
                     const data = await res.json();
                     setLawyer(data);
                 }
-            } catch {}
-            finally {
+            } catch {
+                // silent fail
+            } finally {
                 setLoading(false);
             }
         };
@@ -65,34 +69,51 @@ export const useJoinAsLawyerForm = (onSubmitted) => {
         setForm(prev => ({ ...prev, [key]: file }));
     };
 
-
     const addEducation = () => {
         const { eduDegree, eduInstitute, eduYear, eduSpecialization } = form;
         if (!eduDegree || !eduInstitute || !eduYear) {
-            Swal.fire({ icon: 'warning', title: 'Incomplete Education', text: 'Fill all fields for education.' });
+            Swal.fire({
+                icon: 'warning',
+                title: 'Incomplete Education',
+                text: 'Fill all fields for education.',
+            });
             return;
         }
-        setEducationList(prev => [...prev, {
-            degree: eduDegree,
-            institute: eduInstitute,
-            year: eduYear,
-            specialization: eduSpecialization
-        }]);
-        setForm(prev => ({ ...prev, eduDegree: '', eduInstitute: '', eduYear: '', eduSpecialization: '' }));
+        setEducationList(prev => [
+            ...prev,
+            {
+                degree: eduDegree,
+                institute: eduInstitute,
+                year: eduYear,
+                specialization: eduSpecialization,
+            },
+        ]);
+        setForm(prev => ({
+            ...prev,
+            eduDegree: '',
+            eduInstitute: '',
+            eduYear: '',
+            eduSpecialization: '',
+        }));
     };
 
     const addWork = () => {
         const { workCourt, workFrom, workTo } = form;
         if (!workCourt || !workFrom || !workTo) {
-            Swal.fire({ icon: 'warning', title: 'Incomplete Work', text: 'Fill all fields for work experience.' });
+            Swal.fire({
+                icon: 'warning',
+                title: 'Incomplete Work',
+                text: 'Fill all fields for work experience.',
+            });
             return;
         }
-        setWorkList(prev => [...prev, {
-            court: workCourt,
-            from: workFrom,
-            to: workTo
-        }]);
-        setForm(prev => ({ ...prev, workCourt: '', workFrom: '', workTo: '' }));
+        setWorkList(prev => [...prev, { court: workCourt, from: workFrom, to: workTo }]);
+        setForm(prev => ({
+            ...prev,
+            workCourt: '',
+            workFrom: '',
+            workTo: '',
+        }));
     };
 
     const handleNext = () => {
@@ -100,15 +121,27 @@ export const useJoinAsLawyerForm = (onSubmitted) => {
         if (!isJunior) required.push('specialization');
         const missing = required.filter(k => !form[k]);
         if (missing.length) {
-            Swal.fire({ icon: 'warning', title: 'Incomplete Fields', text: 'Fill all required fields.' });
+            Swal.fire({
+                icon: 'warning',
+                title: 'Incomplete Fields',
+                text: 'Fill all required fields.',
+            });
             return;
         }
         if (!form.licenseFile || !form.profilePhoto) {
-            Swal.fire({ icon: 'warning', title: 'Missing Uploads', text: 'Upload required documents.' });
+            Swal.fire({
+                icon: 'warning',
+                title: 'Missing Uploads',
+                text: 'Upload required documents.',
+            });
             return;
         }
         if (!schedule || schedule.length === 0) {
-            Swal.fire({ icon: 'warning', title: 'Availability Missing', text: 'Please add at least one availability slot.' });
+            Swal.fire({
+                icon: 'warning',
+                title: 'Availability Missing',
+                text: 'Please add at least one availability slot.',
+            });
             return;
         }
         setStep(2);
@@ -116,20 +149,16 @@ export const useJoinAsLawyerForm = (onSubmitted) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const token = localStorage.getItem('lawyerup_token');
         const data = new FormData();
 
-        // Append all string fields
         Object.entries(form).forEach(([key, val]) => {
             if (val && typeof val !== 'object') data.append(key, val);
         });
 
-        // Append files
         if (form.profilePhoto instanceof File) data.append('profilePhoto', form.profilePhoto);
         if (form.licenseFile instanceof File) data.append('licenseFile', form.licenseFile);
 
-        // Append complex arrays
         data.append('education', JSON.stringify(educationList));
         data.append('workExperience', JSON.stringify(isJunior ? [] : workList));
         data.append('schedule', JSON.stringify(schedule));
@@ -137,7 +166,7 @@ export const useJoinAsLawyerForm = (onSubmitted) => {
 
         try {
             setLoading(true);
-            const res = await fetch(`${process.env.REACT_APP_API_URL}lawyers`, {
+            const res = await fetch(API.LAWYERS, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -153,7 +182,6 @@ export const useJoinAsLawyerForm = (onSubmitted) => {
             setLoading(false);
         }
     };
-
 
     return {
         loading,
@@ -172,6 +200,6 @@ export const useJoinAsLawyerForm = (onSubmitted) => {
         addEducation,
         addWork,
         handleNext,
-        handleSubmit
+        handleSubmit,
     };
 };

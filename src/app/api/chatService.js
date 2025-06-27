@@ -1,16 +1,16 @@
 import axios from 'axios';
+import API from './api_endpoints';
 
-const BASE_URL = '/api/ai';
+const BASE_URL = API.AI;
 
 const authHeaders = () => {
-    const token = localStorage.getItem('lawyerup_token'); // ✅ correct key
+    const token = localStorage.getItem('lawyerup_token');
     return {
         headers: {
             Authorization: `Bearer ${token}`
         }
     };
 };
-
 
 export const fetchChats = () => axios.get(`${BASE_URL}/chats`, authHeaders());
 export const getChatById = (id) => axios.get(`${BASE_URL}/chats/${id}`, authHeaders());

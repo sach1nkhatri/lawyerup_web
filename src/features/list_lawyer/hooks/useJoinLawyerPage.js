@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import API from '../../../app/api/api_endpoints';
 
 export const useJoinLawyerPage = () => {
     const [view, setView] = useState('loading');
@@ -12,8 +13,10 @@ export const useJoinLawyerPage = () => {
         if (!token) return setView('form');
 
         try {
-            const res = await fetch(`${process.env.REACT_APP_API_URL}lawyers/me`, {
-                headers: { Authorization: `Bearer ${token}` },
+            const res = await fetch(`${API.LAWYERS}/me`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             });
 
             if (!res.ok) throw new Error('No application found');
@@ -66,6 +69,6 @@ export const useJoinLawyerPage = () => {
         handleNext,
         handleBackToStatus,
         handleReapply,
-        handleGoToStatus
+        handleGoToStatus,
     };
 };

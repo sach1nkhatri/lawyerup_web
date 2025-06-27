@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Swal from 'sweetalert2';
 import { notify } from '../../../app/shared_components/utils/notify';
 import { startLoader, stopLoader } from '../utils/loader';
+import API from '../../../app/api/api_endpoints';
 
 export const useFinalListingForm = (lawyer, { onReapply, onHold }) => {
     const [form, setForm] = useState({
@@ -62,11 +63,10 @@ export const useFinalListingForm = (lawyer, { onReapply, onHold }) => {
 
         try {
             startLoader();
-
             const formData = new FormData();
             formData.append('profilePhoto', file);
 
-            const res = await fetch(`${process.env.REACT_APP_API_URL}lawyers/${lawyer._id}`, {
+            const res = await fetch(`${API.LAWYERS}/${lawyer._id}`, {
                 method: 'PUT',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('lawyerup_token')}`,
@@ -75,10 +75,9 @@ export const useFinalListingForm = (lawyer, { onReapply, onHold }) => {
             });
 
             if (!res.ok) throw new Error();
-
             const data = await res.json();
             notify('success', 'Profile photo updated!');
-            setProfilePhoto(data.profilePhoto); // URL returned from backend
+            setProfilePhoto(data.profilePhoto);
         } catch {
             notify('error', 'Failed to update photo');
         } finally {
@@ -100,28 +99,23 @@ export const useFinalListingForm = (lawyer, { onReapply, onHold }) => {
         try {
             startLoader();
 
-            const token = localStorage.getItem('lawyerup_token');
             const data = new FormData();
-
-            // Append profile fields
             Object.entries(form).forEach(([key, value]) => {
                 if (value) data.append(key, value);
             });
 
-            // Append updated image file
             if (profilePhoto instanceof File) {
                 data.append('profilePhoto', profilePhoto);
             }
 
-            // Add arrays as JSON
             data.append('education', JSON.stringify(education));
             data.append('workExperience', JSON.stringify(workExperience));
             data.append('schedule', JSON.stringify(editableSchedule));
 
-            const res = await fetch(`${process.env.REACT_APP_API_URL}lawyers/${lawyer._id}`, {
+            const res = await fetch(`${API.LAWYERS}/${lawyer._id}`, {
                 method: 'PUT',
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${localStorage.getItem('lawyerup_token')}`,
                 },
                 body: data,
             });
@@ -134,7 +128,6 @@ export const useFinalListingForm = (lawyer, { onReapply, onHold }) => {
             stopLoader();
         }
     };
-
 
     const handleDelete = async () => {
         const result = await Swal.fire({
@@ -150,7 +143,7 @@ export const useFinalListingForm = (lawyer, { onReapply, onHold }) => {
 
         try {
             startLoader();
-            const res = await fetch(`${process.env.REACT_APP_API_URL}lawyers/${lawyer._id}`, {
+            const res = await fetch(`${API.LAWYERS}/${lawyer._id}`, {
                 method: 'DELETE',
             });
 
@@ -170,7 +163,7 @@ export const useFinalListingForm = (lawyer, { onReapply, onHold }) => {
     const handleHold = async () => {
         try {
             startLoader();
-            const res = await fetch(`${process.env.REACT_APP_API_URL}lawyers/${lawyer._id}/status`, {
+            const res = await fetch(`${API.LAWYERS}/${lawyer._id}/status`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: 'hold' }),

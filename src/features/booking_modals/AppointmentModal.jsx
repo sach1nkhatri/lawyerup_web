@@ -3,7 +3,7 @@ import axios from 'axios';
 import './css/AppointmentModal.css';
 import { startLoader, stopLoader } from '../../app/shared_components/utils/loader';
 import { notify } from '../../app/shared_components/utils/notify';
-;
+import API from '../../app/api/api_endpoints';
 
 const AppointmentModal = ({ lawyer, onClose }) => {
     const [availableDates, setAvailableDates] = useState([]);
@@ -16,7 +16,6 @@ const AppointmentModal = ({ lawyer, onClose }) => {
 
     const user = JSON.parse(localStorage.getItem('lawyerup_user'));
 
-// ✅ Get valid dates from lawyer schedule (Nepal time)
     useEffect(() => {
         const validDates = [];
         const today = new Date();
@@ -27,11 +26,10 @@ const AppointmentModal = ({ lawyer, onClose }) => {
 
             const weekday = date.toLocaleDateString('en-US', {
                 weekday: 'long',
-                timeZone: 'Asia/Kathmandu'
+                timeZone: 'Asia/Kathmandu',
             });
 
-            const formatted = getNepalDateString(date); // "YYYY-MM-DD"
-
+            const formatted = getNepalDateString(date);
             if (lawyer.schedule[weekday]?.length > 0) {
                 validDates.push(formatted);
             }
@@ -43,30 +41,29 @@ const AppointmentModal = ({ lawyer, onClose }) => {
         }
     }, [lawyer.schedule]);
 
-
-// ✅ Fetch available + booked slots (objects with availability flag)
     useEffect(() => {
         const fetchAvailableSlots = async () => {
             if (!selectedDate || !duration || !lawyer._id) return;
 
             try {
-                const res = await axios.get(`http://localhost:5000/api/bookings/slots`, {
+                const res = await axios.get(`${API.BOOKINGS}/slots`, {
                     params: {
                         lawyerId: lawyer._id,
                         date: selectedDate,
-                        duration
-                    }
+                        duration,
+                    },
                 });
 
-                const slots = res.data || []; // e.g., [{ time: '10:00', available: true }, ...]
+                const slots = res.data || [];
                 setTimeSlots(slots);
 
-                const firstAvailable = slots.find(slot =>
-                    typeof slot === 'string' || slot.available === true
+                const firstAvailable = slots.find(
+                    (slot) => typeof slot === 'string' || slot.available === true
                 );
-
                 setSelectedTime(
-                    typeof firstAvailable === 'string' ? firstAvailable : firstAvailable?.time || ''
+                    typeof firstAvailable === 'string'
+                        ? firstAvailable
+                        : firstAvailable?.time || ''
                 );
             } catch (err) {
                 console.error('Failed to load available slots:', err);
@@ -77,10 +74,7 @@ const AppointmentModal = ({ lawyer, onClose }) => {
 
         fetchAvailableSlots();
     }, [selectedDate, duration, lawyer._id]);
-;
 
-
-    // ✅ Booking submission
     const handleConfirm = async () => {
         const clientId = user?._id;
         const lawyerUserId = lawyer.user?._id || lawyer.user;
@@ -101,13 +95,13 @@ const AppointmentModal = ({ lawyer, onClose }) => {
             mode: appointmentType,
             description,
             status: 'pending',
-            reviewed: false
+            reviewed: false,
         };
 
         try {
             startLoader();
-            await axios.post(`${process.env.REACT_APP_API_URL}bookings`, bookingData);
-            notify('success', `Appointment booked successfully!`);
+            await axios.post(`${API.BOOKINGS}`, bookingData);
+            notify('success', 'Appointment booked successfully!');
             onClose();
         } catch (err) {
             const msg = err.response?.data?.message || err.message || 'Unknown error occurred.';
@@ -118,18 +112,21 @@ const AppointmentModal = ({ lawyer, onClose }) => {
         }
     };
 
-
     function getNepalDateString(date = new Date()) {
-        const options = { timeZone: 'Asia/Kathmandu', year: 'numeric', month: '2-digit', day: '2-digit' };
+        const options = {
+            timeZone: 'Asia/Kathmandu',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        };
         const parts = new Intl.DateTimeFormat('en-CA', options).formatToParts(date);
 
-        const year = parts.find(p => p.type === 'year').value;
-        const month = parts.find(p => p.type === 'month').value;
-        const day = parts.find(p => p.type === 'day').value;
+        const year = parts.find((p) => p.type === 'year').value;
+        const month = parts.find((p) => p.type === 'month').value;
+        const day = parts.find((p) => p.type === 'day').value;
 
-        return `${year}-${month}-${day}`; // e.g. "2025-06-01"
+        return `${year}-${month}-${day}`;
     }
-
 
     return (
         <div className="appointment-overlay">
