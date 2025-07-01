@@ -13,7 +13,11 @@ export const useUserBookingCard = (booking, onCancel) => {
 
     const lawyerImg = lawyerProfile?.profilePhoto?.startsWith('data:image')
         ? lawyerProfile.profilePhoto
-        : `${process.env.REACT_APP_UPLOADS_URL}${lawyerProfile?.profilePhoto || 'avatar.png'}`;
+        : `${process.env.REACT_APP_SERVER_URL}${lawyerProfile?.profilePhoto || '/uploads/avatar.png'}`;
+
+
+
+
 
     const handleCancel = async () => {
         const result = await Swal.fire({
