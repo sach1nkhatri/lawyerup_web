@@ -10,6 +10,7 @@ const API = {
   PDF: `${BASE_URL}/api/pdfs`,
   FAQ: `${BASE_URL}/api/faqs`,
   AI: `${BASE_URL}/api/ai`,
+  MANUAL_PAYMENT: `${BASE_URL}/api/manual-payment`,
 };
 
 export default API;

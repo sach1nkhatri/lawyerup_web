@@ -7,7 +7,7 @@ import LandingPage from './features/landing_page/components/LandingPage';
 import AuthForm from './features/auth/components/LoginSignup';
 import Dashboard from './features/dashboard/component/Dashboard';
 import PricingPlans from './features/landing_page/components/PricingPlans';
-import CheckoutPage from './features/landing_page/components/CheckoutPage';
+import CheckoutPage from './features/payment_gateway/component/CheckoutPage';
 import PrivateRoute from './app/routes/privateRoute';
 import PlansPricing from './features/landing_page/components/PricingPlans'
 
