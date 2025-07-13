@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../css/LawyerBookingCard.css';
 import { useLawyerBookingCard } from '../hooks/useLawyerBookingCard';
 import ChatPopup from './ChatPopup';
+
 const currentUser = JSON.parse(localStorage.getItem('lawyerup_user'));
 
 const LawyerBookingCard = ({ booking, onStatusChange }) => {
+    const [chatVisible, setChatVisible] = useState(false);
     const user = booking.user;
+
     const {
         link,
         setLink,
@@ -65,11 +68,18 @@ const LawyerBookingCard = ({ booking, onStatusChange }) => {
             </div>
 
             {booking.status === 'approved' && (
-                <ChatPopup
-                    bookingId={booking._id}
-                    senderId={currentUser._id}
-                    receiver={currentUser.role === 'lawyer' ? booking.user : booking.lawyer}
-                />
+                <>
+                    <div style={{ marginTop: '1rem', textAlign: 'right' }}>
+                        <button className="chat-fab" onClick={() => setChatVisible(true)}>💬 Chat</button>
+                    </div>
+                    <ChatPopup
+                        bookingId={booking._id}
+                        senderId={currentUser._id}
+                        receiver={user}
+                        visible={chatVisible}
+                        onClose={() => setChatVisible(false)}
+                    />
+                </>
             )}
         </div>
     );

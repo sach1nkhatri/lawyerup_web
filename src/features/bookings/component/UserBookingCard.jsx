@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import UserReview from './UserReview';
 import defaultAvatar from '../../../app/assets/avatar.png';
 import '../css/UserBookingCard.css';
 import { useUserBookingCard } from '../hooks/useUserBookingCard';
 import ChatPopup from './ChatPopup';
+
 const currentUser = JSON.parse(localStorage.getItem('lawyerup_user'));
 
 const UserBookingCard = ({ booking, onCancel }) => {
+    const [chatVisible, setChatVisible] = useState(false);
+
     const {
         showReview,
         setShowReview,
@@ -82,19 +85,26 @@ const UserBookingCard = ({ booking, onCancel }) => {
                 )}
             </div>
 
+            {booking.status === 'approved' && (
+                <>
+                    <div style={{ marginTop: '1rem', textAlign: 'right' }}>
+                        <button className="chat-fab" onClick={() => setChatVisible(true)}>💬 Chat</button>
+                    </div>
+                    <ChatPopup
+                        bookingId={booking._id}
+                        senderId={currentUser._id}
+                        receiver={lawyerUser}
+                        visible={chatVisible}
+                        onClose={() => setChatVisible(false)}
+                    />
+                </>
+            )}
+
             {showReview && (
                 <UserReview
                     bookingId={booking._id}
                     lawyerId={lawyerUser._id}
                     onClose={() => setShowReview(false)}
-                />
-            )}
-
-            {booking.status === 'approved' && (
-                <ChatPopup
-                    bookingId={booking._id}
-                    senderId={currentUser._id}
-                    receiver={currentUser.role === 'lawyer' ? booking.user : booking.lawyer}
                 />
             )}
         </div>
