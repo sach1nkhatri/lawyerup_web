@@ -3,7 +3,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 
 import Sidebar from '../../../app/shared_components/sidebar/component/Sidebar';
 import ChatWindow from '../../ai_chat/component/ChatWindow';
-import NewsPage from '../../news/componet/NewsPage';
+import NewsPage from '../../news/components/NewsPage';
 import LawyerUp from "../../lawyerUp/component/LawyerUp";
 import PdfLibrary from "../../pdf_libary/component/PdfLibrary";
 import SettingsPage from '../../settings/components/SettingsPage';

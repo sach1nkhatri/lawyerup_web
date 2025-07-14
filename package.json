@@ -5,8 +5,6 @@
   "proxy": "http://localhost:5000",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.126",
@@ -32,7 +30,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts src/__tests__",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -54,6 +52,9 @@
     ]
   },
   "devDependencies": {
-    "@types/nprogress": "^0.2.3"
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@types/nprogress": "^0.2.3",
+    "jest": "^27.5.1"
   }
 }
