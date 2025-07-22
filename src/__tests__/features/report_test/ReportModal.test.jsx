@@ -46,6 +46,7 @@ describe('ReportModal Component', () => {
 
         const Modal = require('../../../features/report/component/ReportModal').default;
         const { container } = render(<Modal isOpen={false} onClose={jest.fn()} />);
+        // eslint-disable-next-line testing-library/no-node-access
         expect(container.firstChild).toBeNull();
     });
 

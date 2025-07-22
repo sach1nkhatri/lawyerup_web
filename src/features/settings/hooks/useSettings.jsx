@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import API from "../../../app/api/api_endpoints";
 
 export const useSettings = () => {
     const [darkMode, setDarkMode] = useState(false);
@@ -10,7 +11,7 @@ export const useSettings = () => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Fetch user from localStorage
+    // Load user from localStorage
     useEffect(() => {
         const storedUser = localStorage.getItem('lawyerup_user');
         if (storedUser) {
@@ -26,14 +27,9 @@ export const useSettings = () => {
             });
         }
 
-        // ⏳ Simulate loading delay
-        const timeout = setTimeout(() => {
-            setLoading(false);
-        }, 500);
-
+        const timeout = setTimeout(() => setLoading(false), 500);
         return () => clearTimeout(timeout);
     }, []);
-
 
     const toggleTheme = () => {
         setDarkMode(prev => !prev);
@@ -91,6 +87,67 @@ export const useSettings = () => {
         }
     };
 
+    // 🔥 SweetAlert-confirmed action executor
+    const handleConfirmAction = async (label, keyword, callback) => {
+        const result = await Swal.fire({
+            title: `Type "${keyword}" to confirm`,
+            input: 'text',
+            inputPlaceholder: `Type "${keyword}" here`,
+            inputValidator: (value) => {
+                if (value !== keyword) return `You must type "${keyword}" to proceed`;
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            icon: 'warning'
+        });
+
+        if (result.isConfirmed) {
+            await callback();
+        }
+    };
+
+    // 🔗 Clear bookings & chats
+    const clearBookingAndChat = async () => {
+        const token = localStorage.getItem('lawyerup_token');
+        try {
+            await axios.patch(`${API.BOOKINGS}/clear-user-history`, {}, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            await Swal.fire('Cleared!', 'Your booking and chat history was removed.', 'success');
+        } catch (err) {
+            Swal.fire('Error', 'Failed to clear booking & chat history.', 'error');
+        }
+    };
+
+    // 🧠 Clear AI chat history
+    const clearLawAiData = async () => {
+        const token = localStorage.getItem('lawyerup_token');
+        try {
+            await axios.delete(`${API.AI}/chats/all`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            await Swal.fire('Cleared!', 'Your Law AI chat history was deleted.', 'success');
+        } catch (err) {
+            Swal.fire('Error', 'Failed to delete Law AI data.', 'error');
+        }
+    };
+
+    // 💀 Delete user account
+    const deleteAccount = async () => {
+        const token = localStorage.getItem('lawyerup_token');
+        try {
+            await axios.delete(`${process.env.REACT_APP_API_URL}delete/account`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            localStorage.removeItem('lawyerup_user');
+            localStorage.removeItem('lawyerup_token');
+            await Swal.fire('Deleted!', 'Your account has been permanently removed.', 'success');
+            window.location.href = '/';
+        } catch (err) {
+            Swal.fire('Error', 'Failed to delete account.', 'error');
+        }
+    };
+
     return {
         darkMode,
         formData,
@@ -101,5 +158,9 @@ export const useSettings = () => {
         handleChange,
         handleEditClick,
         toggleTheme,
+        handleConfirmAction,
+        clearBookingAndChat,
+        clearLawAiData,
+        deleteAccount,
     };
 };

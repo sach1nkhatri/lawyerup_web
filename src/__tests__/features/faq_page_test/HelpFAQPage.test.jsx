@@ -7,10 +7,10 @@ jest.mock('../../../features/faq_page/hooks/useSupportEmail', () => ({
     useSupportEmail: () => jest.fn(),
 }));
 
-// ✅ Declare mock first
+// Declare mock first
 const mockUseFaqs = jest.fn();
 
-// ✅ Global mock once — no out-of-scope vars!
+// Global mock once — no out-of-scope vars!
 jest.mock('../../../features/faq_page/hooks/useFaqs', () => ({
     useFaqs: () => mockUseFaqs(),
 }));

@@ -5,7 +5,6 @@ import PlanCardInSettings from './PlanCardInSettings';
 import { useSettings } from '../hooks/useSettings';
 import '../css/SettingPage.css';
 
-
 const Settings = () => {
     const {
         darkMode,
@@ -16,7 +15,12 @@ const Settings = () => {
         loading,
         handleEditClick,
         toggleTheme,
+        handleConfirmAction,
+        clearBookingAndChat,
+        clearLawAiData,
+        deleteAccount
     } = useSettings();
+
     const isProfileIncomplete = !formData.state || !formData.city || !formData.address;
 
     if (loading) {
@@ -30,7 +34,6 @@ const Settings = () => {
             </div>
         );
     }
-
 
     return (
         <div className={`settings-container ${darkMode ? 'dark-mode' : ''}`}>
@@ -56,7 +59,7 @@ const Settings = () => {
                             ['city', 'City'],
                             ['address', 'Address'],
                         ].map(([key, label]) => (
-                            <div key={key} className={`form-group ${['name','email', 'phone', 'address'].includes(key) ? 'full-width' : ''}`}>
+                            <div key={key} className={`form-group ${['name', 'email', 'phone', 'address'].includes(key) ? 'full-width' : ''}`}>
                                 <label>{label}</label>
                                 <input
                                     type="text"
@@ -91,13 +94,30 @@ const Settings = () => {
                     <h3>Danger Zone</h3>
                     <ul>
                         {[
-                            'Clear Booking & Chat History',
-                            'Clear Law AI Data',
-                            'Delete Account'
-                        ].map((text, index) => (
+                            {
+                                label: 'Clear Booking ',
+                                handler: clearBookingAndChat,
+                                confirmWord: 'CLEAR'
+                            },
+                            {
+                                label: 'Clear Law AI Data',
+                                handler: clearLawAiData,
+                                confirmWord: 'WIPE'
+                            },
+                            {
+                                label: 'Delete Account',
+                                handler: deleteAccount,
+                                confirmWord: 'DELETE'
+                            }
+                        ].map(({ label, handler, confirmWord }, index) => (
                             <li key={index}>
-                                <span>{text}</span>
-                                <button className="delete-btn">Delete</button>
+                                <span>{label}</span>
+                                <button
+                                    className="delete-btn"
+                                    onClick={() => handleConfirmAction(label, confirmWord, handler)}
+                                >
+                                    Delete
+                                </button>
                             </li>
                         ))}
                     </ul>
