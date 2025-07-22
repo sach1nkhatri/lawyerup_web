@@ -1,9 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Sun, Moon } from 'lucide-react';
 import profileImage from '../../../app/assets/avatar.png';
 import PlanCardInSettings from './PlanCardInSettings';
 import { useSettings } from '../hooks/useSettings';
 import '../css/SettingPage.css';
+import PrivacyModal from "../modal/PrivacyModal";
+import AboutModal from "../modal/AboutModal";
+
+
+
 
 const Settings = () => {
     const {
@@ -21,7 +26,11 @@ const Settings = () => {
         deleteAccount
     } = useSettings();
 
+    const [showPrivacy, setShowPrivacy] = useState(false);
+    const [showAbout, setShowAbout] = useState(false);
+
     const isProfileIncomplete = !formData.state || !formData.city || !formData.address;
+
 
     if (loading) {
         return (
@@ -122,6 +131,23 @@ const Settings = () => {
                         ))}
                     </ul>
                     <p className="warning-text">⚠ This action cannot be undone.</p>
+                </div>
+                {/* ===== Privacy Section ===== */}
+                {/* ===== Legal & Info Section ===== */}
+                <div className="privacy-section">
+                    <h3>Legal & Info</h3>
+                    <div className="privacy-buttons">
+                        <button className="info-btn" onClick={() => setShowPrivacy(true)}>
+                            Privacy & Policy
+                        </button>
+                        <button className="info-btn" onClick={() => setShowAbout(true)}>
+                            About Us
+                        </button>
+                    </div>
+
+                    {/* === Popups === */}
+                    {showPrivacy && <PrivacyModal onClose={() => setShowPrivacy(false)} />}
+                    {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
                 </div>
             </div>
         </div>
