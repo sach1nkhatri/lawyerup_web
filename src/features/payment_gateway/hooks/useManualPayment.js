@@ -8,6 +8,14 @@ const useManualPayment = () => {
     const [error, setError] = useState(null);
     const [latestPayment, setLatestPayment] = useState(null);
 
+    /**
+     * This may not be fully automated
+     * But it Works Secure form End to End
+     * A bit Labour Intensive
+     * Since We got Daily plans We gotta to be fastt
+     * Submits a manual payment request including screenshot and plan info.
+     * Expects: plan, amount, method, duration, validUntil (Date), and file screenshot.
+     */
     const submitManualPayment = async ({ plan, amount, method, duration, validUntil, screenshot }) => {
         setLoading(true);
         setError(null);
@@ -17,6 +25,7 @@ const useManualPayment = () => {
             const token = localStorage.getItem('lawyerup_token');
             const formData = new FormData();
 
+            // Append all required fields to form data
             formData.append('plan', plan);
             formData.append('amount', amount);
             formData.append('method', method);
@@ -24,6 +33,7 @@ const useManualPayment = () => {
             formData.append('validUntil', validUntil.toISOString());
             formData.append('screenshot', screenshot);
 
+            // Send form data with authentication header
             await axios.post(API.MANUAL_PAYMENT, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -32,7 +42,7 @@ const useManualPayment = () => {
             });
 
             setSuccess(true);
-            await getLatestUserPayment();
+            await getLatestUserPayment(); // Refresh user’s latest payment info
         } catch (err) {
             setError(err.response?.data?.error || 'Something went wrong');
         } finally {
@@ -40,6 +50,9 @@ const useManualPayment = () => {
         }
     };
 
+    /**
+     * Fetches the most recent manual payment for the logged-in user.
+     */
     const getLatestUserPayment = async () => {
         try {
             const token = localStorage.getItem('lawyerup_token');
@@ -59,7 +72,7 @@ const useManualPayment = () => {
         loading,
         success,
         error,
-        setSuccess,
+        setSuccess, // exposed to manually reset UI state (if needed)
         latestPayment,
         getLatestUserPayment
     };

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Sun, Moon } from 'lucide-react';
+// import { Sun, Moon } from 'lucide-react';
 import profileImage from '../../../app/assets/avatar.png';
 import PlanCardInSettings from './PlanCardInSettings';
 import { useSettings } from '../hooks/useSettings';
@@ -19,7 +19,7 @@ const Settings = () => {
         handleChange,
         loading,
         handleEditClick,
-        toggleTheme,
+        // toggleTheme,
         handleConfirmAction,
         clearBookingAndChat,
         clearLawAiData,
@@ -31,6 +31,7 @@ const Settings = () => {
 
     const isProfileIncomplete = !formData.state || !formData.city || !formData.address;
 
+// If this is still loading after 0.5s, either your internet’s dead or my code is.
 
     if (loading) {
         return (
@@ -50,7 +51,7 @@ const Settings = () => {
                 <h1 className="settings-title">Settings</h1>
                 <p className="settings-subtitle">Manage your account settings and preferences</p>
 
-                {/* 🔔 Recommendation Banner */}
+                {/*// Reminder: if they haven't entered their city/state, good luck finding a lawyer in the void.*/}
                 {isProfileIncomplete && (
                     <div className="profile-incomplete-warning">
                         <strong>Complete your profile</strong> to get personalized lawyer recommendations in your area.
@@ -82,20 +83,36 @@ const Settings = () => {
                     </div>
 
                     <div className="settings-profile">
-                        <img src={profileImage} alt="Profile" className="profile-image" />
+                        <img src={profileImage} alt="Profile" className="profile-image" />    {/*// Profile image is static for now — feel free to pretend it’s AI-generated or royalty-free vibes.*/}
                         <button onClick={handleEditClick} className="edit-button">
                             {isEditing ? (hasChanged ? 'Update Profile' : 'Cancel') : 'Edit Profile'}
                         </button>
-                        <button className="theme-toggle" onClick={toggleTheme}>
-                            {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-                        </button>
+                        {/*<button className="theme-toggle" onClick={toggleTheme}>*/}           {/*Later For Dark Mode*/}
+                        {/*    {darkMode ? <Sun size={18} /> : <Moon size={18} />}*/}
+                        {/*</button>*/}
                     </div>
                 </div>
-
                 {/* ===== Subscription Plan ===== */}
                 <div className="subscription-wrapper">
                     <h3 className="settings-subtitle">Your Current Plan</h3>
                     <PlanCardInSettings plan="Free Trial" />
+                </div>
+                {/* ===== Privacy Section ===== */}
+                {/* ===== Legal & Info Section ===== */}
+                <div className="privacy-section">
+                    <h3>Legal & Info</h3>
+                    <div className="privacy-buttons">
+                        <button className="info-btn" onClick={() => setShowPrivacy(true)}>
+                            Privacy & Policy
+                        </button>
+                        <button className="info-btn" onClick={() => setShowAbout(true)}>
+                            About Us
+                        </button>
+                    </div>
+
+                    {/* === Popups === */}
+                    {showPrivacy && <PrivacyModal onClose={() => setShowPrivacy(false)} />}
+                    {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
                 </div>
 
                 {/* ===== Danger Zone ===== */}
@@ -131,23 +148,6 @@ const Settings = () => {
                         ))}
                     </ul>
                     <p className="warning-text">⚠ This action cannot be undone.</p>
-                </div>
-                {/* ===== Privacy Section ===== */}
-                {/* ===== Legal & Info Section ===== */}
-                <div className="privacy-section">
-                    <h3>Legal & Info</h3>
-                    <div className="privacy-buttons">
-                        <button className="info-btn" onClick={() => setShowPrivacy(true)}>
-                            Privacy & Policy
-                        </button>
-                        <button className="info-btn" onClick={() => setShowAbout(true)}>
-                            About Us
-                        </button>
-                    </div>
-
-                    {/* === Popups === */}
-                    {showPrivacy && <PrivacyModal onClose={() => setShowPrivacy(false)} />}
-                    {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
                 </div>
             </div>
         </div>

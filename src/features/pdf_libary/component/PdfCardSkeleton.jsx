@@ -2,7 +2,7 @@ import React from 'react';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import '../css/PdfLibrary.css';
-
+// SKELETON loder shell
 const PdfCardSkeleton = () => (
     <div className="pdf-card">
         <div className="pdf-info">

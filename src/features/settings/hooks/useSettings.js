@@ -4,14 +4,14 @@ import Swal from 'sweetalert2';
 import API from "../../../app/api/api_endpoints";
 
 export const useSettings = () => {
-    const [darkMode, setDarkMode] = useState(false);
+    // const [darkMode, setDarkMode] = useState(false);                -------------------later for dark mode
     const [isEditing, setIsEditing] = useState(false);
     const [hasChanged, setHasChanged] = useState(false);
     const [formData, setFormData] = useState({});
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Load user from localStorage
+    // Load user from localStorage ( this is true we are not safe )
     useEffect(() => {
         const storedUser = localStorage.getItem('lawyerup_user');
         if (storedUser) {
@@ -31,10 +31,12 @@ export const useSettings = () => {
         return () => clearTimeout(timeout);
     }, []);
 
-    const toggleTheme = () => {
-        setDarkMode(prev => !prev);
-        document.documentElement.classList.toggle('dark-mode');
-    };
+    // const toggleTheme = () => {
+    //     setDarkMode(prev => !prev);
+    //     document.documentElement.classList.toggle('dark-mode');
+    // };
+
+    // If you ever come across this please do smth.....
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -52,8 +54,7 @@ export const useSettings = () => {
             setIsEditing(false);
             return;
         }
-
-        const confirm = await Swal.fire({
+        const confirm = await Swal.fire({    // If the user just opened edit mode to feel something and made no changes, we let them cancel in peace.
             title: 'Save Changes?',
             text: 'Do you want to save your updated profile?',
             icon: 'question',
@@ -87,7 +88,9 @@ export const useSettings = () => {
         }
     };
 
-    // 🔥 SweetAlert-confirmed action executor
+    // SweetAlert-confirmed action executor
+    // Required them to type DELETE, CLEAR, WIPE. I'm not Getting Blame For mistakes.
+    // Do I have seen this somewhere? I’ve seen this somewhere.
     const handleConfirmAction = async (label, keyword, callback) => {
         const result = await Swal.fire({
             title: `Type "${keyword}" to confirm`,
@@ -106,7 +109,9 @@ export const useSettings = () => {
         }
     };
 
-    // 🔗 Clear bookings & chats
+    // Danger Zone logic below. This is where users go full Thanos on their data.
+
+    // Clear bookings & chats
     const clearBookingAndChat = async () => {
         const token = localStorage.getItem('lawyerup_token');
         try {
@@ -119,7 +124,7 @@ export const useSettings = () => {
         }
     };
 
-    // 🧠 Clear AI chat history
+    // Clear AI chat history
     const clearLawAiData = async () => {
         const token = localStorage.getItem('lawyerup_token');
         try {
@@ -149,7 +154,7 @@ export const useSettings = () => {
     };
 
     return {
-        darkMode,
+        // darkMode,   // This Too
         formData,
         user,
         isEditing,
@@ -157,7 +162,7 @@ export const useSettings = () => {
         loading,
         handleChange,
         handleEditClick,
-        toggleTheme,
+        // toggleTheme, later for dark mode
         handleConfirmAction,
         clearBookingAndChat,
         clearLawAiData,
