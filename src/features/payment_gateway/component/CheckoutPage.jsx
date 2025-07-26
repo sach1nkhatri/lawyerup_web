@@ -29,7 +29,8 @@ const CheckoutPage = () => {
         error,
         success,
         latestPayment,
-        getLatestUserPayment
+        getLatestUserPayment,
+        setSuccess
     } = useManualPayment();
 
     useEffect(() => {
@@ -38,35 +39,34 @@ const CheckoutPage = () => {
 
     const getQRImageForMethod = (method) => {
         switch (method) {
-            case 'eSewa':
-                return esewaQR;
-            case 'Khalti':
-                return khaltiQR;
-            case 'IME':
-                return imeQR;
+            case 'eSewa': return esewaQR;
+            case 'Khalti': return khaltiQR;
+            case 'IME': return imeQR;
             case 'Bank':
-            case 'Visa':
-                return bankQR;
-            default:
-                return null;
+            case 'Visa': return bankQR;
+            default: return null;
         }
     };
 
     const getValidityDate = (durationString) => {
-        const duration = durationString.toLowerCase();
         const days =
-            duration.includes('daily') ? 1 :
-                duration.includes('weekly') ? 7 :
-                    duration.includes('monthly') ? 30 : 1;
+            durationString.toLowerCase().includes('daily') ? 1 :
+                durationString.toLowerCase().includes('weekly') ? 7 :
+                    durationString.toLowerCase().includes('monthly') ? 30 : 1;
 
         return new Date(Date.now() + days * 24 * 60 * 60 * 1000);
+    };
+
+    const getCleanAmount = () => {
+        const parsed = parseInt(planPrice.replace(/[^\d]/g, ''), 10);
+        return isNaN(parsed) ? 0 : parsed;
     };
 
     const confirmPayment = async () => {
         if (!selectedMethod || !screenshot) return;
 
         const validUntil = getValidityDate(planDuration);
-        const cleanAmount = Number(planPrice.replace(/[^\d.]/g, ''));
+        const cleanAmount = getCleanAmount();
 
         await submitManualPayment({
             plan: planName,
@@ -78,48 +78,69 @@ const CheckoutPage = () => {
         });
 
         setSubmitted(true);
+        setSuccess(false); // reset to allow re-checking after update
     };
 
-    const renderManualQRUpload = () => {
-        if (!selectedMethod) {
-            return <div className="select-message">Select a payment method to proceed.</div>;
-        }
-
-        return (
-            <div className="manual-payment-box">
-                <h3>Scan QR to Pay</h3>
-                <div className="qr-placeholder">
-                    <img
-                        src={getQRImageForMethod(selectedMethod)}
-                        alt={`${selectedMethod} QR Code`}
-                        className="qr-image"
-                    />
-                </div>
-
-                <div className="upload-section">
-                    <label>Upload Payment Screenshot</label>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => setScreenshot(e.target.files[0])}
-                    />
-                    {screenshot && (
-                        <p className="upload-success">✅ File selected: {screenshot.name}</p>
-                    )}
-                </div>
-
-                <button
-                    className="confirm-btn"
-                    onClick={confirmPayment}
-                    disabled={!screenshot || loading}
-                >
-                    {loading ? 'Submitting...' : "I've Paid – Submit for Review"}
-                </button>
-
-                {error && <p style={{ color: 'red', fontSize: '14px' }}>{error}</p>}
+    const renderManualQRUpload = () => (
+        <div className="manual-payment-box">
+            <h3>Scan QR to Pay</h3>
+            <div className="qr-placeholder">
+                <img
+                    src={getQRImageForMethod(selectedMethod)}
+                    alt={`${selectedMethod} QR Code`}
+                    className="qr-image"
+                />
             </div>
-        );
-    };
+
+            <div className="upload-section">
+                <label>Upload Payment Screenshot</label>
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setScreenshot(e.target.files[0])}
+                />
+                {screenshot && (
+                    <p className="upload-success">✅ File selected: {screenshot.name}</p>
+                )}
+            </div>
+
+            <button
+                className="confirm-btn"
+                onClick={confirmPayment}
+                disabled={!screenshot || loading}
+            >
+                {loading ? 'Submitting...' : "I've Paid – Submit for Review"}
+            </button>
+
+            {error && <p className="error-text">{error}</p>}
+        </div>
+    );
+
+    const renderRejectedScreen = () => (
+        <div className="reupload-screen">
+            <h3>❌ Previous Payment Rejected</h3>
+            <p>Please review your payment details and re-upload a correct screenshot.</p>
+            {renderManualQRUpload()}
+        </div>
+    );
+
+    const renderConfirmationScreen = () => (
+        <div className="confirmation-screen">
+            <h3>✅ Payment Submitted!</h3>
+            <p>We’ve received your payment request.</p>
+            <p>Method: <strong>{latestPayment?.method || selectedMethod}</strong></p>
+            <p>Plan: <strong>{latestPayment?.plan || planName}</strong></p>
+            <p>Valid Until: <strong>{new Date(latestPayment?.validUntil || getValidityDate(planDuration)).toDateString()}</strong></p>
+            <p>Status: <span className="pending-text">
+        {latestPayment?.status === 'approved' ? '✅ Approved' :
+            latestPayment?.status === 'rejected' ? '❌ Rejected' :
+                '⏳ Pending Admin Confirmation'}
+      </span></p>
+        </div>
+    );
+
+    const shouldReupload =
+        latestPayment?.status === 'rejected' && !submitted;
 
     return (
         <div className="checkout-wrapper">
@@ -154,8 +175,7 @@ const CheckoutPage = () => {
                                     src={
                                         method === 'Khalti' ? khaltiLogo :
                                             method === 'eSewa' ? esewaLogo :
-                                                method === 'Bank' ? BankLogo :
-                                                    imeLogo
+                                                method === 'Bank' ? BankLogo : imeLogo
                                     }
                                     alt={method}
                                 />
@@ -166,29 +186,14 @@ const CheckoutPage = () => {
                 </div>
             </div>
 
-            {/* Right Column: QR + Upload / Confirmation */}
+            {/* Right Column: Upload / Confirmation */}
             <div className="checkout-right">
-                {(submitted && success) || latestPayment ? (
-                    <div className="confirmation-screen">
-                        <h3>✅ Payment Submitted!</h3>
-                        <p>We’ve received your payment request.</p>
-                        <p>Method: <strong>{latestPayment?.method || selectedMethod}</strong></p>
-                        <p>Plan: <strong>{latestPayment?.plan || planName}</strong></p>
-                        <p>
-                            Valid Until:{' '}
-                            <strong>
-                                {new Date(latestPayment?.validUntil || getValidityDate(planDuration)).toDateString()}
-                            </strong>
-                        </p>
-                        <p>Status: <span className="pending-text">
-              {latestPayment?.status === 'approved' ? '✅ Approved' :
-                  latestPayment?.status === 'rejected' ? '❌ Rejected' :
-                      '⏳ Pending Admin Confirmation'}
-            </span></p>
-                    </div>
-                ) : (
-                    renderManualQRUpload()
-                )}
+                {shouldReupload
+                    ? renderRejectedScreen()
+                    : (submitted && success) || latestPayment
+                        ? renderConfirmationScreen()
+                        : renderManualQRUpload()
+                }
             </div>
         </div>
     );

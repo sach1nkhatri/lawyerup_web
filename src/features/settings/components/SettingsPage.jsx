@@ -93,10 +93,12 @@ const Settings = () => {
                     </div>
                 </div>
                 {/* ===== Subscription Plan ===== */}
-                <div className="subscription-wrapper">
-                    <h3 className="settings-subtitle">Your Current Plan</h3>
-                    <PlanCardInSettings plan="Free Trial" />
-                </div>
+                {!loading && (
+                    <div className="subscription-wrapper">
+                        <h3 className="settings-subtitle">Your Current Plan</h3>
+                        <PlanCardInSettings plan={formData.plan || 'Free Trial'} />
+                    </div>
+                )}
                 {/* ===== Privacy Section ===== */}
                 {/* ===== Legal & Info Section ===== */}
                 <div className="privacy-section">

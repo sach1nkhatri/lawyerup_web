@@ -23,6 +23,7 @@ export const useSettings = () => {
                 phone: parsed.contactNumber || '',
                 state: parsed.state || '',
                 city: parsed.city || '',
+                plan: parsed.plan || 'Free Trial',
                 address: parsed.address || '',
             });
         }
@@ -30,6 +31,7 @@ export const useSettings = () => {
         const timeout = setTimeout(() => setLoading(false), 500);
         return () => clearTimeout(timeout);
     }, []);
+
 
     // const toggleTheme = () => {
     //     setDarkMode(prev => !prev);

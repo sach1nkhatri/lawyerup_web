@@ -2,7 +2,7 @@ import React from 'react';
 import tick from '../../../app/assets/tick.png';
 import no from '../../../app/assets/no.png';
 import { useNavigate } from 'react-router-dom';
-import '../../landing_page/css/PricingPlans.css';
+import ManageBilling from './ManageBilling'; // ✅ Import
 
 const PlanCardInSettings = ({ plan }) => {
     const navigate = useNavigate();
@@ -45,6 +45,8 @@ const PlanCardInSettings = ({ plan }) => {
 
     const current = plansData[plan] || plansData['Free Trial'];
 
+    const isFree = plan === 'Free Trial';
+
     return (
         <div className="plan-card-glow">
             <h3>{current.name}</h3>
@@ -54,18 +56,19 @@ const PlanCardInSettings = ({ plan }) => {
                 ))}
                 {current.noSupport && <li><img src={no} alt="✖" /> No 24/7 Support</li>}
             </ul>
-            <button
-                className="choose-btn"
-                onClick={() => navigate('/settings/pricing')}
-            >
-                {current.buttonText}
-            </button>
+
+            {isFree ? (
+                <button
+                    className="choose-btn"
+                    onClick={() => navigate('/settings/pricing')}
+                >
+                    {current.buttonText}
+                </button>
+            ) : (
+                <ManageBilling />
+            )}
         </div>
     );
 };
 
 export default PlanCardInSettings;
-
-
-//I think I have much work do still
-
