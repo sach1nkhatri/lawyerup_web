@@ -12,6 +12,8 @@ const useChat = () => {
     const textareaRef = useRef(null);
     const scrollRef = useRef(null);
     const shouldAutoScroll = useRef(true);
+    const [locked, setLocked] = useState(false);
+
 
     const hasStarted = messages.length > 0;
 
@@ -63,7 +65,7 @@ const useChat = () => {
                 setChatId(currentChatId);
             }
 
-            await fetch(`${API.AI}/appendUserMessage`, {
+            const saveRes = await fetch(`${API.AI}/appendUserMessage`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -71,6 +73,13 @@ const useChat = () => {
                 },
                 body: JSON.stringify({ chatId: currentChatId, message: text })
             });
+
+// 🛡️ Check if trial limit is hit
+            if (!saveRes.ok) {
+                const errorText = await saveRes.text();
+                throw new Error(errorText || 'Trial limit reached or message save failed');
+            }
+
 
             const response = await fetch('http://localhost:8010/proxy/v1/chat/completions', {
                 method: 'POST',
@@ -167,12 +176,33 @@ const useChat = () => {
             }
 
         } catch (err) {
-            console.error('❌ Streaming error:', err.message);
             setIsGenerating(false);
-            setMessages(prev => [...prev, {
-                text: '⚠️ Error connecting to LLM server.',
-                sender: 'bot'
-            }]);
+
+            if (err.message.includes('403') || err.message.includes('Trial')) {
+                setLocked(true);
+                setMessages(prev => [...prev, {
+                    text: '❌ You’ve hit your daily limit. Upgrade to continue or come back tomorrow.',
+                    sender: 'bot'
+                }]);
+
+                // Optionally show SweetAlert upsell
+                import('sweetalert2').then(({ default: Swal }) => {
+                    Swal.fire({
+                        title: 'Trial Ended 💡',
+                        text: 'Upgrade to LawyerUp Premium for unlimited access.',
+                        icon: 'warning',
+                        confirmButtonText: 'Get Premium',
+                        showCancelButton: true
+                    });
+                });
+
+            } else {
+                console.error('❌ Streaming error:', err.message);
+                setMessages(prev => [...prev, {
+                    text: '⚠️ Error connecting to LLM server.',
+                    sender: 'bot'
+                }]);
+            }
         }
     };
 
@@ -228,6 +258,7 @@ const useChat = () => {
         setModel,
         newChat,
         loadChat,
+        locked,
     };
 };
 

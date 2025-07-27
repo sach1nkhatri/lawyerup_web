@@ -9,6 +9,10 @@ const ManageBilling = () => {
         getLatestUserPayment();
     }, []);
 
+    if (!latestPayment || latestPayment.plan === 'Free Trial') {
+        return null; // ❌ Don't show anything for Free Trial
+    }
+
     const renderStatusTag = (status) => {
         switch (status) {
             case 'approved':
@@ -21,16 +25,6 @@ const ManageBilling = () => {
         }
     };
 
-    if (!latestPayment) {
-        return (
-            <div className="manage-billing-card">
-                <h3>Billing Details</h3>
-                <p>No manual payment history found.</p>
-                <p>To subscribe, go to the <strong>Upgrade Plan</strong> section.</p>
-            </div>
-        );
-    }
-
     const expired = new Date(latestPayment.validUntil) < new Date();
 
     return (
@@ -42,7 +36,18 @@ const ManageBilling = () => {
             <p><strong>Status:</strong> {renderStatusTag(latestPayment.status)}</p>
 
             {expired && (
-                <p className="expired-warning">This plan has expired. You can now upload a new payment screenshot to renew or change your plan.</p>
+                <p className="expired-warning">
+                    ⏳ This plan has expired. Please{' '}
+                    <span
+                        style={{ color: '#2563eb', textDecoration: 'underline', cursor: 'pointer' }}
+                        onClick={() =>
+                            window.location.href = '/checkout'
+                        }
+                    >
+                        upgrade again
+                    </span>{' '}
+                    to continue using premium features.
+                </p>
             )}
         </div>
     );

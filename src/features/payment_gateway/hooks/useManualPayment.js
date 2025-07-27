@@ -16,7 +16,14 @@ const useManualPayment = () => {
      * Submits a manual payment request including screenshot and plan info.
      * Expects: plan, amount, method, duration, validUntil (Date), and file screenshot.
      */
-    const submitManualPayment = async ({ plan, amount, method, duration, validUntil, screenshot }) => {
+    const submitManualPayment = async ({
+                                           plan,
+                                           amount,
+                                           method,
+                                           duration,
+                                           validUntil,
+                                           screenshot
+                                       }) => {
         setLoading(true);
         setError(null);
         setSuccess(false);
@@ -25,7 +32,6 @@ const useManualPayment = () => {
             const token = localStorage.getItem('lawyerup_token');
             const formData = new FormData();
 
-            // Append all required fields to form data
             formData.append('plan', plan);
             formData.append('amount', amount);
             formData.append('method', method);
@@ -33,7 +39,6 @@ const useManualPayment = () => {
             formData.append('validUntil', validUntil.toISOString());
             formData.append('screenshot', screenshot);
 
-            // Send form data with authentication header
             await axios.post(API.MANUAL_PAYMENT, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -42,16 +47,22 @@ const useManualPayment = () => {
             });
 
             setSuccess(true);
-            await getLatestUserPayment(); // Refresh user’s latest payment info
+            await getLatestUserPayment(); // Refresh payment info
+
         } catch (err) {
-            setError(err.response?.data?.error || 'Something went wrong');
+            console.error('❌ Payment error:', err);
+            setError(
+                err.response?.data?.error ||
+                err.message ||
+                'Something went wrong. Please try again.'
+            );
         } finally {
             setLoading(false);
         }
     };
 
     /**
-     * Fetches the most recent manual payment for the logged-in user.
+     * 📥 Fetches the latest manual payment for the logged-in user.
      */
     const getLatestUserPayment = async () => {
         try {
@@ -63,7 +74,7 @@ const useManualPayment = () => {
             });
             setLatestPayment(res.data);
         } catch (err) {
-            console.error('Payment fetch error:', err);
+            console.error('❌ Failed to fetch latest payment:', err);
         }
     };
 
@@ -72,7 +83,7 @@ const useManualPayment = () => {
         loading,
         success,
         error,
-        setSuccess, // exposed to manually reset UI state (if needed)
+        setSuccess, // allow manual reset
         latestPayment,
         getLatestUserPayment
     };

@@ -3,9 +3,9 @@
   align-items: flex-end;
   gap: 10px;
   padding: 12px;
-  background: #c9dafc;
+  background: rgb(201, 218, 252);
   border-radius: 20px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  box-shadow: none;
 }
 
 .chatInput textarea {
@@ -36,3 +36,9 @@
   cursor: pointer;
   border: none;
 }
+.icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
