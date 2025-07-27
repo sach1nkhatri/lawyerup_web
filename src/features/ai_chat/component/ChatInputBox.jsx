@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from '../css/ChatInputBox.module.css';
 
-const ChatInputBox = ({ input, setInput, handleSend, textareaRef }) => {
+const ChatInputBox = ({ input, setInput, handleSend, textareaRef, onUploadClick }) => {
     return (
         <div className={styles.chatInput}>
-            <button className={styles.btn}>＋</button>
+            <button className={styles.btn} onClick={onUploadClick}>＋</button>
             <textarea
                 ref={textareaRef}
                 value={input}
@@ -17,7 +17,7 @@ const ChatInputBox = ({ input, setInput, handleSend, textareaRef }) => {
                 }}
                 onKeyDown={(e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault(); // prevent newline
+                        e.preventDefault();
                         handleSend();
                     }
                 }}
