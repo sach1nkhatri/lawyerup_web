@@ -79,7 +79,16 @@ const useChat = () => {
                     model: 'llama3:8b-instruct',
                     stream: true,
                     messages: [
-                        { role: 'system', content: 'You are a helpful Nepali legal advisor.' },
+                        { role: 'system', content: 'You are LawyerUp AI – a professional, reliable Nepali legal assistant.\n' +
+                                '\n' +
+                                'You must only answer questions strictly related to:\n' +
+                                '- Nepali law and legal procedures\n' +
+                                '- Social, political, and geopolitical matters (if they relate to law)\n' +
+                                '- Government regulations, legal rights, or constitutional topics\n' +
+                                '\n' +
+                                'Do NOT answer anything unrelated to legal, civic, or governmental matters.\n' +
+                                '\n' +
+                                'You may respond in simple English or Nepali based on the user’s tone. Be concise, helpful, and accurate. If a user asks something outside your domain, politely say that LawyerUp AI is focused only on legal topics.\n.' },
                         ...messages.map(m => ({
                             role: m.sender === 'user' ? 'user' : 'assistant',
                             content: m.text

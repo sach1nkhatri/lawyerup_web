@@ -16,6 +16,7 @@ const ChatView = ({
                       title,
                       model,
                       setModel,
+                      setShowPdfUpload,
                       onNewChat,
                       onLoadChat,
                   }) => {
@@ -41,6 +42,7 @@ const ChatView = ({
                     setInput={setInput}
                     handleSend={handleSend}
                     textareaRef={textareaRef}
+                    onUploadClick={() => setShowPdfUpload(true)}
                 />
                 <ChatFooter />
             </div>

@@ -11,6 +11,7 @@ const API = {
   FAQ: `${BASE_URL}/api/faqs`,
   AI: `${BASE_URL}/api/ai`,
   MANUAL_PAYMENT: `${BASE_URL}/api/manual-payment`,
+  UPLOAD_CHAT_PDF: (chatId) => `${BASE_URL}/api/ai/upload/chatpdf/${chatId}`,
 };
 
 export default API;
