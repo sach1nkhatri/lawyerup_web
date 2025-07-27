@@ -42,7 +42,7 @@ const ManageBilling = () => {
             <p><strong>Status:</strong> {renderStatusTag(latestPayment.status)}</p>
 
             {expired && (
-                <p className="expired-warning">⚠ This plan has expired. You can now upload a new payment screenshot to renew or change your plan.</p>
+                <p className="expired-warning">This plan has expired. You can now upload a new payment screenshot to renew or change your plan.</p>
             )}
         </div>
     );

@@ -16,6 +16,10 @@ const LawyerCard = ({ lawyer, onViewProfile, showShare }) => {
                 src={resolvedImage}
                 alt="Lawyer"
                 className="lawyer-photo"
+                onError={(e) => {
+                    e.target.onerror = null; // prevent infinite loop
+                    e.target.src = require('../../../app/assets/avatar.png'); // or a default image URL
+                }}
             />
             <div className="lawyer-info">
                 <p><strong>{lawyer.fullName}</strong></p>
