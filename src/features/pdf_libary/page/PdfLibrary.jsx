@@ -3,7 +3,7 @@ import '../css/PdfLibrary.css';
 import pdfIcon from '../../../app/assets/pdf.png';
 import downloadIcon from '../../../app/assets/download.png';
 import usePdfList from '../hooks/usePdfList';
-import PdfCardSkeleton from './PdfCardSkeleton';
+import PdfCardSkeleton from '../component/PdfCardSkeleton';
 
 const PdfLibrary = () => {
     const { pdfs, loading } = usePdfList();

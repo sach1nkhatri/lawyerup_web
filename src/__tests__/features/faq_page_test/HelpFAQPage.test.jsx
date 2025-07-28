@@ -1,7 +1,7 @@
 // src/__tests__/features/faq_page_test/HelpFAQPage.test.jsx
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import HelpFAQPage from '../../../features/faq_page/component/HelpFAQPage';
+import HelpFAQPage from '../../../features/faq_page/page/HelpFAQPage';
 
 jest.mock('../../../features/faq_page/hooks/useSupportEmail', () => ({
     useSupportEmail: () => jest.fn(),

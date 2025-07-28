@@ -1,9 +1,9 @@
 import React from 'react';
 import styles from '../css/ChatView.module.css';
-import ChatHeader from './ChatHeader';
-import ChatBody from './ChatBody';
-import ChatInputBox from './ChatInputBox';
-import ChatFooter from './ChatFooter';
+import ChatHeader from '../component/ChatHeader';
+import ChatBody from '../component/ChatBody';
+import ChatInputBox from '../component/ChatInputBox';
+import ChatFooter from '../component/ChatFooter';
 
 const ChatView = ({
                       messages,

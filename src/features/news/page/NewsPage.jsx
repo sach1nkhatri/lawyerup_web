@@ -1,6 +1,6 @@
 import React from 'react';
-import NewsCard from './NewsCard';
-import NewsCardSkeleton from './NewsCardSkeleton';
+import NewsCard from '../components/NewsCard';
+import NewsCardSkeleton from '../components/NewsCardSkeleton';
 import '../css/NewsPage.css';
 import '../../../app/shared_components/utils/css/nprogress.css';
 import { useNewsPage } from '../hooks/useNewsPage';

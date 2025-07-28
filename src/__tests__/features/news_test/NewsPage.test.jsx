@@ -1,7 +1,7 @@
 // src/__tests__/NewsPage.test.jsx
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import NewsPage from '../../../features/news/components/NewsPage';
+import NewsPage from '../../../features/news/page/NewsPage';
 
 // Mock the hook and utility
 jest.mock('../../../features/news/hooks/useNewsPage', () => ({

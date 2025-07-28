@@ -19,7 +19,7 @@ const CheckoutPage = () => {
         planDuration: ''
     };
 
-    const [selectedMethod, setSelectedMethod] = useState(null);
+    const [selectedMethod, setSelectedMethod] = useState('eSewa');
     const [screenshot, setScreenshot] = useState(null);
     const [submitted, setSubmitted] = useState(false);
 
@@ -78,7 +78,7 @@ const CheckoutPage = () => {
         });
 
         setSubmitted(true);
-        setSuccess(false); // reset to allow re-checking after update
+        setSuccess(false);
     };
 
     const renderManualQRUpload = () => (
@@ -132,19 +132,21 @@ const CheckoutPage = () => {
             <p>Plan: <strong>{latestPayment?.plan || planName}</strong></p>
             <p>Valid Until: <strong>{new Date(latestPayment?.validUntil || getValidityDate(planDuration)).toDateString()}</strong></p>
             <p>Status: <span className="pending-text">
-        {latestPayment?.status === 'approved' ? '✅ Approved' :
-            latestPayment?.status === 'rejected' ? '❌ Rejected' :
-                '⏳ Pending Admin Confirmation'}
-      </span></p>
+                {latestPayment?.status === 'approved' ? '✅ Approved' :
+                    latestPayment?.status === 'rejected' ? '❌ Rejected' :
+                        '⏳ Pending Admin Confirmation'}
+            </span></p>
         </div>
     );
 
     const shouldReupload =
         latestPayment?.status === 'rejected' && !submitted;
 
+    const shouldIgnoreStatus =
+        latestPayment?.status === 'expired'; // 🧠 ignore if expired, treat like fresh
+
     return (
         <div className="checkout-wrapper">
-            {/* Left Column: Plan Summary */}
             <div className="checkout-left">
                 <h2>Your Plan</h2>
                 <div className="plan-box">
@@ -159,7 +161,6 @@ const CheckoutPage = () => {
                 </div>
             </div>
 
-            {/* Center Column: Method Selection */}
             <div className="checkout-center">
                 <h2>Confirm Your Payment</h2>
                 <div className="method-section">
@@ -186,14 +187,16 @@ const CheckoutPage = () => {
                 </div>
             </div>
 
-            {/* Right Column: Upload / Confirmation */}
             <div className="checkout-right">
-                {shouldReupload
-                    ? renderRejectedScreen()
-                    : (submitted && success) || latestPayment
-                        ? renderConfirmationScreen()
-                        : renderManualQRUpload()
-                }
+                {shouldIgnoreStatus ? (
+                    renderManualQRUpload()
+                ) : shouldReupload ? (
+                    renderRejectedScreen()
+                ) : (submitted && success) || latestPayment ? (
+                    renderConfirmationScreen()
+                ) : (
+                    renderManualQRUpload()
+                )}
             </div>
         </div>
     );
