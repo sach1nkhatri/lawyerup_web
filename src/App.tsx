@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import './app/shared_components/utils/css/toast.css';
 
-import LandingPage from './features/landing_page/components/LandingPage';
+import LandingPage from './features/landing_page/page/LandingPage';
 import AuthForm from './features/auth/components/LoginSignup';
 import Dashboard from './features/dashboard/component/Dashboard';
 import PricingPlans from './features/landing_page/components/PricingPlans';

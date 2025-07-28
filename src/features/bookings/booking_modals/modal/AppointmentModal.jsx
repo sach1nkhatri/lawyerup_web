@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './css/AppointmentModal.css';
-import { startLoader, stopLoader } from '../../app/shared_components/utils/loader';
-import { notify } from '../../app/shared_components/utils/notify';
-import API from '../../app/api/api_endpoints';
+import '../css/AppointmentModal.css';
+import { startLoader, stopLoader } from '../../../../app/shared_components/utils/loader';
+import { notify } from '../../../../app/shared_components/utils/notify';
+import API from '../../../../app/api/api_endpoints';
 
 const AppointmentModal = ({ lawyer, onClose }) => {
     const [availableDates, setAvailableDates] = useState([]);

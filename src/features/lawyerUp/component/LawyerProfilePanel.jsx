@@ -1,6 +1,6 @@
 import React from 'react';
 import ReviewList from './ReviewList';
-import AppointmentModal from '../../booking_modals/AppointmentModal';
+import AppointmentModal from '../../bookings/booking_modals/modal/AppointmentModal';
 import '../css/LawyerUp.css';
 import { FaGraduationCap, FaFolderOpen } from 'react-icons/fa';
 import { useLawyerProfile } from '../hooks/useLawyerProfile';

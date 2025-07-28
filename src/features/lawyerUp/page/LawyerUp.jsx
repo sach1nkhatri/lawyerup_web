@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import LawyerCard from './LawyerCard';
-import LawyerProfilePanel from './LawyerProfilePanel';
+import LawyerCard from '../component/LawyerCard';
+import LawyerProfilePanel from '../component/LawyerProfilePanel';
 import { useLawyerUp } from '../hooks/useLawyerUp';
-import { LawyerCardSkeleton, LawyerProfileSkeleton } from './LawyerSkeletons'; // ✅ import
+import { LawyerCardSkeleton, LawyerProfileSkeleton } from '../component/LawyerSkeletons'; // ✅ import
 import '../css/LawyerUp.css';
 
 const LawyerUp = () => {

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import useChat from '../hooks/useChat';
 import ChatView from './ChatView';
-import ChatHistoryPopup from './ChatHistoryPopup';
-import ChatPdfUpload from './chatPdfUpload';
+import ChatHistoryPopup from '../component/ChatHistoryPopup';
+import ChatPdfUpload from '../component/chatPdfUpload';
 
 import plusIcon from '../../../app/assets/plus.png';
 import sendIcon from '../../../app/assets/send.png';

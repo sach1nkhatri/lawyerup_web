@@ -1,5 +1,5 @@
 import React from 'react';
-import FAQItem from './FAQItem';
+import FAQItem from '../component/FAQItem';
 import { useSupportEmail } from '../hooks/useSupportEmail';
 import { useFaqs } from '../hooks/useFaqs';
 import '../css/HelpFAQPage.css';

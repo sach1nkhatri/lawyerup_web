@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import PdfLibrary from '../../../features/pdf_libary/component/PdfLibrary';
+import PdfLibrary from '../../../features/pdf_libary/page/PdfLibrary';
 
 jest.mock('../../../features/pdf_libary/hooks/usePdfList', () => ({
     __esModule: true,

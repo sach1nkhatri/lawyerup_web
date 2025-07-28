@@ -1,9 +1,9 @@
 import React from 'react';
-import JoinAsLawyerForm from './JoinAsLawyerForm';
-import LawyerStatusPanel from './LawyerStatusPanel';
-import LawyerFinalListingPanel from './LawyerFinalListingPanel';
+import JoinAsLawyerForm from '../component/JoinAsLawyerForm';
+import LawyerStatusPanel from '../component/LawyerStatusPanel';
+import LawyerFinalListingPanel from '../component/LawyerFinalListingPanel';
 import { useJoinLawyerPage } from '../hooks/useJoinLawyerPage';
-import LawyerStatusPanelSkeleton from './LawyerStatusPanelSkeleton'
+import LawyerStatusPanelSkeleton from '../component/LawyerStatusPanelSkeleton'
 
 const JoinLawyerPage = () => {
     const {

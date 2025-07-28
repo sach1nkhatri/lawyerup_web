@@ -1,7 +1,7 @@
 import React from 'react';
 import useBooking from '../hooks/useBooking';
-import UserBookingCard from './UserBookingCard';
-import LawyerBookingCard from './LawyerBookingCard';
+import UserBookingCard from '../component/UserBookingCard';
+import LawyerBookingCard from '../component/LawyerBookingCard';
 import '../css/BookingPage.css';
 
 const BookingPage = () => {

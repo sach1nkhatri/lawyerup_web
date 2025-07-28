@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 // import { Sun, Moon } from 'lucide-react';
 import profileImage from '../../../app/assets/avatar.png';
-import PlanCardInSettings from './PlanCardInSettings';
+import PlanCardInSettings from '../components/PlanCardInSettings';
 import { useSettings } from '../hooks/useSettings';
 import '../css/SettingPage.css';
 import PrivacyModal from "../modal/PrivacyModal";
