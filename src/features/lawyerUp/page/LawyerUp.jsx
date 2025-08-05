@@ -19,13 +19,13 @@ const LawyerUp = () => {
         <div className="lawyerup-container">
             <div className="lawyerup-header">
                 <h2>LawyerUp</h2>
-                <div className="lawyerup-controls">
-                    <input className="search-bar" placeholder="Search for lawyers"/>
-                    <label className="toggle-wrapper">
-                        <input type="checkbox"/>
-                        <span className="toggle-slider"/>
-                    </label>
-                </div>
+                {/*<div className="lawyerup-controls">*/}
+                {/*    <input className="search-bar" placeholder="Search for lawyers"/>*/}
+                {/*    <label className="toggle-wrapper">*/}
+                {/*        <input type="checkbox"/>*/}
+                {/*        <span className="toggle-slider"/>*/}
+                {/*    </label>*/}
+                {/*</div>*/}
             </div>
 
             {loading ? (

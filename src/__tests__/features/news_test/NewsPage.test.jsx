@@ -55,6 +55,7 @@ describe('NewsPage Component', () => {
 
     test('clicking news card triggers handleCardClick', () => {
         const { getByText } = render(<NewsPage />);
+        // eslint-disable-next-line testing-library/prefer-screen-queries,testing-library/no-node-access
         const card = getByText(/Test News/i).closest('.news-card');
         fireEvent.click(card);
         // Note: actual trigger checked in integration test with real implementation

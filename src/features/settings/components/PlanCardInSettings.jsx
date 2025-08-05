@@ -12,7 +12,7 @@ const PlanCardInSettings = ({ plan }) => {
             name: 'Free Trial',
             features: [
                 'Access to key law documents',
-                '500 words/day or 10 chatbot interactions',
+                '5 chatbot interactions per day',
                 'Legal news & articles',
                 'Lawyer appointment access',
             ],
